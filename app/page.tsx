@@ -1,95 +1,255 @@
+"use client"
+import styled from "styled-components";
+import { Noto_Serif_KR } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
+import { IoSearch } from "react-icons/io5";
+import { useState } from "react";
+
 import Image from "next/image";
-import styles from "./page.module.css";
+const serifNormal = Noto_Serif_KR({ weight: "400", subsets: ["latin"] })
+const serifBold = Noto_Serif_KR({ weight: "600", subsets: ["latin"] })
+const sansNormal = Noto_Sans_KR({ weight: "400", subsets: ["latin"] })
+const sansBold = Noto_Sans_KR({ weight: "600", subsets: ["latin"] })
+const Body = styled.div`
+  width: var(--cont-width);
+  margin-left: auto;
+  margin-right: auto;
+`
 
-export default function Home() {
+const SearchArea = styled.section`
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: flex-start;
+padding: 100px 0px;
+@media(max-width: 1100px) {
+  flex-direction: column;
+  align-items: flex-start;
+}
+& h1 {
+  font-size: 27px;
+  font-family: ${sansBold.style.fontFamily};
+  max-width: 300px;
+  margin: 0;
+}
+& p {
+  color: #7a7a7a;
+}
+`
+const SearchTexts = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`
+const SearchImg = styled.div`
+  margin-left: 100px;
+  @media(max-width: 1100px) {
+    margin: 0;
+  }
+`
+const SearchBarHolder = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-start;
+  margin-top: 20px;
+`
+const SearchBarInputHolder = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 500px;
+  & select {
+    position: absolute;
+    right: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 0px;
+  }
+`
+const SearchBar = styled.input`
+  padding: 10px 10px;
+  font-size: 15px;
+  border-radius: 0;
+  border: solid 1px #848484;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  width: 100%;
+`
+const SearchBtn = styled.button`
+  background-color: #000;
+  color:#fff;
+  font-size: 15px;
+  padding: 10px 20px;
+  border-radius: 0;
+  border: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+`
+
+const DisplayDocs = styled.ul`
+margin: 0;
+padding: 0;
+list-style-type: none;
+display: flex;
+flex-wrap: wrap;
+`
+const Doc = styled.li`
+  padding: 10px 17px;
+  border-radius: 5px;
+  border: solid 1px #cecece;
+  width: 150px;
+  font-family: ${serifBold.style.fontFamily};
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+  & .sub {
+    color: #a4a4a4;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    font-family: ${sansBold.style.fontFamily};
+  }
+`
+const DisplayH = styled.ul`
+margin: 0;
+padding: 0;
+list-style-type: none;
+display: flex;
+flex-direction: column;
+margin-top: 20px;
+`
+const HDoc = styled.li`
+  border-bottom: solid 1px #cecece;
+  margin: 0;
+  padding: 10px 5px;
+  display: flex;
+  cursor: pointer;
+  align-items: baseline;
+  &:hover {
+    background-color: #ededed;
+  }
+  & .title {
+    margin-right: auto;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-family: ${serifNormal.style.fontFamily};
+  }
+  & .sub {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    color: #a4a4a4;
+    margin-right: 5px;
+  }
+  & .date {
+    margin: 0;
+    padding: 0;
+    margin-right: 0;
+    margin-left: auto;
+    font-size: 12px;
+    color: #555555;
+  }
+`
+export default function MainPage() {
+  const [activeElem, setActive] = useState(0)
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <Body>
+      <SearchArea>
+        <SearchTexts>
+        <h1>
+          과학, 수학, 정보에 특화된 문서를 제공합니다
+        </h1>
+        <p>모르는 정보를 검색해 보세요</p>
+        <SearchBarHolder>
+          <SearchBarInputHolder>
+            <SearchBar type="text"></SearchBar>
+            <select name="pets" id="pet-select">
+              <option value="">전체</option>
+              <option value="math">수학</option>
+              <option value="physics">물리</option>
+              <option value="biology">생명과학</option>
+              <option value="astrology">천문</option>
+              <option value="informatics">정보과학</option>
+            </select>
+          </SearchBarInputHolder>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
+          <SearchBtn><IoSearch /></SearchBtn>
+        </SearchBarHolder>
+        </SearchTexts>
+        <SearchImg>
+          <Image src="/undraw_connected_world_wuay.svg" alt="globe" width={280} height={280}></Image>
+        </SearchImg>
+      </SearchArea>
+      <h3>인기 문서</h3>
+      <DisplayDocs>
+        <Doc>
+          <p className="sub">
+            물리학
           </p>
-        </a>
-      </div>
-    </main>
-  );
+          상대성 이론
+        </Doc>
+        <Doc>
+          <p className="sub">
+            천문학
+          </p>
+          전복 썬그라스를 만드는 방법
+        </Doc>
+        <Doc>
+          <p className="sub">
+            생명과학
+          </p>
+          맛있게 밥 먹는 방법
+        </Doc>
+        <Doc>
+          <p className="sub">
+            수학
+          </p>
+          손가락으로 숫자 세는 방법
+        </Doc>
+        <Doc>
+          <p className="sub">
+            정보과학
+          </p>
+          브롤스타즈 잘하는 방법
+        </Doc>
+      </DisplayDocs>
+      <DisplayH>
+      <h3>새로 업데이트된 문서</h3>
+        <HDoc>
+          <p className="sub">물리학 &gt;</p>
+          <p className="title">집가는법</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+        <HDoc>
+          <p className="sub">천문학 &gt;</p>
+          <p className="title">집가는법</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+        <HDoc>
+          <p className="sub">생명과학 &gt;</p>
+          <p className="sub">실험 &gt;</p>
+          <p className="title">Disk Diffusion Test</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+        <HDoc>
+          <p className="sub">생명과학 &gt;</p>
+          <p className="sub">실험 &gt;</p>
+          <p className="title">Disk Diffusion Test</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+        <HDoc>
+          <p className="sub">생명과학 &gt;</p>
+          <p className="sub">실험 &gt;</p>
+          <p className="title">Disk Diffusion Test</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+      </DisplayH>
+    </Body>
+  )
 }

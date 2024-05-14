@@ -1,0 +1,15 @@
+/* ssr된 markdown을 위한 globals.css*/
+p {
+    line-height: 24px;
+    font-size: 15px;
+}
+table {
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid;
+  }
+
+  th,td {
+    padding: 5px;
+  }

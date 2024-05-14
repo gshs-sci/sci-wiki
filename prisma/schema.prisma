@@ -1,0 +1,48 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String          @id
+  email       String
+  registered  DateTime @default(now())
+  contributed Contribution[]
+}
+
+model Contribution {
+  id      Int  @id @default(autoincrement())
+  userId  String
+  docId   String
+  author  User   @relation(fields: [userId], references: [id])
+  doc     Doc    @relation(fields: [docId], references: [id])
+  ip      String
+}
+
+model Subject {
+    id String @id
+    doc Doc[]
+}
+
+model Doc {
+  id            String         @id
+  title         String
+  content       String?
+  subjectId     String
+  subject       Subject        @relation(fields:[subjectId], references: [id])
+  contributions Contribution[]
+  tags Tag[]
+}
+
+model Tag {
+    label   String
+    id String @id @default(cuid())
+    doc Doc[]
+}
+//the value in the relation fields or references fields should not be inserted, since it is a control element controlled by relations defined in prisma
