@@ -33,7 +33,7 @@ model Subject {
 model Doc {
   id            String         @id
   title         String
-  content       String?
+  content       String         @db.Text     
   subjectId     String
   subject       Subject        @relation(fields:[subjectId], references: [id])
   contributions Contribution[]

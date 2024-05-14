@@ -7,12 +7,15 @@ import styled from "styled-components";
 // };
 import { useEffect, useState } from "react";
 import CurrentActiveProvider from "@/app/components/doc/provider";
+import { Noto_Sans_KR,Noto_Serif_KR } from "next/font/google";
+const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 const Holder = styled.div`
     margin-left: auto;
     margin-right: auto;
     width: var(--cont-width);
     display: flex;
+    font-family: ${sansNormal.style.fontFamily};
 `
 
 
@@ -45,7 +48,7 @@ export default function RootLayout({
     return (
         <>
             <CurrentActiveProvider value={currentActive}>
-                <Holder>{children}</Holder>
+                <Holder >{children}</Holder>
             </CurrentActiveProvider>
         </>
     );

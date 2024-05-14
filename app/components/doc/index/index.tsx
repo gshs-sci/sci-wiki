@@ -73,6 +73,7 @@ const Li = styled.li<{ $isActive: boolean }>`
     justify-content: center;
     color:${props => props.$isActive ? "#000" : "#4287f5"};
     font-weight: ${props => props.$isActive ? "bold" : "normal"};
+    font-size: 15px;
 `
 const LiLabel = styled.div`
     display: flex;
@@ -112,9 +113,26 @@ const ToggleBtn = styled.span`
     }
 `
 
+const Licomponent = (props: { isActive: boolean, elem: any }) => {
+    const [isDropped, setIsDropped] = useState(false)
+    return (
+        <Li $isActive={props.isActive}>
+            <LiLabel>
+                <Link href={"#" + props.elem.id}>{props.elem.text}</Link>
+                <RotateArrow $rotated={isDropped} onClick={() => setIsDropped(!isDropped)} >
+                    <MdKeyboardArrowDown />
+                </RotateArrow>
+            </LiLabel>
+
+            <Ul aria-expanded={isDropped}>
+                <RecursiveIndex titles={props.elem.children} />
+            </Ul>
+        </Li>
+    )
+}
+
 
 const RecursiveIndex = (props: { titles: Array<Title> }) => {
-    const [isActive, setIsActive] = useState(false)
     const active = useContext(CurrentActive);
     return (
         <>
@@ -129,19 +147,7 @@ const RecursiveIndex = (props: { titles: Array<Title> }) => {
                     )
                 } else {
                     return (
-                        <Li $isActive={active == elem.id} key={elem.id}>
-                            <LiLabel>
-                                <Link href={"#" + elem.id}>{elem.text}</Link>
-                                <RotateArrow $rotated={isActive} onClick={() => setIsActive(!isActive)} >
-                                    <MdKeyboardArrowDown />
-                                </RotateArrow>
-                            </LiLabel>
-
-                            <Ul aria-expanded={isActive}>
-                                <RecursiveIndex titles={elem.children} />
-                            </Ul>
-
-                        </Li>
+                        <Licomponent isActive={active == elem.id} elem={elem} key={elem.id}/>
                     )
                 }
             })}
@@ -159,7 +165,7 @@ export const Index = (props: { titles: Array<Title> }) => {
                     <RecursiveIndex titles={props.titles} />
                 </MasterUl>
             </IndexParent>
-            <ToggleBtn onClick={()=>setMenuShown(!isMenuShown)}><MdMenu /></ToggleBtn>
+            <ToggleBtn onClick={() => setMenuShown(!isMenuShown)}><MdMenu /></ToggleBtn>
         </>
     )
 }
