@@ -127,7 +127,7 @@ const CompileMD = (data: string): Promise<JSX.Element> => {
 const prisma = new PrismaClient({})
 
 export async function generateMetadata({ params }: any) {
-    const { title } = await prisma.doc.findFirst({
+    const data = await prisma.doc.findFirst({
         where: {
             id: params.docId
         },
@@ -135,13 +135,17 @@ export async function generateMetadata({ params }: any) {
             title: true
         }
     })
+    if (data === null) {
+        return notFound()
+    }
+    const {title} = data
     return {
         title: title + " - SCI"
     }
 }
 
 export default async function Document({ params }: { params: { docId: string } }) {
-
+    console.log(params.docId)
     const { content, title } = await prisma.doc.findFirst({
         where: {
             id: params.docId
@@ -151,9 +155,6 @@ export default async function Document({ params }: { params: { docId: string } }
             title: true
         }
     })
-    if (content === null) {
-        return notFound()
-    }
     const compiled = await CompileMD(content)
     return (
         <>

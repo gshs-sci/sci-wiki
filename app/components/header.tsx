@@ -1,3 +1,4 @@
+"use client"
 import styled from "styled-components";
 import { Playfair } from "next/font/google";
 import { RiUserFill } from "react-icons/ri";
@@ -19,6 +20,7 @@ const HeaderElement = styled.div`
     margin-right: auto;
     display: flex;
     align-items: center;
+    position: relative;
 `
 
 const Logo = styled.div`
@@ -46,19 +48,61 @@ border-radius: 3px;
 }
 `
 
-export const Header = () => {
+const ExpandedUser = styled.ul`
+display: none;
+position: absolute;
+top: 30px;
+padding: 10px;
+border: solid 1px #bfbfbf;
+border-radius: 3px;
+right: 0;
+list-style-type: none;
+background-color: #fff;
+&[aria-expanded="true"] {
+    display: flex;
+    flex-direction: column;
+}
+& li {
+    padding: 5px 10px;
+    border-radius: 1px;
+    user-select: none;
+    cursor: pointer;
+    font-size: 15px;
+    min-width: 80px;
+    &:hover {
+        background-color: #e9e9e9;
+    }
+}
+`
+
+export const Header = (props: { userIp?: string, userId?: string }) => {
     const [userExpanded, setUserExpanded] = useState(false)
-    return (<_Header>
-        <HeaderElement>
-                <Logo>
-                <Link href="/">
-                    SCI
-                    </Link>
-                </Logo>
-            
-            <UserArea>
-                <RiUserFill />
-            </UserArea>
-        </HeaderElement>
-    </_Header>)
+    return (
+        <>
+            <_Header>
+                <HeaderElement>
+                    <Logo>
+                        <Link href="/">
+                            SCI
+                        </Link>
+                    </Logo>
+                    <UserArea onClick={() => setUserExpanded(!userExpanded)}>
+                        <RiUserFill />
+                    </UserArea>
+                    <ExpandedUser aria-expanded={userExpanded}>
+                        {props.userIp ?
+                            <li>{props.userIp}</li> :
+                            props.userIp && props.userId ?
+                                <li>{props.userId}</li>
+                                : <></>
+                        }
+                        <li>기여 목록</li>
+                        {props.userId ? <></> : <li>로그인</li>}
+                    </ExpandedUser>
+                </HeaderElement>
+            </_Header>
+        </>
+
+
+    )
 }

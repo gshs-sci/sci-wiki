@@ -12,18 +12,25 @@ datasource db {
 model User {
   id          String          @id
   email       String
+  password    String
   registered  DateTime @default(now())
   contributed Contribution[]
+  deletePermission Boolean
+  createPermission Boolean
 }
 
 model Contribution {
   id      Int  @id @default(autoincrement())
-  userId  String
+  userId  String?
   docId   String
-  author  User   @relation(fields: [userId], references: [id])
+  author  User?   @relation(fields: [userId], references: [id])
   doc     Doc    @relation(fields: [docId], references: [id])
+  before  String @db.Text  
+  after   String @db.Text  
+  date    DateTime @default(now())
   ip      String
 }
+
 
 model Subject {
     id String @id

@@ -1,3 +1,4 @@
+"use client"
 import styled from "styled-components";
 import { Playfair } from "next/font/google";
 const playfair = Playfair({ subsets: ["latin"] });

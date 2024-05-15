@@ -7,7 +7,7 @@ import styled from "styled-components";
 // };
 import { useEffect, useState } from "react";
 import CurrentActiveProvider from "@/app/components/doc/provider";
-import { Noto_Sans_KR,Noto_Serif_KR } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
 const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 const Holder = styled.div`

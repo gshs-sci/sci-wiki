@@ -4,6 +4,10 @@ const prisma = new prisma1.PrismaClient({})
 
 // A `main` function so that you can use async/await
 
+const test_doc_data_b4=`
+## Introduction
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis massa sed elementum tempus egestas. Et pharetra pharetra massa massa ultricies mi. Pharetra vel turpis nunc eget lorem dolor sed. Faucibus interdum posuere lorem ipsum dolor. Velit laoreet id donec ultrices tincidunt arcu non sodales neque. Faucibus nisl tincidunt eget nullam. Fermentum odio eu feugiat pretium. Tristique magna sit amet purus gravida quis blandit turpis. Mi bibendum neque egestas congue. Eu sem integer vitae justo eget magna. Eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque. Quis imperdiet massa tincidunt nunc pulvinar sapien et ligula. Varius vel pharetra vel turpis nunc eget lorem dolor sed. Augue interdum velit euismod in pellentesque massa placerat. Vitae purus faucibus ornare suspendisse sed nisi lacus. Semper risus in hendrerit gravida rutrum quisque non tellus. Amet mauris commodo quis imperdiet massa tincidunt. Ac ut consequat semper viverra nam libero justo laoreet sit. Porttitor rhoncus dolor purus non enim.
+`
 const test_doc_data=`
 ## Introduction
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis massa sed elementum tempus egestas. Et pharetra pharetra massa massa ultricies mi. Pharetra vel turpis nunc eget lorem dolor sed. Faucibus interdum posuere lorem ipsum dolor. Velit laoreet id donec ultrices tincidunt arcu non sodales neque. Faucibus nisl tincidunt eget nullam. Fermentum odio eu feugiat pretium. Tristique magna sit amet purus gravida quis blandit turpis. Mi bibendum neque egestas congue. Eu sem integer vitae justo eget magna. Eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque. Quis imperdiet massa tincidunt nunc pulvinar sapien et ligula. Varius vel pharetra vel turpis nunc eget lorem dolor sed. Augue interdum velit euismod in pellentesque massa placerat. Vitae purus faucibus ornare suspendisse sed nisi lacus. Semper risus in hendrerit gravida rutrum quisque non tellus. Amet mauris commodo quis imperdiet massa tincidunt. Ac ut consequat semper viverra nam libero justo laoreet sit. Porttitor rhoncus dolor purus non enim.
@@ -78,6 +82,9 @@ async function main() {
   const userData = {
     id: "testUser123",
     email: "gs22048@gs.hs.kr",
+    password:"47d69ccfc23bce9ecb96550abb36a9aa9ee5892f7f9fbbdec0ea10f55bacd0fc",
+    deletePermission:true,
+    createPermission:true
   }
   await prisma.user.upsert({
     where: { id: "testUser123" },
@@ -85,12 +92,14 @@ async function main() {
     create: { ...userData }
   })
   const createData = {
+    before:test_doc_data_b4,
+    after:test_doc_data,
     author: {
       connect: { id: "testUser123" }
     },
     doc: {
       create: {
-        id: "test-document-1",
+        id: "test-document",
         title: "test document",
         content: test_doc_data,
         subject: {

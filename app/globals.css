@@ -8,6 +8,10 @@ body,html {
   --cont-width:1200px;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+}
 
 @media(max-width: 1500px) {
   :root {
