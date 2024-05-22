@@ -71,11 +71,12 @@ export const Textarea = (props: { title: string, defaultValue: string, id?: stri
             <h1>{title}</h1>
             <form action={Edit}>
                 <ModeChange>
-                    <ModeChangeBtn>
+                    <ModeChangeBtn type="button">
                         <span>
                             <AiFillFileMarkdown />
                         </span>
-                        RAW 편집</ModeChangeBtn>
+                        RAW 편집
+                    </ModeChangeBtn>
                 </ModeChange>
                 {props.id ? <input type="hidden" name="docId" defaultValue={props.id} /> : <></>}
                 <Ta {...prop} spellCheck={false} name="data" />

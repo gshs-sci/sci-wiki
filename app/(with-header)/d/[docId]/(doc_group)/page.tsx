@@ -145,7 +145,6 @@ export async function generateMetadata({ params }: any) {
 }
 
 export default async function Document({ params }: { params: { docId: string } }) {
-    console.log(params.docId)
     const { content, title } = await prisma.doc.findFirst({
         where: {
             id: params.docId

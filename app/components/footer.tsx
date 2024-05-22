@@ -6,7 +6,6 @@ const playfair = Playfair({ subsets: ["latin"] });
 const Holder = styled.footer`
     border-top: solid 1px #cacaca;
     width: 100vw;
-    margin-top: 50px;
 `
 const Elem = styled.div`
     width: var(--cont-width);

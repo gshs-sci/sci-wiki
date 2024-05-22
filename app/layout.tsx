@@ -2,10 +2,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Header } from "./components/header";
-import { Footer } from "./components/footer";
 import StyledComponentsRegistry from './lib/registry'
-import { headers } from 'next/headers'
+
 import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,16 +18,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let ip = headers().get("x-forwarded-for")
   return (
     <>
     <html lang="en">
       <body>
       <NextTopLoader showSpinner={false} color="#7d7d7d"/>
         <StyledComponentsRegistry>
-          <Header userIp={ip!}></Header>
           {children}
-          <Footer></Footer>
         </StyledComponentsRegistry>
       </body>
     </html>
