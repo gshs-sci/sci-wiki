@@ -2,8 +2,11 @@
 import styled from "styled-components";
 import { Playfair } from "next/font/google";
 import { RiUserFill } from "react-icons/ri";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Cookies from 'js-cookie'
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const playfair = Playfair({ subsets: ["latin"] });
 
@@ -63,20 +66,37 @@ background-color: #fff;
     flex-direction: column;
 }
 & li {
-    padding: 5px 10px;
+    margin: 0;
+    padding: 0;
     border-radius: 1px;
     user-select: none;
     cursor: pointer;
     font-size: 15px;
-    min-width: 80px;
+    width: 130px;
     &:hover {
         background-color: #e9e9e9;
+    }
+    & a {
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        color: #000;
+        padding: 5px 10px;
+        display: block;
+    }
+    & p {
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        color: #000;
+        padding: 5px 10px;
     }
 }
 `
 
 export const Header = (props: { userIp?: string, userId?: string }) => {
     const [userExpanded, setUserExpanded] = useState(false)
+    const router = useRouter()
     return (
         <>
             <_Header>
@@ -90,14 +110,30 @@ export const Header = (props: { userIp?: string, userId?: string }) => {
                         <RiUserFill />
                     </UserArea>
                     <ExpandedUser aria-expanded={userExpanded}>
+                        <li>
                         {props.userIp ?
-                            <li>{props.userIp}</li> :
                             props.userIp && props.userId ?
-                                <li>{props.userId}</li>
-                                : <></>
+                                <p>계정: {props.userId}</p>
+                                : <p>IP: {props.userIp}</p>
+                            : <></>
                         }
-                        <li>기여 목록</li>
-                        {props.userId ? <></> : <li>로그인</li>}
+                        </li>
+                        <li>
+                            <p>
+                            기여 목록
+                            </p>
+                        </li>
+                        {props.userId ?
+                            <li onClick={() => { Cookies.remove("auth");router.refresh() }}>
+                                <p>로그아웃</p>
+                            </li>
+                            :
+                            <li>
+                                <Link href="/login">
+                                로그인
+                                </Link>
+                            </li>
+                        }
                     </ExpandedUser>
                 </HeaderElement>
             </_Header>

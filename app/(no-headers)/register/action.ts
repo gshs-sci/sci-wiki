@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { Resend } from 'resend';
 import { createClient } from 'redis';
 import { createHash } from "crypto";
+import { Verify } from "@/app/lib/turnstile";
 
 if (!process.env.RESEND_KEY) {
     throw new Error("No resend api key provided, terminating..")
@@ -18,14 +19,24 @@ export async function Register(prevState: any, formData: FormData) {
         .on('error', err => console.log('Redis Client Error', err))
         .connect();
 
-    const email = formData.get("email")?.toString()
-    const id = formData.get("id")?.toString().toLowerCase()
-    const pw = formData.get("pw")?.toString()
-    const pwre = formData.get("pwre")?.toString()
+    let email = formData.get("email")?.toString().trim().replaceAll(/\s/g, '')
+    let id = formData.get("id")?.toString().toLowerCase()
+    let pw = formData.get("pw")?.toString()
+    let pwre = formData.get("pwre")?.toString()
+    let cf_token = formData.get("cf-turnstile-response")?.toString()
+
+    let verified = await Verify(cf_token ?? "", process.env.TURNSTILE_KEY ?? "")
+    if (!verified) {
+        return {
+            "success": false,
+            errors: {
+                email: "CAPTCHA를 검증하지 못했습니다. 새로고침 후 다시 시도해 주세요",
+            }
+        }
+    }
     if (!email || !id || !pw || pw.length < 8) {
         return {
             "success": false,
-            "message": "failed",
             errors: {
                 id: id ? "" : "아이디를 입력해 주세요",
                 email: email ? "" : "이메일을 입력해 주세요",
@@ -33,12 +44,19 @@ export async function Register(prevState: any, formData: FormData) {
             }
         }
     }
-    if(pw!==pwre) {
+    if (pw !== pwre) {
         return {
             "success": false,
-            "message": "failed",
             errors: {
                 pwre: "비밀번호가 일치하지 않습니다"
+            }
+        }
+    }
+    if (!(/^[a-zA-Z0-9_,-]*$/.test(id))) {
+        return {
+            "success": false,
+            errors: {
+                id: "허용되지 않는 문자가 포함되어 있습니다."
             }
         }
     }
@@ -54,18 +72,32 @@ export async function Register(prevState: any, formData: FormData) {
     if (record != null || await client.get("idp:" + id) != null) {
         return {
             "success": false,
-            "message": "*이 표시된 입력란은 필수입니다",
             errors: {
-                id: "이미 가입되어 있는 아이디입니다"
+                id: "이미 가입되어 있는 아이디입니다."
+            }
+        }
+    }
+    let mailrecord = await prisma.user.findFirst({
+        where: {
+            email: email
+        },
+        select: {
+            id: true
+        }
+    })
+    if (mailrecord != null) {
+        return {
+            "success": false,
+            errors: {
+                email: "이미 가입되어 있는 이메일입니다."
             }
         }
     }
     if (await client.get("mailp:" + email) != null) {
         return {
             "success": false,
-            "message": "가입에 실패했습니다",
             errors: {
-                email: "이미 가입중인 이메일입니다. 10분 후에 다시 시도해 주세요"
+                email: "이미 가입중인 이메일입니다. 10분 후에 다시 시도해 주세요."
             }
         }
     }
@@ -89,14 +121,13 @@ export async function Register(prevState: any, formData: FormData) {
         console.log(e)
         return {
             "success": false,
-            "message": "가입에 실패했습니다",
             errors: {
                 email: "이메일을 보내지 못했습니다. 주소를 다시 확인해 주세요"
             }
         }
     }
     await client.set("mailp:" + email, code, { EX: 600 });
-    await client.set("idp:" + id, "true", { EX: 600 });
+    await client.set("idp:" + id, 0, { EX: 600 });
     await client.set(registerCode, JSON.stringify({
         mail: email,
         id: id,

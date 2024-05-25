@@ -1,9 +1,9 @@
 "use client"
 import styled from "styled-components";
-import { Noto_Sans_KR,Playfair } from "next/font/google";
+import { Noto_Sans_KR, Playfair } from "next/font/google";
 import { RefObject, useEffect, useRef } from "react";
 import { Validate } from "./action";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 
 const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
@@ -74,21 +74,32 @@ const NextBtn = styled.button`
     cursor: pointer;
     font-size: 13px;
 `
+const ContinueBtn = () => {
+    const { pending } = useFormStatus()
+
+    return (
+        <>
+            <NextBtn type="submit" disabled={pending}>{pending ? "처리중.." : "인증하기"}</NextBtn>
+        </>
+
+    )
+}
+
 export default function validatePage({
     children,
-  }: Readonly<{
+}: Readonly<{
     children: React.ReactNode;
-  }>) {
+}>) {
     const [state, formAction] = useFormState(Validate, null)
     return (
         <Holder>
             <form action={formAction}>
-            <Logo>SCI</Logo>
-            <InputLabel>인증번호</InputLabel>
-                <InputExp>{children}으로 인증 코드를 전송했습니다. 메일이 오지 않았다면, 스팸함을 확인해주세요</InputExp>
+                <Logo>SCI</Logo>
+                <InputLabel>인증번호</InputLabel>
+                <InputExp>{children}으로 인증 코드를 전송했습니다. 메일이 오지 않았다면, 메일 주소가 올바른지 확인해주세요.</InputExp>
                 <InputElem name="code" required placeholder="인증번호(5자리)" $isError={!!state?.errors?.code}></InputElem>
                 {state?.errors?.code ? <InputErr>{state?.errors?.code}</InputErr> : <></>}
-                <NextBtn>인증하기</NextBtn>
+                <ContinueBtn />
             </form>
         </Holder>
     )

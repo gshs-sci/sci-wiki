@@ -3,7 +3,9 @@ import styled from "styled-components"
 import { Noto_Sans_KR, Noto_Serif_KR, Playfair } from "next/font/google";
 import { useFormStatus, useFormState } from 'react-dom'
 import { Register } from "./action";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import Turnstile, { useTurnstile } from "react-turnstile";
+
 const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 const playfair = Playfair({ subsets: ["latin"] });
@@ -80,8 +82,27 @@ const serifBold = Noto_Serif_KR({ weight: "600", subsets: ["latin"] })
 
 const ContinueBtn = () => {
     const { pending } = useFormStatus()
+    const [isVerified, setVerified] = useState(false)
+    const turnstile = useTurnstile()
+
+    useEffect(() => {
+        if(!turnstile) return
+        if (!pending) {
+            setVerified(false)
+            turnstile.reset();
+        }
+    }, [pending,turnstile])
+
     return (
-        <NextBtn type="submit" disabled={pending}>{pending ? "처리중.." : "계속하기"}</NextBtn>
+        <>
+            <Turnstile
+                sitekey="0x4AAAAAAAax0WPa0nug6v7L"
+                onVerify={() => setVerified(true)}
+                refreshExpired="auto"
+            />
+            <NextBtn type="submit" disabled={!isVerified || pending}>{pending ? "처리중.." :"계속하기"}</NextBtn>
+        </>
+
     )
 }
 
@@ -93,18 +114,18 @@ export default function registerPage() {
                 <Logo>SCI</Logo>
                 <InputLabel>이메일 주소</InputLabel>
                 <InputExp>아래 주소로 인증 메일을 전송합니다.</InputExp>
-                <InputElem required type="email" name="email" placeholder="이메일 주소" $isError={!!state?.errors?.email}></InputElem>
+                <InputElem required type="email" name="email" placeholder="이메일 주소" autoComplete="email" $isError={!!state?.errors?.email}></InputElem>
                 {state?.errors?.email ? <InputErr>{state?.errors?.email}</InputErr> : <></>}
                 <InputLabel>아이디</InputLabel>
-                <InputExp>중복되는 아이디는 사용하실 수 없습니다. 아이디는 대소문자를 구별하지 않습니다.</InputExp>
-                <InputElem required name="id" placeholder="아이디" $isError={!!state?.errors?.id}></InputElem>
+                <InputExp>아이디는 대소문자를 구별하지 않습니다. 알파벳, 숫자 및 -,_만 사용하실 수 있습니다.</InputExp>
+                <InputElem required name="id" placeholder="아이디" autoComplete="username" $isError={!!state?.errors?.id}></InputElem>
                 {state?.errors?.id ? <InputErr>{state?.errors?.id}</InputErr> : <></>}
                 <InputLabel>비밀번호</InputLabel>
                 <InputExp>8글자 이상이어야 합니다.</InputExp>
-                <InputElem required name="pw" placeholder="비밀번호" $isError={!!state?.errors?.pw} type="password" minLength={8}></InputElem>
+                <InputElem required name="pw" placeholder="비밀번호" autoComplete="new-password" $isError={!!state?.errors?.pw} type="password" minLength={8}></InputElem>
                 {state?.errors?.pw ? <InputErr>{state?.errors?.pw}</InputErr> : <></>}
                 <InputLabel>비밀번호 재입력</InputLabel>
-                <InputElem $isError={!!state?.errors?.pwre} required placeholder="비밀번호 재입력" name="pwre" type="password"></InputElem>
+                <InputElem $isError={!!state?.errors?.pwre} required autoComplete="new-password" placeholder="비밀번호 재입력" name="pwre" type="password"></InputElem>
                 {state?.errors?.pwre ? <InputErr>{state?.errors?.pwre}</InputErr> : <></>}
                 <ContinueBtn />
             </form>

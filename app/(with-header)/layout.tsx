@@ -15,9 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   let ip = headers().get("x-forwarded-for")
+  let user = headers().get("x-user-id")
   return (
     <>
-        <Header userIp={ip!}></Header>
+        <Header userIp={ip!} userId={user!}></Header>
         {children}
         <Footer />
     </>

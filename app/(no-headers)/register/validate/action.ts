@@ -24,17 +24,42 @@ export async function Validate(prevState: any, formData: FormData) {
     }
     let regData = JSON.parse(regDatad) as Reg
     const code = formData.get("code")
-    const serverCode = await client.get("mailp:" + regData["mail"])
-    if (code !== serverCode) {
+    let tried = await client.get("idp:" + regData["id"])
+    if(tried==null) {
+        return
+    }
+    if(parseInt(tried)>5) {
         return {
             success: false,
             errors: {
-                code: "인증번호가 일치하지 않습니다"
+                code: "시도 가능 횟수를 초과했습니다. 10분 후 다시 시도해 주세요"
+            }
+        }
+    }
+    const serverCode = await client.get("mailp:" + regData["mail"])
+    if (code !== serverCode) {
+        await client.incr("idp:" + regData["id"])
+        return {
+            success: false,
+            errors: {
+                code: "인증번호가 일치하지 않습니다."
             }
         }
     }
     const prisma = new PrismaClient({})
-    try{
+
+    let deletePerm = false
+    let createPerm = false
+
+    //gs
+    let sa = regData["mail"].split("@")
+    if (sa[sa.length - 1] == "gs.hs.kr") {
+        deletePerm = true
+        createPerm = true
+    }
+    //gs
+
+    try {
         await client.del("mailp:" + regData["mail"])
         await client.del("idp:" + regData["id"])
         await client.del(key.value)
@@ -43,16 +68,16 @@ export async function Validate(prevState: any, formData: FormData) {
                 id: regData["id"],
                 email: regData["mail"],
                 password: regData["pw"],
-                deletePermission: true,
-                createPermission: true,
+                deletePermission: deletePerm,
+                createPermission: createPerm,
             },
         })
-    }catch(e) {
+    } catch (e) {
         console.log(e)
         return {
             success: false,
             errors: {
-                code: "오류가 발생했습니다"
+                code: "오류가 발생했습니다."
             }
         }
     }

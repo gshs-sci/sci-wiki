@@ -13,10 +13,12 @@ export async function middleware(request: NextRequest) {
     let auth = request.cookies.get("auth")
     if (auth) {
         try {
-            const { payload } = await jose.jwtDecrypt(auth.value, JWT_KEY)
+            const { payload } = await jose.jwtVerify(auth.value, JWT_KEY)
             const uid = payload.uid as string
             requestHeaders.set("x-user-id", uid)
-        } catch (e) { }
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     let ip = requestHeaders.get("CF-Connecting-IP")
