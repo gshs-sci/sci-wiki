@@ -4,6 +4,7 @@ import { Playfair } from "next/font/google";
 import { RiUserFill } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import Cookies from 'js-cookie'
+import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -61,6 +62,7 @@ border-radius: 3px;
 right: 0;
 list-style-type: none;
 background-color: #fff;
+z-index: 10;
 &[aria-expanded="true"] {
     display: flex;
     flex-direction: column;
@@ -71,7 +73,7 @@ background-color: #fff;
     border-radius: 1px;
     user-select: none;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px;
     width: 130px;
     &:hover {
         background-color: #e9e9e9;
@@ -81,15 +83,18 @@ background-color: #fff;
         padding: 0;
         text-decoration: none;
         color: #000;
-        padding: 5px 10px;
         display: block;
+        padding: 5px 10px;
+        line-height: 18px;
     }
     & p {
         margin: 0;
         padding: 0;
         text-decoration: none;
         color: #000;
+        display: block;
         padding: 5px 10px;
+        line-height: 18px;
     }
 }
 `
@@ -97,6 +102,7 @@ background-color: #fff;
 export const Header = (props: { userIp?: string, userId?: string }) => {
     const [userExpanded, setUserExpanded] = useState(false)
     const router = useRouter()
+    const pathname = usePathname()
     return (
         <>
             <_Header>
@@ -129,7 +135,7 @@ export const Header = (props: { userIp?: string, userId?: string }) => {
                             </li>
                             :
                             <li>
-                                <Link href="/login">
+                                <Link href={"/login?next="+pathname}>
                                 로그인
                                 </Link>
                             </li>

@@ -2,7 +2,7 @@
 import { createClient } from 'redis';
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/app/lib/prisma";
 
 interface Reg {
     mail: String
@@ -46,7 +46,6 @@ export async function Validate(prevState: any, formData: FormData) {
             }
         }
     }
-    const prisma = new PrismaClient({})
 
     let deletePerm = false
     let createPerm = false

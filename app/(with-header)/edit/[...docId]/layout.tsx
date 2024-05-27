@@ -13,6 +13,7 @@ const Holder = styled.div`
     font-family: ${sansNormal.style.fontFamily};
     min-height: calc(100vh - 51px);
 `
+
 export default function RootLayout({
     children
 }: Readonly<{
@@ -20,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <Holder>
-        {children}
+                {children}
         </Holder>
     )
 }

@@ -72,7 +72,7 @@ const Li = styled.li<{ $isActive: boolean }>`
     flex-direction: column;
     justify-content: center;
     color:${props => props.$isActive ? "#000" : "#4287f5"};
-    font-weight: ${props => props.$isActive ? "bold" : "normal"};
+    font-weight: normal;
     font-size: 15px;
 `
 const LiLabel = styled.div`
@@ -118,7 +118,7 @@ const Licomponent = (props: { isActive: boolean, elem: any }) => {
     return (
         <Li $isActive={props.isActive}>
             <LiLabel>
-                <Link href={"#" + props.elem.id}>{props.elem.text}</Link>
+                <Link href={"#"+props.elem.id}>{props.elem.text}</Link>
                 <RotateArrow $rotated={isDropped} onClick={() => setIsDropped(!isDropped)} >
                     <MdKeyboardArrowDown />
                 </RotateArrow>
@@ -141,7 +141,7 @@ const RecursiveIndex = (props: { titles: Array<Title> }) => {
                     return (
                         <Li $isActive={active == elem.id} key={elem.id}>
                             <LiLabel>
-                                <Link href={"#" + elem.id}>{elem.text}</Link>
+                                <Link href={"#"+elem.id}>{elem.text}</Link>
                             </LiLabel>
                         </Li>
                     )

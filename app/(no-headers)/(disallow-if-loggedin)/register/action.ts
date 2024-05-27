@@ -1,5 +1,5 @@
 "use server"
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/app/lib/prisma";
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Resend } from 'resend';
@@ -22,7 +22,6 @@ export async function Register(prevState: any, formData: FormData) {
     let email = formData.get("email")?.toString().trim().replaceAll(/\s/g, '')
     let id = formData.get("id")?.toString().toLowerCase()
     let pw = formData.get("pw")?.toString()
-    let pwre = formData.get("pwre")?.toString()
     let cf_token = formData.get("cf-turnstile-response")?.toString()
 
     let verified = await Verify(cf_token ?? "", process.env.TURNSTILE_KEY ?? "")
@@ -44,14 +43,6 @@ export async function Register(prevState: any, formData: FormData) {
             }
         }
     }
-    if (pw !== pwre) {
-        return {
-            "success": false,
-            errors: {
-                pwre: "비밀번호가 일치하지 않습니다"
-            }
-        }
-    }
     if (!(/^[a-zA-Z0-9_,-]*$/.test(id))) {
         return {
             "success": false,
@@ -60,7 +51,7 @@ export async function Register(prevState: any, formData: FormData) {
             }
         }
     }
-    const prisma = new PrismaClient({})
+
     let record = await prisma.user.findFirst({
         where: {
             id: id

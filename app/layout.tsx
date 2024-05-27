@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-    <html lang="en">
+    <html lang="kr" data-color-mode="light">
       <body>
       <NextTopLoader showSpinner={false} color="#7d7d7d"/>
         <StyledComponentsRegistry>

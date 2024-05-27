@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import CurrentActiveProvider from "@/app/components/doc/provider";
 import { Noto_Sans_KR } from "next/font/google";
+
 const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 const Holder = styled.div`
@@ -40,6 +41,7 @@ export default function RootLayout({
         };
         document.addEventListener('hashchange', listenForScroll);
         document.addEventListener("scroll", listenForScroll)
+        listenForScroll()
         return () => {
             document.removeEventListener("scroll", listenForScroll)
             document.removeEventListener('hashchange', listenForScroll);

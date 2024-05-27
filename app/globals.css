@@ -1,4 +1,3 @@
-@import url("https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css");
 body,html {
   margin: 0;
   padding: 0;
@@ -27,6 +26,6 @@ form {
 
 @media(max-width: 900px) {
   :root {
-    --cont-width:95vw;
+    --cont-width:92vw;
   }
 }

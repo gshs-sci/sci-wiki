@@ -1,12 +1,10 @@
 "use server"
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/app/lib/prisma";
 import { Verify } from "@/app/lib/turnstile";
 import { createHash } from "crypto";
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import { redirect } from 'next/navigation'
-
-const prisma = new PrismaClient({})
 
 export async function Login(prevState: any, formData: FormData) {
     let id = formData.get("id")?.toString().toLowerCase()
@@ -66,6 +64,8 @@ export async function Login(prevState: any, formData: FormData) {
         .sign(secret)
 
     cookies().set("auth", JWT)
-    redirect("/")
+    return {
+        success: true,
+    }
 
 }

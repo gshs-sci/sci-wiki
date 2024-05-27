@@ -1,0 +1,56 @@
+/* ssr된 markdown을 위한 globals.css*/
+p {
+    line-height: 24px;
+    font-size: 15px;
+}
+h2 {
+  border-bottom: none!important;
+}
+table {
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+table th,td {
+  padding: 6px 13px;
+  border: solid 1px #d0d7de;
+  text-align: center;
+}
+.md_doc code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(175, 184, 193, 0.2);
+  border-radius: 6px;
+}
+
+.md_doc pre > code {
+  padding: 16px;
+  overflow: auto;
+  display: block;
+  background-color: transparent;
+}
+.md_doc pre {
+  margin-bottom: 16px;
+  background-color: #f6f8fa;;
+}
+code.code-highlight {
+  font-size: 14px;
+  padding: 16px;
+}
+table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+a[data-footnote-ref=true] {
+  &:before {
+    content:"["
+  }
+  &:after {
+    content: "]";
+  }
+}
+  .wmde-markdown {
+    font-family: inherit;
+  }
+  .wmde-markdown table{
+    display: table;
+  }

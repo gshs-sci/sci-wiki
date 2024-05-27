@@ -6,6 +6,7 @@ import Turnstile, { useTurnstile } from "react-turnstile";
 import { useEffect, useState } from "react";
 import { useFormStatus, useFormState } from "react-dom";
 import { Login } from "./action";
+import { useRouter,useSearchParams } from "next/navigation";
 
 const playfair = Playfair({ subsets: ["latin"] });
 const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
@@ -88,7 +89,7 @@ const Btn = () => {
             turnstile.reset();
         }
     }, [pending,turnstile])
-    
+
     return (
         <>
             <Turnstile
@@ -104,6 +105,18 @@ const Btn = () => {
 
 export default function loginPage() {
     const [state, formAction] = useFormState(Login, null)
+    const router = useRouter()
+    const searchParams =useSearchParams()
+    useEffect(()=>{
+        if(state?.success) {
+            let sp = searchParams.get("next")
+            if(sp==null){
+                router.replace("/")
+            }else {
+                router.replace(sp)
+            }
+        }
+    },[state?.success])
     return (
         <Holder>
             <form action={formAction}>
