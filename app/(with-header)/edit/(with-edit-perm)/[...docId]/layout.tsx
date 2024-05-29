@@ -1,8 +1,6 @@
 "use client"
 import styled from "styled-components";
-import { Noto_Sans_KR } from "next/font/google";
 
-const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 const Holder = styled.div`
     margin-left: auto;
@@ -10,7 +8,6 @@ const Holder = styled.div`
     width: var(--cont-width);
     display: flex;
     flex-direction: column;
-    font-family: ${sansNormal.style.fontFamily};
     min-height: calc(100vh - 51px);
 `
 

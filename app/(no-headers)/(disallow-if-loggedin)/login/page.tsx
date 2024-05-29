@@ -1,6 +1,6 @@
 "use client"
 import styled from "styled-components"
-import { Noto_Sans_KR, Playfair } from "next/font/google";
+import { Playfair } from "next/font/google";
 import Link from "next/link";
 import Turnstile, { useTurnstile } from "react-turnstile";
 import { useEffect, useState } from "react";
@@ -9,7 +9,6 @@ import { Login } from "./action";
 import { useRouter,useSearchParams } from "next/navigation";
 
 const playfair = Playfair({ subsets: ["latin"] });
-const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 const Logo = styled.div`
     font-family: ${playfair.style.fontFamily};
@@ -25,7 +24,6 @@ const Holder = styled.div`
     margin-right: auto;
     width: var(--cont-width);
     display: flex;
-    font-family: ${sansNormal.style.fontFamily};
     height: 100vh;
     align-items: center;
     justify-content: center;

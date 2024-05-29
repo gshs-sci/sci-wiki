@@ -1,12 +1,10 @@
 "use client"
 import styled from "styled-components"
-import { Noto_Sans_KR, Noto_Serif_KR, Playfair } from "next/font/google";
+import { Noto_Serif_KR, Playfair } from "next/font/google";
 import { useFormStatus, useFormState } from 'react-dom'
 import { Register } from "./action";
 import { useRef, useState, useEffect, useTransition } from "react";
 import Turnstile, { useTurnstile } from "react-turnstile";
-
-const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 const playfair = Playfair({ subsets: ["latin"] });
 
@@ -24,7 +22,6 @@ const Holder = styled.div`
     margin-right: auto;
     width: var(--cont-width);
     display: flex;
-    font-family: ${sansNormal.style.fontFamily};
     height: 100vh;
     align-items: center;
     justify-content: center;

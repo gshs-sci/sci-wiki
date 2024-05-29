@@ -7,14 +7,14 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { getCodeString } from 'rehype-rewrite';
 import { remarkExtendedTable, extendedTableHandlers } from 'remark-extended-table';
-import rehypeSanitize,{defaultSchema} from "rehype-sanitize";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import GithubSlugger from 'github-slugger'
 
 import "./globals.css"
 import "./highlight.css"
 import * as prod from 'react/jsx-runtime'
 import { Index } from "@/app/components/doc/index/index";
-import { H2Elem, H3Elem, H4Elem, H5Elem, H6Elem, AElem,SectionElem } from "@/app/components/doc/txt";
+import { H2Elem, H3Elem, H4Elem, H5Elem, H6Elem, AElem, SectionElem } from "@/app/components/doc/txt";
 import prisma from "@/app/lib/prisma";
 import { notFound } from "next/navigation";
 
@@ -88,13 +88,13 @@ const CompileMD = (data: string): Promise<JSX.Element> => {
 
     const options: any = {
         Fragment: prod.Fragment, jsx: prod.jsx, jsxs: prod.jsxs, components: {
-            h2: H2Elem, h3: H3Elem, h4: H4Elem, h5: H5Elem, h6: H6Elem, a: AElem,section:SectionElem,
+            h2: H2Elem, h3: H3Elem, h4: H4Elem, h5: H5Elem, h6: H6Elem, a: AElem, section: SectionElem,
             code: ({ children = [], className, ...props }: any) => {
                 if (typeof children === 'string' && /^\$\$(.*)\$\$/.test(children)) {
                     const html = katex.renderToString(children.replace(/^\$\$(.*)\$\$/, '$1'), {
                         throwOnError: false,
                     });
-                    return <code dangerouslySetInnerHTML={{ __html: html }} style={{ background: 'transparent',display:"inline",padding:0 }} />;
+                    return <code dangerouslySetInnerHTML={{ __html: html }} style={{ background: 'transparent', display: "inline", padding: 0 }} />;
                 }
                 const code = props.node && props.node.children ? getCodeString(props.node.children) : children;
                 if (
@@ -105,7 +105,7 @@ const CompileMD = (data: string): Promise<JSX.Element> => {
                     const html = katex.renderToString(code, {
                         throwOnError: false,
                     });
-                    return <code dangerouslySetInnerHTML={{ __html: html }}/>;
+                    return <code dangerouslySetInnerHTML={{ __html: html }} />;
                 }
                 return <code className={String(className)} >{children}</code>;
 
@@ -120,7 +120,7 @@ const CompileMD = (data: string): Promise<JSX.Element> => {
             .use(remarkExtendedTable)
             .use(remarkRehype, {
                 clobberPrefix: "uc-",
-                handlers:{
+                handlers: {
                     ...extendedTableHandlers
                 }
             })
@@ -128,20 +128,21 @@ const CompileMD = (data: string): Promise<JSX.Element> => {
                 ...defaultSchema,
                 clobberPrefix: "sci-",
                 attributes: {
-                  ...defaultSchema.attributes,
-                  code: [
-                    ...(defaultSchema?.attributes?.code || []),
-                    ['className', 'language-*']
-                  ],
-                  'th':[
-                    'colspan','rowspan'
-                  ],
-                  'td':[
-                    'colspan','rowspan'
-                  ]
-                }})
+                    ...defaultSchema.attributes,
+                    code: [
+                        ...(defaultSchema?.attributes?.code || []),
+                        ['className', 'language-*']
+                    ],
+                    'th': [
+                        'colspan', 'rowspan'
+                    ],
+                    'td': [
+                        'colspan', 'rowspan'
+                    ]
+                }
+            })
             .use(rehypeSlug)
-            .use(rehypeHighlight,{plainText: ['KaTeX','katex','KATEX']})
+            .use(rehypeHighlight, { plainText: ['KaTeX', 'katex', 'KATEX'] })
             .use(rehypeReact, options)
             .process(data)
             .then((val) => {
@@ -171,7 +172,7 @@ export async function generateMetadata({ params }: any) {
 }
 
 export default async function Document({ params }: { params: { docId: Array<string> } }) {
-    const { content, title } = await prisma.doc.findFirst({
+    const data = await prisma.doc.findFirst({
         where: {
             id: params.docId.join("/")
         },
@@ -180,6 +181,10 @@ export default async function Document({ params }: { params: { docId: Array<stri
             title: true
         }
     })
+    if (data === null) {
+        return notFound()
+    }
+    const { content, title } = data
     const compiled = await CompileMD(content)
     return (
         <>

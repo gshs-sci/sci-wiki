@@ -8,7 +8,6 @@ import { useState } from "react";
 import Image from "next/image";
 const serifNormal = Noto_Serif_KR({ weight: "400", subsets: ["latin"] })
 const serifBold = Noto_Serif_KR({ weight: "600", subsets: ["latin"] })
-const sansNormal = Noto_Sans_KR({ weight: "400", subsets: ["latin"] })
 const sansBold = Noto_Sans_KR({ weight: "600", subsets: ["latin"] })
 const Body = styled.div`
   width: var(--cont-width);
@@ -59,13 +58,22 @@ const SearchBarInputHolder = styled.div`
   display: flex;
   align-items: center;
   width: 500px;
-  & select {
-    position: absolute;
-    right: 10px;
+  & select:not([multiple]) {
     border: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-position: right 50%;
+    background-repeat: no-repeat;
+    background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1"><path d="M4 8L0 4h8z"/></svg>');
+    padding: 3px;
+    padding-right: 1.5em;
+    right: 10px;
+    font-size: 12px;
     cursor: pointer;
-    border-radius: 0px;
-  }
+    position: absolute;
+}
+
 `
 const SearchBar = styled.input`
   padding: 10px 10px;
@@ -186,39 +194,6 @@ export default function MainPage() {
           <Image src="/undraw_connected_world_wuay.svg" alt="globe" width={280} height={280}></Image>
         </SearchImg>
       </SearchArea>
-      <h3>인기 문서</h3>
-      <DisplayDocs>
-        <Doc>
-          <p className="sub">
-            물리학
-          </p>
-          상대성 이론
-        </Doc>
-        <Doc>
-          <p className="sub">
-            천문학
-          </p>
-          전복 썬그라스를 만드는 방법
-        </Doc>
-        <Doc>
-          <p className="sub">
-            생명과학
-          </p>
-          맛있게 밥 먹는 방법
-        </Doc>
-        <Doc>
-          <p className="sub">
-            수학
-          </p>
-          손가락으로 숫자 세는 방법
-        </Doc>
-        <Doc>
-          <p className="sub">
-            정보과학
-          </p>
-          브롤스타즈 잘하는 방법
-        </Doc>
-      </DisplayDocs>
       <DisplayH>
       <h3>새로 업데이트된 문서</h3>
         <HDoc>
@@ -229,6 +204,30 @@ export default function MainPage() {
         <HDoc>
           <p className="sub">천문학 &gt;</p>
           <p className="title">집가는법</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+        <HDoc>
+          <p className="sub">생명과학 &gt;</p>
+          <p className="sub">실험 &gt;</p>
+          <p className="title">Disk Diffusion Test</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+        <HDoc>
+          <p className="sub">생명과학 &gt;</p>
+          <p className="sub">실험 &gt;</p>
+          <p className="title">Disk Diffusion Test</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+        <HDoc>
+          <p className="sub">생명과학 &gt;</p>
+          <p className="sub">실험 &gt;</p>
+          <p className="title">Disk Diffusion Test</p>
+          <p className="date">1시간 전</p>
+        </HDoc>
+        <HDoc>
+          <p className="sub">생명과학 &gt;</p>
+          <p className="sub">실험 &gt;</p>
+          <p className="title">Disk Diffusion Test</p>
           <p className="date">1시간 전</p>
         </HDoc>
         <HDoc>

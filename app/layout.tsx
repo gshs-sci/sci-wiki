@@ -1,12 +1,13 @@
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter,Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import StyledComponentsRegistry from './lib/registry'
 
 import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({ subsets: ["latin"] });
+const notoSans=Noto_Sans_KR({subsets:["latin"]})
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <>
     <html lang="kr" data-color-mode="light">
-      <body>
+      <body className={notoSans.className}>
       <NextTopLoader showSpinner={false} color="#7d7d7d"/>
         <StyledComponentsRegistry>
           {children}

@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: any) {
 }
 
 export default async function Document({ params }: { params: { docId: Array<string> } }) {
-    const { content, title } = await prisma.doc.findFirst({
+    const data = await prisma.doc.findFirst({
         where: {
             id: params.docId.join("/")
         },
@@ -32,6 +32,10 @@ export default async function Document({ params }: { params: { docId: Array<stri
             title: true
         }
     })
+    if (data === null) {
+        return notFound()
+    }
+    const { content, title }=data
     let deletePerm = false
     let user = headers().get("x-user-id")
     if (user) {

@@ -7,16 +7,12 @@ import styled from "styled-components";
 // };
 import { useEffect, useState } from "react";
 import CurrentActiveProvider from "@/app/components/doc/provider";
-import { Noto_Sans_KR } from "next/font/google";
-
-const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 const Holder = styled.div`
     margin-left: auto;
     margin-right: auto;
     width: var(--cont-width);
     display: flex;
-    font-family: ${sansNormal.style.fontFamily};
 `
 
 
@@ -31,13 +27,15 @@ export default function RootLayout({
         let titleList: Array<Element> = []
         document.querySelectorAll("[data-type='md-title']").forEach(elem => titleList.push(elem))
         const listenForScroll = () => {
-            let min: Element = titleList[0]
-            titleList.forEach((item) => {
-                if (Math.abs(item.getBoundingClientRect().top) <= Math.abs(min.getBoundingClientRect().top)) {
-                    min = item
-                }
-            });
-            setCurrentActive(min.id);
+            try{
+                let min: Element = titleList[0]
+                titleList.forEach((item) => {
+                    if (Math.abs(item.getBoundingClientRect().top) <= Math.abs(min.getBoundingClientRect().top)) {
+                        min = item
+                    }
+                });
+                setCurrentActive(min.id);
+            }catch(e){}
         };
         document.addEventListener('hashchange', listenForScroll);
         document.addEventListener("scroll", listenForScroll)

@@ -1,6 +1,6 @@
 "use client"
 import styled from "styled-components";
-import { Edit } from "../../(with-header)/edit/[...docId]/action";
+import { Edit } from "../../(with-header)/edit/(with-edit-perm)/[...docId]/action";
 
 import MDEditor from '@uiw/react-md-editor';
 import * as commands from "@uiw/react-md-editor/commands"
@@ -24,10 +24,7 @@ import "@/app/(with-header)/d/[...docId]/globals.css"
 
 const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
-
-
-export const Textarea = (props: { title: string, defaultValue: string, id?: string }) => {
-    const { title, ...prop } = props
+export const Textarea = (props: { defaultValue: string}) => {
     const [value, setValue] = useState<any>(props.defaultValue)
 
     return (
@@ -108,7 +105,6 @@ export const Textarea = (props: { title: string, defaultValue: string, id?: stri
                         },
                     }}
                 />
-                {props.id ? <input type="hidden" name="docId" defaultValue={props.id} /> : <></>}
         </>
     )
 }

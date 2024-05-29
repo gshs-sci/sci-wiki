@@ -23,8 +23,8 @@ model Contribution {
   id      Int  @id @default(autoincrement())
   userId  String?
   docId   String
-  author  User?   @relation(fields: [userId], references: [id])
-  doc     Doc    @relation(fields: [docId], references: [id])
+  author  User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  doc     Doc    @relation(fields: [docId], references: [id], onDelete: Cascade)
   before  String @db.Text  
   after   String @db.Text  
   date    DateTime @default(now())
@@ -40,11 +40,13 @@ model Subject {
 model Doc {
   id            String         @id
   title         String
-  content       String         @db.Text     
+  content       String         @db.Text
   subjectId     String
   subject       Subject        @relation(fields:[subjectId], references: [id])
-  contributions Contribution[]
+  contributions Contribution[] 
   tags Tag[]
+
+  @@unique([id,title])
 }
 
 model Tag {

@@ -1,11 +1,11 @@
 "use client"
 import styled from "styled-components";
-import { Noto_Sans_KR } from "next/font/google";
 import { useFormStatus, useFormState } from "react-dom";
 import { useEffect, useState } from "react";
 import Turnstile, { useTurnstile } from "react-turnstile";
-import { Edit } from "./action";
+import { Create } from "./action";
 import { Textarea } from "@/app/components/edit/editor";
+
 
 const BottomBtns = styled.div`
     display: flex;   
@@ -36,12 +36,6 @@ const SubmitBtn = styled.button`
     color: #fff;
     cursor: pointer;
 `
-const DelBtn = styled.button`
-    background-color: transparent;
-    color: #c90000;
-    border: none;
-    cursor: pointer;
-`
 
 export const SubmitButton = (props: { isSuccess?: boolean, message?: string }) => {
     const { pending } = useFormStatus()
@@ -57,34 +51,53 @@ export const SubmitButton = (props: { isSuccess?: boolean, message?: string }) =
     }, [pending, turnstile])
     return (
         <>
-                <LBtn>
-                    <Turnstile
-                        sitekey="0x4AAAAAAAax0WPa0nug6v7L"
-                        onVerify={() => setVerified(true)}
-                        refreshExpired="auto"
-                    />
-                    <SubmitBtn type="submit" disabled={pending || !isVerified}>
-                        {pending ? "저장중.." : "변경사항 적용하기"}
-                    </SubmitBtn>
-                    <Msg>
-                        {props.message ? props.message : ""}
-                    </Msg>
-                </LBtn>
+            <LBtn>
+                <Turnstile
+                    sitekey="0x4AAAAAAAax0WPa0nug6v7L"
+                    onVerify={() => setVerified(true)}
+                    refreshExpired="auto"
+                />
+                <SubmitBtn type="submit" disabled={pending || !isVerified}>
+                    {pending ? "저장중.." : "변경사항 적용하기"}
+                </SubmitBtn>
+                <Msg>
+                    {props.message ? props.message : ""}
+                </Msg>
+            </LBtn>
 
         </>
     )
 }
-export const EditArea = (props:{title:string, content:string, docId:string, deletePerm:boolean}) => {
-    const {title,content,docId} = props
-    const [state, formAction] = useFormState(Edit, null)
+
+const Holder = styled.div`
+    margin-left: auto;
+    margin-right: auto;
+    width: var(--cont-width);
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 51px);
+`
+const TitleInput = styled.input`
+    font-size: 2em;
+    font-weight: bold;
+    margin: 20px 0px;
+    border: none;
+    border: solid 1px rgb(202, 202, 202);
+    padding: 5px;
+    border-radius: 3px;
+`
+
+export default function Document() {
+    const [state, formAction] = useFormState(Create, null)
     return (
+        <Holder>
             <form action={formAction}>
-                <h1>{title}</h1>
-                <Textarea defaultValue={content} title={title} id={docId}></Textarea>
+                <TitleInput placeholder="제목을 입력하세요" spellCheck={false} name="title" required/>
+                <Textarea defaultValue="" />
                 <BottomBtns>
                     <SubmitButton isSuccess={state?.success} message={state?.message} />
-                    {props.deletePerm?<DelBtn type="button">문서 삭제</DelBtn>:<></>}
                 </BottomBtns>
             </form>
+        </Holder>
     )
 }
