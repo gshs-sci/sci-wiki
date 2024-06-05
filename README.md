@@ -10,6 +10,7 @@ After cloning this repository to your local development environment, build and s
 
 ```bash
 docker-compose --profile dev up
+docker-compose --profile dev up -V --build
 ```
 
 the development server container along with the redis,mariadb container will start automatically.

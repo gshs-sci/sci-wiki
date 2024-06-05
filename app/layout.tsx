@@ -6,8 +6,10 @@ import StyledComponentsRegistry from './lib/registry'
 
 import NextTopLoader from 'nextjs-toploader';
 
-const inter = Inter({ subsets: ["latin"] });
-const notoSans=Noto_Sans_KR({subsets:["latin"]})
+const inter = Inter({ subsets: ["latin"], display: 'swap' });
+const notoSans=Noto_Sans_KR({subsets:["latin"],
+display: 'swap'
+})
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",

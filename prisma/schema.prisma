@@ -20,7 +20,7 @@ model User {
 }
 
 model Contribution {
-  id      Int  @id @default(autoincrement())
+  id      String  @id @default(cuid())
   userId  String?
   docId   String
   author  User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -29,6 +29,7 @@ model Contribution {
   after   String @db.Text  
   date    DateTime @default(now())
   ip      String
+  note    String @default("")
 }
 
 

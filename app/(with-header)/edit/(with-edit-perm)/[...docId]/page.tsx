@@ -3,11 +3,12 @@ import prisma from "@/app/lib/prisma";
 import { notFound } from "next/navigation";
 import { EditArea } from "./editArea";
 import { headers } from "next/headers";
+import { CompileMD } from "@/app/lib/document/compileMd";
 
 export async function generateMetadata({ params }: any) {
     const data = await prisma.doc.findFirst({
         where: {
-            id: params.docId.join("/")
+            id: decodeURIComponent(params.docId.join("/"))
         },
         select: {
             title: true
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: any) {
 export default async function Document({ params }: { params: { docId: Array<string> } }) {
     const data = await prisma.doc.findFirst({
         where: {
-            id: params.docId.join("/")
+            id: decodeURIComponent(params.docId.join("/"))
         },
         select: {
             content: true,
@@ -49,9 +50,10 @@ export default async function Document({ params }: { params: { docId: Array<stri
         })
         deletePerm = deletePermission
     }
+    const precompile = await CompileMD(content)
     return (
         <>
-            <EditArea title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} />
+            <EditArea title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} preCompile={precompile}/>
         </>
     )
 }

@@ -7,6 +7,7 @@ import Turnstile, { useTurnstile } from "react-turnstile";
 import { Edit, Delete } from "./action";
 import { Textarea } from "@/app/components/edit/editor";
 import Link from "next/link";
+
 const BottomBtns = styled.div`
     display: flex;   
     margin-top: 20px;
@@ -151,15 +152,15 @@ const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm
     )
 }
 
-export const EditArea = (props: { title: string, content: string, docId: string, deletePerm: boolean }) => {
+export const EditArea = (props: { title: string, content: string, docId: string, deletePerm: boolean, preCompile?:JSX.Element }) => {
     const { title, content, docId } = props
     const [state, formAction] = useFormState(Edit, null)
     return (
         <form action={formAction}>
             <h1>{title}</h1>
-            <Textarea defaultValue={content}></Textarea>
-            <input type="hidden" name="docId" defaultValue={docId} />
-            <SubmitButton isSuccess={state?.success} message={state?.message} deletePerm={props.deletePerm} docId={docId} />
+            <Textarea defaultValue={content} preCompiled={props.preCompile}></Textarea>
+            <input type="hidden" name="docId" defaultValue={decodeURIComponent(docId)} />
+            <SubmitButton isSuccess={state?.success} message={state?.message} deletePerm={props.deletePerm} docId={decodeURIComponent(docId)} />
         </form>
     )
 }

@@ -103,6 +103,19 @@ export const Header = (props: { userIp?: string, userId?: string }) => {
     const [userExpanded, setUserExpanded] = useState(false)
     const router = useRouter()
     const pathname = usePathname()
+
+    const listner = (e: Event) => {
+        if (!(e.target as HTMLTextAreaElement).matches("[data-header=true], [data-header=true] *")) {
+            setUserExpanded(false)
+        }
+    }
+    useEffect(() => {
+        addEventListener("click", listner)
+        return () => {
+            removeEventListener("click", listner)
+        }
+    }, [])
+
     return (
         <>
             <_Header>
@@ -112,31 +125,31 @@ export const Header = (props: { userIp?: string, userId?: string }) => {
                             SCI
                         </Link>
                     </Logo>
-                    <UserArea onClick={() => setUserExpanded(!userExpanded)}>
+                    <UserArea onClick={() => setUserExpanded(!userExpanded)} data-header="true">
                         <RiUserFill />
                     </UserArea>
-                    <ExpandedUser aria-expanded={userExpanded}>
+                    <ExpandedUser aria-expanded={userExpanded} data-header="true">
                         <li>
-                        {props.userIp ?
-                            props.userIp && props.userId ?
-                                <p>계정: {props.userId}</p>
-                                : <p>IP: {props.userIp}</p>
-                            : <></>
-                        }
+                            {props.userIp ?
+                                props.userIp && props.userId ?
+                                    <p>계정: {props.userId}</p>
+                                    : <p>IP: {props.userIp}</p>
+                                : <></>
+                            }
                         </li>
                         <li>
                             <p>
-                            기여 목록
+                                기여 목록
                             </p>
                         </li>
                         {props.userId ?
-                            <li onClick={() => { Cookies.remove("auth");router.refresh() }}>
+                            <li onClick={() => { Cookies.remove("auth"); router.refresh() }} >
                                 <p>로그아웃</p>
                             </li>
                             :
                             <li>
-                                <Link href={"/login?next="+pathname}>
-                                로그인
+                                <Link href={"/login?next=" + pathname}>
+                                    로그인
                                 </Link>
                             </li>
                         }
