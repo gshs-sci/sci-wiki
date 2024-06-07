@@ -119,7 +119,9 @@ export default function loginPage() {
         <Holder>
             <form action={formAction}>
                 <Logo>
-                    SCI
+                    <Link href="/">
+                        SCI
+                    </Link>
                 </Logo>
                 <InputLabel>아이디</InputLabel>
                 <InputElem required type="id" name="id" placeholder="이메일 주소 또는 아이디" autoComplete="id" $isError={!!state?.errors?.id}></InputElem>

@@ -13,15 +13,6 @@ import { CompileMD } from "@/app/lib/document/compileMd";
 import styled from 'styled-components';
 const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
-const LoadingHolder = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-`
-
-
 export const Textarea = (props: { defaultValue: string, preCompiled?:JSX.Element }) => {
     const [value, setValue] = useState<any>(props.defaultValue)
 
@@ -31,6 +22,7 @@ export const Textarea = (props: { defaultValue: string, preCompiled?:JSX.Element
                 textareaProps={{ name: "data" }}
                 height={"calc(100vh - 210px)"}
                 style={{ fontFamily: sansNormal.style.fontFamily }}
+                preview="edit"
                 commands={[
                     commands.group([commands.title2, commands.title3, commands.title4, commands.title5, commands.title6], {
                         name: 'title',

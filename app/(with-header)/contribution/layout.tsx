@@ -10,6 +10,7 @@ const Holder = styled.div`
     width: var(--cont-width);
     display: flex;
     flex-direction: column;
+    overflow: scroll;
 `
 export default function RootLayout({
   children,

@@ -78,36 +78,41 @@ export default async function Page({
             note: elem.note
         }
     })
-    const [next, prev] = await prisma.$transaction([
-        prisma.contribution.findFirst({
-            orderBy: {
-                date: "desc"
-            },
-            where: where,
-            select: {
-                id: true
-            },
-            take: 1,
-            skip: 1,
-            cursor: {
-                id: data.slice(-1)[0].id
-            }
-        }),
-        prisma.contribution.findFirst({
-            orderBy: {
-                date: "desc"
-            },
-            where: where,
-            select: {
-                id: true
-            },
-            take: -1,
-            skip: 1,
-            cursor: {
-                id: data[0].id
-            }
-        })
-    ])
+    let next,prev
+    if(data.length<1) {
+        [next,prev]=[null,null]
+    }else {
+        [next, prev] = await prisma.$transaction([
+            prisma.contribution.findFirst({
+                orderBy: {
+                    date: "desc"
+                },
+                where: where,
+                select: {
+                    id: true
+                },
+                take: 1,
+                skip: 1,
+                cursor: {
+                    id: data.slice(-1)[0].id
+                }
+            }),
+            prisma.contribution.findFirst({
+                orderBy: {
+                    date: "desc"
+                },
+                where: where,
+                select: {
+                    id: true
+                },
+                take: -1,
+                skip: 1,
+                cursor: {
+                    id: data[0].id
+                }
+            })
+        ])
+    }
     return (
         <>
             <TitleH1>{user ? user : ip}의 기여 목록</TitleH1>

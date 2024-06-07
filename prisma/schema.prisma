@@ -46,7 +46,8 @@ model Doc {
   subject       Subject        @relation(fields:[subjectId], references: [id])
   contributions Contribution[] 
   tags Tag[]
-
+  lastUpdated   DateTime       @updatedAt
+  created   DateTime           @default(now())
   @@unique([id,title])
 }
 

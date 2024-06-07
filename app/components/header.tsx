@@ -138,9 +138,9 @@ export const Header = (props: { userIp?: string, userId?: string }) => {
                             }
                         </li>
                         <li>
-                            <p>
+                            <Link href={"/contribution"}>
                                 기여 목록
-                            </p>
+                            </Link>
                         </li>
                         {props.userId ?
                             <li onClick={() => { Cookies.remove("auth"); router.refresh() }} >

@@ -9,6 +9,7 @@ export const Edit = async (prevState: any, formData: FormData) => {
     const data = formData.get("data")?.toString()
     const docId = formData.get("docId")
     const cf_tk = formData.get("cf-turnstile-response")?.toString()
+    const commitmsg = formData.get("commitmsg")?.toString()
 
     let verified = await Verify(cf_tk ?? "", process.env.TURNSTILE_KEY ?? "")
     if (!verified) {
@@ -62,24 +63,34 @@ export const Edit = async (prevState: any, formData: FormData) => {
             success: false,
             message: "오류: 변경사항이 존재하지 않습니다"
         }
-    await prisma.contribution.create({
-        data: {
-            ...contributionPayload,
-            before: docData.content,
-            after: data
+    try{
+        await prisma.$transaction([
+            prisma.contribution.create({
+                data: {
+                    note:commitmsg,
+                    ...contributionPayload,
+                    before: docData.content,
+                    after: data
+                }
+            }),
+            prisma.doc.update({
+                where: {
+                    id: docId
+                },
+                data: {
+                    content: data
+                }
+            })
+        ])
+    }catch(e) {
+        return {
+            success: false,
+            message: "오류가 발생했습니다"
         }
-    })
-    await prisma.doc.update({
-        where: {
-            id: docId
-        },
-        data: {
-            content: data
-        }
-    })
+    }
     return {
         success: true,
-        message: "문서를 수정했습니다."
+        message: "문서를 수정했습니다"
     }
 }
 

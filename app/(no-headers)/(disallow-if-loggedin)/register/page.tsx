@@ -5,6 +5,7 @@ import { useFormStatus, useFormState } from 'react-dom'
 import { Register } from "./action";
 import { useRef, useState, useEffect, useTransition } from "react";
 import Turnstile, { useTurnstile } from "react-turnstile";
+import Link from "next/link";
 
 const playfair = Playfair({ subsets: ["latin"] });
 
@@ -81,33 +82,33 @@ const serifBold = Noto_Serif_KR({ weight: "600", subsets: ["latin"] })
 export default function registerPage() {
     const formRef = useRef<HTMLFormElement>(null)
     const [isPending, startTransition] = useTransition()
-    const [submitState,setSubmitState] = useState<any>()
+    const [submitState, setSubmitState] = useState<any>()
 
     const [isVerified, setVerified] = useState(false)
     const turnstile = useTurnstile()
 
     useEffect(() => {
-        if(!turnstile) return
+        if (!turnstile) return
         if (!isPending) {
             setVerified(false)
             turnstile.reset();
         }
-    }, [isPending,turnstile])
+    }, [isPending, turnstile])
 
-    const SubmitForm = async() => {
-        const form = new FormData(formRef.current??undefined)
+    const SubmitForm = async () => {
+        const form = new FormData(formRef.current ?? undefined)
         let result;
-        startTransition(async ()=>{
-            if(!(form.get("pw")==form.get("pwre"))){
+        startTransition(async () => {
+            if (!(form.get("pw") == form.get("pwre"))) {
                 result = {
-                    success:false,
-                    errors:{
-                        pwre:"비밀번호가 일치하지 않습니다"
+                    success: false,
+                    errors: {
+                        pwre: "비밀번호가 일치하지 않습니다"
                     }
                 }
-            }else{
+            } else {
                 form.delete("pwre")
-                result = await Register("",form)
+                result = await Register("", form)
             }
             setSubmitState(result)
         })
@@ -115,7 +116,11 @@ export default function registerPage() {
     return (
         <Holder>
             <form ref={formRef} action={SubmitForm}>
-                <Logo>SCI</Logo>
+                <Logo>
+                    <Link href="/">
+                        SCI
+                    </Link>
+                </Logo>
                 <InputLabel>이메일 주소</InputLabel>
                 <InputExp>아래 주소로 인증 메일을 전송합니다.</InputExp>
                 <InputElem required type="email" name="email" placeholder="이메일 주소" autoComplete="email" $isError={!!submitState?.errors?.email}></InputElem>
@@ -136,7 +141,7 @@ export default function registerPage() {
                     onVerify={() => setVerified(true)}
                     refreshExpired="auto"
                 />
-                <NextBtn type="submit" disabled={!isVerified || isPending}>{isPending ? "처리중.." :"계속하기"}</NextBtn>
+                <NextBtn type="submit" disabled={!isVerified || isPending}>{isPending ? "처리중.." : "계속하기"}</NextBtn>
             </form>
         </Holder>
     )

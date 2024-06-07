@@ -4,6 +4,7 @@ import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { Source_Code_Pro } from "next/font/google";
 import { TbDots } from "react-icons/tb";
+import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"], weight: "400" })
 
@@ -58,6 +59,7 @@ display: flex;
 flex-direction: column;
 border-left: solid 1px #dadada;
 border-right: solid 1px #dadada;
+position: relative;
 &:first-child {
     border-top: solid 1px #dadada;
 }
@@ -130,6 +132,74 @@ a:hover {
 
 `
 
+const ElemDropdown = styled.ul`
+    &[aria-hidden=false] {
+        display: flex;
+        flex-direction: column;
+    }
+    display: none;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    border: solid 1px #bfbfbf;
+    padding: 10px;
+    top: 10px;
+    right: 10px;
+    & li {
+        display: flex;
+        cursor: pointer;
+    }
+    & a {
+        margin: 0;
+        padding: 5px 10px;
+        width: 100%;
+        font-size: 13px;
+        line-height: 18px;
+    }
+    & p {
+        margin: 0;
+        padding: 5px 10px;
+        width: 100%;
+        font-size: 13px;
+        line-height: 18px;
+    }
+    & a:hover {
+        color: #000;
+        text-decoration: none;
+    }
+    & li:hover {
+        background-color: rgb(233, 233, 233);
+    }
+    position: absolute;
+    z-index: 2;
+    border-radius: 3px;
+`
+
+const Btns = styled.div`
+    display: flex;
+`
+const NavigationBtn = styled.button`
+    color: #2776af;
+    margin-right: 10px;
+    background-color: transparent;
+    border: none;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    &:enabled {
+        cursor: pointer;
+    }
+    &:disabled {
+        color: #949494;
+    }
+    &:enabled:hover {
+        text-decoration: underline;
+    }
+`
+
 interface Contribution {
     id: string,
     date: Date,
@@ -139,9 +209,9 @@ interface Contribution {
     lengthDifference: number
 }
 
-export const Contribution = (props: { data: Array<Contribution>, forward?:boolean, backward?:boolean }) => {
-    const [isDropped, setDropped] = useState(false)
-    const {forward,backward} = props
+export const Contribution = (props: { data: Array<Contribution>, forward?: boolean, backward?: boolean }) => {
+    const [drop, setDropped] = useState("")
+    const { forward, backward } = props
     const { data } = props
     let fullData:
         {
@@ -157,6 +227,18 @@ export const Contribution = (props: { data: Array<Contribution>, forward?:boolea
             fullData[key] = [elem]
         }
     })
+    const listner = (e: Event) => {
+        if (!(e.target as HTMLTextAreaElement).matches("[data-cont=true], [data-cont=true] *")) {
+            setDropped("")
+        }
+    }
+    useEffect(() => {
+        addEventListener("click", listner)
+        return () => {
+            removeEventListener("click", listner)
+        }
+    }, [])
+
     return (<>
         {Object.keys(fullData).map((e) => {
             let elem = fullData[e]
@@ -168,7 +250,7 @@ export const Contribution = (props: { data: Array<Contribution>, forward?:boolea
                             return (
                                 <Elem key={data.id}>
                                     <div className="top">
-                                        <Link href={`/d/${data.docId}`}>
+                                        <Link href={`/d/${data.docId}`} scroll={false}>
                                             {data.docId}
                                         </Link>
                                         {data.lengthDifference > 0 ?
@@ -183,12 +265,29 @@ export const Contribution = (props: { data: Array<Contribution>, forward?:boolea
                                             <div className="id">
                                                 {data.id.slice(16, -1)}
                                             </div>
-                                            <div className="menubtn">
+                                            <div className="menubtn" onClick={() => setDropped(data.id)} data-cont={true}>
                                                 <TbDots />
                                             </div>
 
                                         </div>
                                     </div>
+                                    <ElemDropdown aria-hidden={!(drop == data.id)} data-cont={true}>
+                                        <li>
+                                            <Link href={`/d/${data.docId}?rev=${data.id}`}>
+                                            리비전 보기
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href={`/contribution/compare?after=${data.id}`}>
+                                            이 리비전 비교
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <p>
+                                            이 리비전으로 되돌리기
+                                            </p>
+                                        </li>
+                                    </ElemDropdown>
                                     <div className="bottom">
                                         <p className="id">
                                             {data.userId ? data.userId : data.ip}
@@ -198,13 +297,16 @@ export const Contribution = (props: { data: Array<Contribution>, forward?:boolea
                                             {data.date.toUTCString()}
                                         </p>
                                     </div>
-                                </Elem>)
+                                </Elem>
+                            )
                         })}
                     </Holder>
                 </Fragment>
             )
         })}
-        {forward?<Link href={"?from=" + data.slice(-1)[0].id}>다음 페이지</Link>:<></>}
-        {backward?<Link href={"?until=" + data[0].id}>이전 페이지</Link>:<></>}
+        <Btns>
+            <Link style={{ textDecoration: "none" }} href={backward ? "?until=" + data[0].id : ""}><NavigationBtn disabled={!backward}><MdNavigateBefore />이전 페이지</NavigationBtn></Link>
+            <Link style={{ textDecoration: "none" }} href={forward ? "?from=" + data.slice(-1)[0].id : ""}> <NavigationBtn disabled={!forward}>다음 페이지 <MdNavigateNext /></NavigationBtn></Link>
+        </Btns>
     </>)
 }

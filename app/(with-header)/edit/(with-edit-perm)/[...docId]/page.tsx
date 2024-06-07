@@ -39,6 +39,7 @@ export default async function Document({ params }: { params: { docId: Array<stri
     const { content, title }=data
     let deletePerm = false
     let user = headers().get("x-user-id")
+    let ip = headers().get("x-forwarded-for")
     if (user) {
         let { deletePermission } = await prisma.user.findFirst({
             where: {
@@ -53,7 +54,7 @@ export default async function Document({ params }: { params: { docId: Array<stri
     const precompile = await CompileMD(content)
     return (
         <>
-            <EditArea title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} preCompile={precompile}/>
+            <EditArea title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} preCompile={precompile} user={user} ip={!user?ip!:undefined}/>
         </>
     )
 }

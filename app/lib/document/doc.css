@@ -15,6 +15,9 @@ table th,td {
   border: solid 1px #d0d7de;
   text-align: center;
 }
+.md_doc {
+  width: 100%;
+}
 .md_doc code {
   padding: 0.2em 0.4em;
   margin: 0;
@@ -36,9 +39,6 @@ table th,td {
 code.code-highlight {
   font-size: 14px;
   padding: 16px;
-}
-table tr:nth-child(2n) {
-  background-color: #f6f8fa;
 }
 a[data-footnote-ref=true] {
   &:before {
