@@ -80,6 +80,7 @@ export const Create = async (prevState: any, formData: FormData) => {
             message: "문서를 생성했습니다."
         }
     }catch(e) {
+        console.log(e)
         return {
             success: false,
             message: "문서를 만들지 못했습니다. 제목이 중복되었나요?"

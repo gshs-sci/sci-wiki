@@ -75,7 +75,10 @@ export default async function Document({ params, searchParams }: { params: { doc
             {rev ? <Banner>주의: 이 문서의 이전 리비전({rev})을 보고 있습니다. <Link href={"/d/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>최신 버전 보기</Link></Banner>:<></>}
                 <Title>
                 <h1>{title}</h1>
+                <div>
                 <Link href={"/edit/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>[편집]</Link>
+                <Link href={"/contribution/doc/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>[편집 기록]</Link>
+                </div>
                 </Title>
                 {compiled}
             </div>

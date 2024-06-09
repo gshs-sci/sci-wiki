@@ -13,38 +13,17 @@ export const TitleH1 = styled.h1`
     font-size: 25px;
     padding: 20px 0px;
     margin-bottom: 20px;
-    font-weight: 499;
+    font-weight: 700;
 `
 const Holder = styled.ul`
     list-style-type: none;
     padding: 0;
     margin: 0;
     padding-left: 0px;
-    margin-left: 20px;
     padding-top: 30px;
     padding-bottom: 30px;
     position: relative;
-    &:before {
-        content: "";
-        height: 30px;
-        width: 2px;
-        background-color: #d1d1d1;
-        position: absolute;
-        top:0px;
-        left: 30px;
-    }
-    &:after {
-        content: "";
-        height: 30px;
-        width: 2px;
-        background-color: #d1d1d1;
-        position: absolute;
-        bottom:0px;
-        left: 30px;
-    }
-    &:last-of-type:after {
-        display: none;
-    }
+
 `
 const Date = styled.p`
     margin: 0;
@@ -60,6 +39,9 @@ flex-direction: column;
 border-left: solid 1px #dadada;
 border-right: solid 1px #dadada;
 position: relative;
+&:hover {
+    background-color: #f7f7f7;
+}
 &:first-child {
     border-top: solid 1px #dadada;
 }
@@ -74,6 +56,7 @@ position: relative;
     padding: 5px;
     margin-right: 5px;
     color: #000;
+    font-size: 13px;
 
 }
 & .bottom .date {
@@ -200,17 +183,36 @@ const NavigationBtn = styled.button`
     }
 `
 
+const NoteBtn = styled.button`
+    border: none;
+    background-color: #e5e5e5;
+    font-size: 10px;
+    padding: 0px 4px;
+    margin: 0;
+    margin-left: 10px;
+    cursor: pointer;
+`
+
+const Note = styled.div`
+    margin: 0;
+    padding: 5px 10px;
+    font-size: 13px;
+    color: #5b5b5b;
+`
+
 interface Contribution {
     id: string,
     date: Date,
     docId: string,
     ip?: string,
     userId?: string,
-    lengthDifference: number
+    lengthDifference: number,
+    note?:string
 }
 
 export const Contribution = (props: { data: Array<Contribution>, forward?: boolean, backward?: boolean }) => {
     const [drop, setDropped] = useState("")
+    const [showDesc, setShowDesc] = useState("")
     const { forward, backward } = props
     const { data } = props
     let fullData:
@@ -261,6 +263,9 @@ export const Contribution = (props: { data: Array<Contribution>, forward?: boole
                                             <div className="change red">
                                                 {data.lengthDifference}
                                             </div>}
+                                            {data.note?<NoteBtn onClick={()=>setShowDesc(showDesc==data.id?"":data.id)}>
+                                            <TbDots />
+                                            </NoteBtn>:<></>}
                                         <div className="right">
                                             <div className="id">
                                                 {data.id.slice(16, -1)}
@@ -271,6 +276,11 @@ export const Contribution = (props: { data: Array<Contribution>, forward?: boole
 
                                         </div>
                                     </div>
+                                    {showDesc==data.id?
+                                    <Note>
+                                        {data.note}
+                                    </Note>
+                                    :<></>}
                                     <ElemDropdown aria-hidden={!(drop == data.id)} data-cont={true}>
                                         <li>
                                             <Link href={`/d/${data.docId}?rev=${data.id}`}>
@@ -290,7 +300,10 @@ export const Contribution = (props: { data: Array<Contribution>, forward?: boole
                                     </ElemDropdown>
                                     <div className="bottom">
                                         <p className="id">
-                                            {data.userId ? data.userId : data.ip}
+                                            
+                                            {data.userId ?
+                                            <Link href={"/contribution/id/"+data.userId}>{data.userId}</Link>
+                                             : <Link href={"/contribution/ip/"+data.ip}>{data.ip}</Link>}
                                         </p>
                                         -
                                         <p className="date">

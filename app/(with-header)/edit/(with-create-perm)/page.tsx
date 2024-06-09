@@ -35,6 +35,7 @@ const SubmitBtn = styled.button`
     background-color: #000000;
     color: #fff;
     cursor: pointer;
+    font-size: 13px;
 `
 
 export const SubmitButton = (props: { isSuccess?: boolean, message?: string }) => {

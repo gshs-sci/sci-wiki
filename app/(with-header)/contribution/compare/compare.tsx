@@ -11,7 +11,7 @@ export const TitleH1 = styled.h1`
     font-size: 25px;
     padding: 20px 0px;
     margin-bottom: 20px;
-    font-weight: 499;
+    font-weight: 700;
 `
 
 const Td = styled.td`
