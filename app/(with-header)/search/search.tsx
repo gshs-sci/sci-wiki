@@ -4,11 +4,14 @@ import styled from "styled-components"
 import { IoSearch } from "react-icons/io5"
 import { Banner } from "@/app/components/doc/component";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSuggestion } from "@/app/components/search/suggestion";
+
 const Body = styled.div`
   width: var(--cont-width);
   margin-left: auto;
   margin-right: auto;
+  min-height: 100vh;
 `
 
 const Holder = styled.ul`
@@ -98,6 +101,38 @@ const SearchBtn = styled.button`
   cursor: pointer;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
+  
+`
+
+const SearchSuggestions = styled.ul`
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    background-color: #fff;
+    width: calc(100% - 2px);
+    border: solid 1px #848484;
+    top: 50px;
+    list-style-type: none;
+    border-radius: 4px;
+`
+const Suggestions = styled.li`
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    border: solid 1px transparent;
+    border-radius: 3px;
+    &:hover {
+        border: solid 1px #dbdbdb;
+        background-color: #f4f4f4;
+        text-decoration: underline;
+    }
+    & a {
+        padding:4px;
+        color: #000;
+        font-size: 14px;
+        text-decoration: none;
+    }
 `
 
 export const SearchResult = (props: {
@@ -116,6 +151,7 @@ export const SearchResult = (props: {
     const { query, cat, count, data, activecat } = props
     const router = useRouter()
     const form = useRef<HTMLFormElement>(null)
+    const [changeFn, Suggestion] = useSuggestion()
 
     const submit = (e: any) => {
         e.preventDefault()
@@ -129,13 +165,13 @@ export const SearchResult = (props: {
             <DocTitle>검색 결과</DocTitle>
             <SearchBarHolder onSubmit={submit} ref={form}>
                 <SearchBarInputHolder>
-                    <SearchBar type="text" name="q" defaultValue={query}></SearchBar>
+                    <SearchBar data-sug="true" autoComplete="off" type="text" name="q" defaultValue={query} onChange={(e)=>changeFn(e.target.value)}></SearchBar>
                     <select name="s">
                         <option value="" selected={activecat == "전체"}>전체</option>
                         {cat.map(elem => <option selected={activecat == elem.id} value={elem.id}>{elem.id}</option>)}
                     </select>
+                    <Suggestion />
                 </SearchBarInputHolder>
-
                 <SearchBtn type="submit"><IoSearch /></SearchBtn>
             </SearchBarHolder>
             <Banner $normal={true}>제목이 "{query}"인 문서로 바로 이동하려면 <Link href={"/d/" + query}>여기</Link>를 클릭하세요.</Banner>

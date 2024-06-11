@@ -2,6 +2,7 @@
 import prisma from "@/app/lib/prisma"
 import { Verify } from "@/app/lib/turnstile"
 import { headers } from "next/headers"
+import { disassembleHangul,getChosung } from "es-hangul"
 
 export const Create = async (prevState: any, formData: FormData) => {
     const title = formData.get("title")?.toString()
@@ -47,6 +48,8 @@ export const Create = async (prevState: any, formData: FormData) => {
                 id: title,
                 title: title,
                 content: data,
+                title_dis: disassembleHangul(title),
+                chosung:getChosung(title),
                 subject: {
                     connect: {
                         id: '지구과학'

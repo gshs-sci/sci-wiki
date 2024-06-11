@@ -11,6 +11,7 @@ const Holder = styled.div`
     display: flex;
     flex-direction: column;
     overflow: scroll;
+    min-height: 100vh;
 `
 export default function RootLayout({
   children,

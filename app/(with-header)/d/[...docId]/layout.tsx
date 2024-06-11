@@ -13,6 +13,7 @@ const Holder = styled.div`
     margin-right: auto;
     width: var(--cont-width);
     display: flex;
+    min-height: 100vh;
 `
 
 

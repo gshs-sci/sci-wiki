@@ -49,8 +49,12 @@ model Doc {
   tags Tag[]
   lastUpdated   DateTime       @updatedAt
   created       DateTime       @default(now())
-
+  title_dis     String         @default("")
+  chosung       String         @default("")
+  
   @@unique([id,title])
+
+
 }
 
 model Tag {

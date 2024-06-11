@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Turnstile, { useTurnstile } from "react-turnstile";
 import { Create } from "./action";
 import { Textarea } from "@/app/components/edit/editor";
-
+import { useSearchParams } from "next/navigation";
 
 const BottomBtns = styled.div`
     display: flex;   
@@ -77,6 +77,7 @@ const Holder = styled.div`
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 51px);
+    min-height: 100vh;
 `
 const TitleInput = styled.input`
     font-size: 2em;
@@ -89,11 +90,13 @@ const TitleInput = styled.input`
 `
 
 export default function Document() {
+    const params = useSearchParams()
+    const title:any=typeof params.get("where") !== "string"?params.get("where"):""
     const [state, formAction] = useFormState(Create, null)
     return (
         <Holder>
             <form action={formAction}>
-                <TitleInput placeholder="제목을 입력하세요" spellCheck={false} name="title" required/>
+                <TitleInput placeholder="제목을 입력하세요" spellCheck={false} name="title" required defaultValue={title}/>
                 <Textarea defaultValue="" />
                 <BottomBtns>
                     <SubmitButton isSuccess={state?.success} message={state?.message} />

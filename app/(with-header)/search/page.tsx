@@ -37,7 +37,7 @@ export default async function Page({
             }]
         }
     } else {
-        cat = subject
+        cat = searchParams["s"]
         where = {
             subject: {
                 id: subject

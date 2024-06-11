@@ -4,17 +4,17 @@ import { Noto_Serif_KR } from "next/font/google";
 import { Noto_Sans_KR } from "next/font/google";
 import { IoSearch } from "react-icons/io5";
 import { useEffect, useState,useRef } from "react";
-
+import { useSuggestion } from "../components/search/suggestion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const serifNormal = Noto_Serif_KR({ weight: "400", subsets: ["latin"] })
 const sansBold = Noto_Sans_KR({ weight: "600", subsets: ["latin"] })
 const Body = styled.div`
   width: var(--cont-width);
   margin-left: auto;
   margin-right: auto;
+  min-height: 100vh;
 `
 
 const SearchArea = styled.section`
@@ -112,7 +112,7 @@ const HDoc = styled.li`
 & a {
     border-bottom: solid 1px #cecece;
   margin: 0;
-  padding: 10px 5px;
+  padding: 12px 5px;
   display: flex;
   cursor: pointer;
   align-items: baseline;
@@ -126,8 +126,7 @@ const HDoc = styled.li`
     margin-right: auto;
     margin: 0;
     padding: 0;
-    font-size: 15px;
-    font-family: ${serifNormal.style.fontFamily};
+    font-size: 14px;
   }
   & .sub {
     margin: 0;
@@ -170,6 +169,7 @@ export const MainPage = (props: {
 }) => {
     const router = useRouter()
     const form = useRef<HTMLFormElement>(null)
+    const [inputChanged,Suggestion] = useSuggestion()
 
     const submit = (e: any) => {
         e.preventDefault()
@@ -188,11 +188,12 @@ export const MainPage = (props: {
                     <p>모르는 정보를 검색해 보세요</p>
                     <SearchBarHolder onSubmit={submit} ref={form}>
                         <SearchBarInputHolder>
-                            <SearchBar type="text" name="q"></SearchBar>
+                            <SearchBar type="text" autoComplete="off" name="q" data-sug="true" onChange={(e)=>inputChanged(e.target.value)}></SearchBar>
                             <select name="s">
                                 <option value="">전체</option>
                                 {props.subjects.map(elem=><option key={elem.id} value={elem.id}>{elem.id}</option>)}
                             </select>
+                            <Suggestion />
                         </SearchBarInputHolder>
 
                         <SearchBtn><IoSearch /></SearchBtn>
