@@ -2,6 +2,10 @@
 import { MainPage } from ".";
 import prisma from "../lib/prisma";
 
+export const metadata = {
+  title: 'SCI - 메인페이지'
+}
+
 export default async function Page() {
   const [updatedDocs, Subjects] = await prisma.$transaction([
     prisma.doc.findMany({

@@ -1,0 +1,24 @@
+.holder {
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    padding-top: 50px;
+    & h2 {
+        margin: 15px 0px;
+        font-size: 20px;
+        font-weight: 500;
+    }
+    & p {
+        font-size: 15px;
+        word-break: none;
+        color: #4d4d4d;
+        margin: 0;
+        margin-bottom: 20px;
+    }
+}
+.logo {
+    text-decoration: none;
+    color: #000;
+    font-size: 35px;
+}

@@ -91,7 +91,7 @@ const TitleInput = styled.input`
 
 export default function Document() {
     const params = useSearchParams()
-    const title:any=typeof params.get("where") !== "string"?params.get("where"):""
+    const title:any=typeof params.get("where") == "string"?params.get("where"):""
     const [state, formAction] = useFormState(Create, null)
     return (
         <Holder>
