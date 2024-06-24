@@ -9,7 +9,7 @@ import { checkDelete, checkEdit } from "@/app/lib/permission";
 export async function generateMetadata({ params }: any) {
     const data = await prisma.doc.findFirst({
         where: {
-            id: decodeURIComponent(params.docId.join("/"))
+            id: params.docId.join("/")
         },
         select: {
             title: true
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: any) {
 export default async function Document({ params }: { params: { docId: Array<string> } }) {
     const data = await prisma.doc.findFirst({
         where: {
-            id: decodeURIComponent(params.docId.join("/"))
+            id: params.docId.join("/")
         },
         select: {
             content: true,

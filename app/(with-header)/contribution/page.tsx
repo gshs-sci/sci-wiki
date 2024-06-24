@@ -54,7 +54,7 @@ export default async function Page({
             id: true,
             ip: true,
             doc: {
-                select: { id: true }
+                select: { id: true,title:true }
             },
             before: true,
             after: true,
@@ -75,7 +75,8 @@ export default async function Page({
             ip: user ? "" : elem.ip,
             userId: user ? elem.author.id : "",
             lengthDifference: elem.after.length - elem.before.length,
-            note: elem.note
+            note: elem.note,
+            title: elem.doc.title
         }
     })
     let next,prev

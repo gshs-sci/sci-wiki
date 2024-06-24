@@ -10,7 +10,7 @@ import Link from "next/link";
 export async function generateMetadata({ params, searchParams }: any) {
     const data = await prisma.doc.findFirst({
         where: {
-            id: decodeURIComponent(params.docId.join("/"))
+            id: params.docId.join("/")
         },
         select: {
             title: true
@@ -33,7 +33,7 @@ export default async function Document({ params, searchParams }: { params: { doc
             where: {
                 id: rev,
                 doc: {
-                    id: decodeURIComponent(params.docId.join("/"))
+                    id: params.docId.join("/")
                 }
             },
             select: {
@@ -47,7 +47,7 @@ export default async function Document({ params, searchParams }: { params: { doc
             }
         })
         if (contData === null) {
-            return redirect("/d/" + decodeURIComponent(params.docId.join("/")))
+            return redirect("/d/" + params.docId.join("/"))
         }
         data = {
             content: contData.after,
@@ -57,7 +57,7 @@ export default async function Document({ params, searchParams }: { params: { doc
     } else {
         data = await prisma.doc.findFirst({
             where: {
-                id: decodeURIComponent(params.docId.join("/"))
+                id: params.docId.join("/")
             },
             select: {
                 content: true,
@@ -75,15 +75,15 @@ export default async function Document({ params, searchParams }: { params: { doc
         <>
             <Index titles={extractTitles(content)} />
             <div className="md_doc">
-                {rev ? <Banner>주의: 이 문서의 이전 리비전({rev})을 보고 있습니다. <Link href={"/d/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>최신 버전 보기</Link></Banner> : <></>}
+                {rev ? <Banner>주의: 이 문서의 이전 리비전({rev})을 보고 있습니다. <Link href={"/d/" + params.docId.join("/")} scroll={false}>최신 버전 보기</Link></Banner> : <></>}
                 <Title>
                     <div className="left">
                         <h1>{title}</h1>
                         <p className="date">{rev?"리비전 수정:":"최근 수정:"} {new Date(lastUpdated).toLocaleString('en-GB', { timeZone: 'Asia/Seoul' })}</p>
                     </div>
                     <div className="right">
-                        <Link href={"/edit/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>[편집]</Link>
-                        <Link href={"/contribution/doc/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>[편집 기록]</Link>
+                        <Link href={"/edit/" + params.docId.join("/")} scroll={false}>[편집]</Link>
+                        <Link href={"/contribution/doc/" + params.docId.join("/")} scroll={false}>[편집 기록]</Link>
                     </div>
                 </Title>
                 {compiled}

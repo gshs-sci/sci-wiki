@@ -202,6 +202,7 @@ const Note = styled.div`
 
 interface Contribution {
     id: string,
+    title:string,
     date: Date,
     docId: string,
     ip?: string,
@@ -253,7 +254,7 @@ export const Contribution = (props: { data: Array<Contribution>, forward?: boole
                                 <Elem key={data.id}>
                                     <div className="top">
                                         <Link href={`/d/${data.docId}`} scroll={false}>
-                                            {data.docId}
+                                            {data.title}
                                         </Link>
                                         {data.lengthDifference > 0 ?
                                             <div className="change green">

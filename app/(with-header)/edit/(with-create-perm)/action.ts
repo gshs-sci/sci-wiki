@@ -50,7 +50,7 @@ export const Create = async (prevState: any, formData: FormData) => {
     try {
         const { id } = await prisma.doc.create({
             data: {
-                id: title,
+                id: encodeURIComponent(title),
                 title: title,
                 content: data,
                 title_dis: disassembleHangul(title),

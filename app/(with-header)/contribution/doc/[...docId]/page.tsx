@@ -36,14 +36,14 @@ export default async function Page({
         },
         where: {
             doc:{
-                id:decodeURIComponent(params.docId.join("/"))
+                id:params.docId.join("/")
             }
         },
         select: {
             id: true,
             ip: true,
             doc: {
-                select: { id: true }
+                select: { id: true,            title:true, }
             },
             before: true,
             after: true,
@@ -64,7 +64,8 @@ export default async function Page({
             ip: elem.author ? "" : elem.ip,
             userId: elem.author ? elem.author.id : "",
             lengthDifference: elem.after.length - elem.before.length,
-            note: elem.note
+            note: elem.note,
+            title:elem.doc.title
         }
     })
     let next, prev
@@ -78,7 +79,7 @@ export default async function Page({
                 },
                 where: {
                     doc:{
-                        id:decodeURIComponent(params.docId.join("/"))
+                        id:params.docId.join("/")
                     }
                 },
                 select: {
@@ -96,7 +97,7 @@ export default async function Page({
                 },
                 where: {
                     doc:{
-                        id:decodeURIComponent(params.docId.join("/"))
+                        id:params.docId.join("/")
                     }
                 },
                 select: {
