@@ -95,7 +95,7 @@ const Btn = () => {
                 onVerify={() => setVerified(true)}
                 refreshExpired="auto"
             />
-            <NextBtn type="submit" disabled={!isVerified || pending}>{pending ? "처리중.." : "로그인"}</NextBtn>
+            <NextBtn type="submit" disabled={!isVerified || pending}>{pending ? "처리중.." : isVerified?"로그인":"잠시만 기다려 주세요.."}</NextBtn>
         </>
 
     )

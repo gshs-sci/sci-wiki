@@ -18,6 +18,8 @@ model User {
   contributed Contribution[]
   deletePermission Boolean
   createPermission Boolean
+  editPermission Boolean @default(false)
+  isAdmin     Boolean @default(false)
 }
 
 model Contribution {
@@ -58,8 +60,7 @@ model Doc {
 }
 
 model Tag {
-    label   String
-    id String @id @default(cuid())
+    id String @id
     doc Doc[]
 }
 //the value in the relation fields or references fields should not be inserted, since it is a control element controlled by relations defined in prisma

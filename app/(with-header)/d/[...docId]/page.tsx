@@ -5,7 +5,7 @@ import prisma from "@/app/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import 'katex/dist/katex.css';
 import { extractTitles, CompileMD } from "@/app/lib/document/compileMd";
-import { Banner,Title } from "@/app/components/doc/component";
+import { Banner, Title } from "@/app/components/doc/component";
 import Link from "next/link";
 export async function generateMetadata({ params, searchParams }: any) {
     const data = await prisma.doc.findFirst({
@@ -38,9 +38,10 @@ export default async function Document({ params, searchParams }: { params: { doc
             },
             select: {
                 after: true,
+                date:true,
                 doc: {
                     select: {
-                        title: true
+                        title: true,
                     }
                 }
             }
@@ -50,7 +51,8 @@ export default async function Document({ params, searchParams }: { params: { doc
         }
         data = {
             content: contData.after,
-            title: contData.doc.title
+            title: contData.doc.title,
+            lastUpdated: contData.date
         }
     } else {
         data = await prisma.doc.findFirst({
@@ -59,26 +61,30 @@ export default async function Document({ params, searchParams }: { params: { doc
             },
             select: {
                 content: true,
-                title: true
+                title: true,
+                lastUpdated:true
             }
         })
     }
     if (data === null) {
         return notFound()
     }
-    const { content, title } = data
+    const { content, title,lastUpdated } = data
     const compiled = await CompileMD(content)
     return (
         <>
             <Index titles={extractTitles(content)} />
             <div className="md_doc">
-            {rev ? <Banner>주의: 이 문서의 이전 리비전({rev})을 보고 있습니다. <Link href={"/d/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>최신 버전 보기</Link></Banner>:<></>}
+                {rev ? <Banner>주의: 이 문서의 이전 리비전({rev})을 보고 있습니다. <Link href={"/d/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>최신 버전 보기</Link></Banner> : <></>}
                 <Title>
-                <h1>{title}</h1>
-                <div>
-                <Link href={"/edit/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>[편집]</Link>
-                <Link href={"/contribution/doc/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>[편집 기록]</Link>
-                </div>
+                    <div className="left">
+                        <h1>{title}</h1>
+                        <p className="date">{rev?"리비전 수정:":"최근 수정:"} {new Date(lastUpdated).toLocaleString('en-GB', { timeZone: 'Asia/Seoul' })}</p>
+                    </div>
+                    <div className="right">
+                        <Link href={"/edit/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>[편집]</Link>
+                        <Link href={"/contribution/doc/" + decodeURIComponent(params.docId.join("/"))} scroll={false}>[편집 기록]</Link>
+                    </div>
                 </Title>
                 {compiled}
             </div>

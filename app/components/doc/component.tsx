@@ -19,13 +19,30 @@ export const Title = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
-    div {
+    & h1 {
+        margin:0;
+        margin-top: 20px;
+    }
+    p.date {
+        margin: 0;
+        color: #7e7e7e;
+        margin: 5px 0px;
+    }
+    div.right {
         margin-left: auto;
         margin-right: 0;
+    }
+    div.left {
+        display: flex;
+        flex-direction: column;
     }
     a {
         font-size: 15px;
         margin-left: 10px;
         color: #2776af;
+    }
+    @media(max-width: 800px) {
+        flex-direction: column;
+        align-items: flex-start;
     }
 `

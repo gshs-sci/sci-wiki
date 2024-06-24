@@ -2,11 +2,13 @@
 import prisma from "@/app/lib/prisma"
 import { Verify } from "@/app/lib/turnstile"
 import { headers } from "next/headers"
-import { disassembleHangul,getChosung } from "es-hangul"
+import { disassembleHangul, getChosung } from "es-hangul"
+import { checkCreate } from "@/app/lib/permission"
 
 export const Create = async (prevState: any, formData: FormData) => {
     const title = formData.get("title")?.toString()
     const data = formData.get("data")
+    const category = formData.get("cat")
     const cf_tk = formData.get("cf-turnstile-response")?.toString()
 
     let user = headers().get("x-user-id")
@@ -20,14 +22,7 @@ export const Create = async (prevState: any, formData: FormData) => {
         }
     }
 
-    const { createPermission } = await prisma.user.findFirst({
-        where: {
-            id: user
-        },
-        select: {
-            createPermission: true
-        }
-    })
+    const createPermission = await checkCreate(user)
 
     if (!createPermission) {
         return {
@@ -42,28 +37,34 @@ export const Create = async (prevState: any, formData: FormData) => {
             message: "제목을 입력해 주세요."
         }
     }
-    try{
-        const {id} = await prisma.doc.create({
+    let d: any = {}
+    if (user) {
+        d = {
+            author: {
+                connect: {
+                    id: user
+                }
+            },
+        }
+    }
+    try {
+        const { id } = await prisma.doc.create({
             data: {
                 id: title,
                 title: title,
                 content: data,
                 title_dis: disassembleHangul(title),
-                chosung:getChosung(title),
+                chosung: getChosung(title),
                 subject: {
                     connect: {
-                        id: '지구과학'
+                        id: category
                     }
                 },
                 contributions: {
                     create: {
                         before: "",
                         after: data,
-                        author: {
-                            connect: {
-                                id: user
-                            }
-                        },
+                        ...d,
                         ip: ip
                     }
                 }
@@ -82,7 +83,7 @@ export const Create = async (prevState: any, formData: FormData) => {
             success: true,
             message: "문서를 생성했습니다."
         }
-    }catch(e) {
+    } catch (e) {
         console.log(e)
         return {
             success: false,

@@ -3,7 +3,7 @@ import { MainPage } from ".";
 import prisma from "../lib/prisma";
 
 export const metadata = {
-  title: 'SCI - 메인페이지'
+  title: '메인페이지 - SCI'
 }
 
 export default async function Page() {

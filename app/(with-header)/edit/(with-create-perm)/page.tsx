@@ -6,6 +6,7 @@ import Turnstile, { useTurnstile } from "react-turnstile";
 import { Create } from "./action";
 import { Textarea } from "@/app/components/edit/editor";
 import { useSearchParams } from "next/navigation";
+import { Category } from "@/app/components/edit/category/category";
 
 const BottomBtns = styled.div`
     display: flex;   
@@ -59,7 +60,7 @@ export const SubmitButton = (props: { isSuccess?: boolean, message?: string }) =
                     refreshExpired="auto"
                 />
                 <SubmitBtn type="submit" disabled={pending || !isVerified}>
-                    {pending ? "저장중.." : "변경사항 적용하기"}
+                    {pending ? "저장중.." : isVerified?"변경사항 적용하기":"잠시만 기다려 주세요.."}
                 </SubmitBtn>
                 <Msg>
                     {props.message ? props.message : ""}
@@ -97,6 +98,7 @@ export default function Document() {
         <Holder>
             <form action={formAction}>
                 <TitleInput placeholder="제목을 입력하세요" spellCheck={false} name="title" required defaultValue={title}/>
+                <Category isRequired={true} name="cat"/>
                 <Textarea defaultValue="" />
                 <BottomBtns>
                     <SubmitButton isSuccess={state?.success} message={state?.message} />

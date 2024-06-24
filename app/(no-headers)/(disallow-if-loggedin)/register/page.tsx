@@ -141,7 +141,7 @@ export default function registerPage() {
                     onVerify={() => setVerified(true)}
                     refreshExpired="auto"
                 />
-                <NextBtn type="submit" disabled={!isVerified || isPending}>{isPending ? "처리중.." : "계속하기"}</NextBtn>
+                <NextBtn type="submit" disabled={!isVerified || isPending}>{isPending ? "처리중.." : isVerified?"계속하기":"잠시만 기다려 주세요.."}</NextBtn>
             </form>
         </Holder>
     )

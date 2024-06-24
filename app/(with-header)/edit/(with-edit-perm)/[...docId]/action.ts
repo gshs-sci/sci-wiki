@@ -4,10 +4,12 @@ import { cookies } from 'next/headers'
 import { headers } from 'next/headers'
 import { Verify } from "@/app/lib/turnstile";
 import { createHash } from "crypto";
+import { checkDelete,checkEdit } from "@/app/lib/permission";
 
 export const Edit = async (prevState: any, formData: FormData) => {
     const data = formData.get("data")?.toString()
     const docId = formData.get("docId")
+    const category = formData.get("cat")
     const cf_tk = formData.get("cf-turnstile-response")?.toString()
     const commitmsg = formData.get("commitmsg")?.toString()
 
@@ -33,6 +35,12 @@ export const Edit = async (prevState: any, formData: FormData) => {
         }
     }
     let uid = headers().get("x-user-id")
+    if(!await checkEdit(uid)) {
+        return {
+            success: false,
+            message: "오류: 권한이 없습니다."
+        }
+    }
     if (uid) {
         contributionPayload = {
             ...contributionPayload,
@@ -48,7 +56,13 @@ export const Edit = async (prevState: any, formData: FormData) => {
             id: docId
         },
         select: {
-            content: true
+            content: true,
+            subject:{
+                select:{
+                    id:true
+                }
+            }
+            
         }
     })  
     if(docData===null){
@@ -58,7 +72,11 @@ export const Edit = async (prevState: any, formData: FormData) => {
         }
     }
 
-    if (createHash('sha256').update(docData.content).digest('hex') == createHash('sha256').update(data ?? "").digest('hex'))
+    if (createHash('sha256').update(docData.content).digest('hex') == createHash('sha256').update(data ?? "").digest('hex') 
+        && 
+        category == docData.subject.id
+    
+    )
         return {
             success: false,
             message: "오류: 변경사항이 존재하지 않습니다"
@@ -78,7 +96,12 @@ export const Edit = async (prevState: any, formData: FormData) => {
                     id: docId
                 },
                 data: {
-                    content: data
+                    content: data,
+                    subject:{
+                        connect:{
+                            id:category
+                        }
+                    }
                 }
             })
         ])
@@ -109,20 +132,7 @@ export const Delete = async (id: string, cf_tk: string) => {
         }
     }
     let uid = headers().get("x-user-id")
-    if (!uid) {
-        return {
-            success: false,
-            message: "오류: 로그인되지 않았습니다."
-        }
-    }
-    const { deletePermission } = await prisma.user.findFirst({
-        where: {
-            id: uid
-        },
-        select: {
-            deletePermission: true
-        }
-    })
+    const deletePermission = await checkDelete(uid)
     if (!deletePermission) {
         return {
             success: false,

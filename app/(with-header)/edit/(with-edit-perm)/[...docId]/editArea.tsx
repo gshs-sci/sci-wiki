@@ -8,6 +8,7 @@ import Turnstile, { useTurnstile } from "react-turnstile";
 import { Edit, Delete } from "./action";
 import { Textarea } from "@/app/components/edit/editor";
 import Link from "next/link";
+import { Category } from "@/app/components/edit/category/category";
 
 const BottomBtns = styled.div`
     display: flex;   
@@ -250,7 +251,7 @@ const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm
                                 {props.message?<Sub_Banner $isAlert={!props.isSuccess}>{props.message}
                                 </Sub_Banner>:<></>}
                                 <SubBtns>
-                                    <button className="submit" type="submit" disabled={pending || !token}>{pending ? "저장중.." : "변경사항 적용하기"}</button>
+                                    <button className="submit" type="submit" disabled={pending || !token}>{pending ? "저장중.." : token?"변경사항 적용하기":"잠시만 기다려 주세요.."}</button>
                                     <button className="cancel" type="button" onClick={() => setSubmitPrompt(false)}>취소</button>
                                 </SubBtns>
                             </SubPrompt>
@@ -277,12 +278,13 @@ const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm
     )
 }
 
-export const EditArea = (props: { title: string, content: string, docId: string, deletePerm: boolean, user:string|null, ip?:string, preCompile?: JSX.Element }) => {
+export const EditArea = (props: { title: string, category:string, content: string, docId: string, deletePerm: boolean, user:string|null, ip?:string, preCompile?: JSX.Element }) => {
     const { title, content, docId,user,ip } = props
     const [state, formAction] = useFormState(Edit, null)
     return (
         <form action={formAction}>
             <h1>{title}</h1>
+            <Category default={props.category} isRequired={true} name="cat"/>
             <Textarea defaultValue={content} preCompiled={props.preCompile}></Textarea>
             <input type="hidden" name="docId" defaultValue={decodeURIComponent(docId)} />
             <SubmitButton isSuccess={state?.success} message={state?.message} deletePerm={props.deletePerm} docId={decodeURIComponent(docId)} user={user} ip={ip}/>

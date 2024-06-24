@@ -50,14 +50,6 @@ export async function Validate(prevState: any, formData: FormData) {
     let deletePerm = false
     let createPerm = false
 
-    //gs
-    let sa = regData["mail"].split("@")
-    if (sa[sa.length - 1] == "gs.hs.kr") {
-        deletePerm = true
-        createPerm = true
-    }
-    //gs
-
     try {
         await client.del("mailp:" + regData["mail"])
         await client.del("idp:" + regData["id"])

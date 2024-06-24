@@ -11,6 +11,10 @@ form {
   display: flex;
   flex-direction: column;
 }
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 @media(max-width: 1500px) {
   :root {

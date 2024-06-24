@@ -1,3 +1,4 @@
+"use server"
 export const Verify = async (siteToken: string, secret: string) => {
     const url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
     let formData = new FormData();

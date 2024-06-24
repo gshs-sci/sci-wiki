@@ -1,7 +1,6 @@
 "use client"
 import styled from "styled-components";
 
-
 const Holder = styled.div`
     margin-left: auto;
     margin-right: auto;

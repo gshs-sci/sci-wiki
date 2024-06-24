@@ -4,7 +4,7 @@ import { Playfair } from 'next/font/google';
 const playfair = Playfair({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'SCI - 페이지를 찾을 수 없습니다'
+  title: '페이지를 찾을 수 없습니다 - SCI'
 }
 
 export default function NotFound() {

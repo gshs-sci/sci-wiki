@@ -68,19 +68,6 @@ const Added = styled(Td)`
         background-color: rgba(72, 255, 0,.2);
         position: relative;
     }
-    & span:hover::after {
-        position: absolute;
-        padding: 3px 10px;
-        background-color: #fff;
-        content: "추가한 내용";
-        white-space: nowrap;
-        z-index: 10;
-        border-radius: 5px;
-        border: solid 1px #cecece;
-        font-size: 12px;
-        top:0;
-        right:-90px;
-    }
 `
 
 const Removed = styled(Td)`
@@ -90,19 +77,6 @@ const Removed = styled(Td)`
     & span {
         background-color: rgba(255, 0, 0,.2);
         position: relative;
-    }
-    & span:hover::after {
-        position: absolute;
-        padding: 5px 10px;
-        background-color: #fff;
-        content: "삭제한 내용";
-        white-space: nowrap;
-        z-index: 10;
-        border-radius: 5px;
-        border: solid 1px #cecece;
-        font-size: 12px;
-        top:0;
-        right:-90px;
     }
 `
 const Reversion = styled.div`
