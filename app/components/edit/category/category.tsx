@@ -1,6 +1,6 @@
 import styled from "styled-components"
-import { useEffect, useRef, useState } from "react"
-import { FetchCategory, CreateCategory } from "./action"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { FetchCategory } from "./action"
 
 const Holder = styled.div`
     display: flex;
@@ -36,7 +36,7 @@ const CreateBtn = styled.button`
     &:hover {
         background-color: #efefef;
     }
-` 
+`
 const CreateHolder = styled.div`
     position: relative;
     margin-left: 20px;
@@ -80,11 +80,10 @@ const Create = styled.div`
         cursor: pointer;
     }
 `
-export const Category = (props:{default?:string, isRequired:boolean, name:string}) => {
+export const Category = (props: { default?: string, isRequired: boolean, name: string }) => {
     const [categories, setCategories] = useState([])
     const [isShown, setShown] = useState(false)
-    const [submitting, setSubmitting] = useState(false)
-    const [message, setMessage] = useState("")
+    const [created, setCreated] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)
     const listner = (e: Event) => {
         if (!(e.target as HTMLTextAreaElement).matches("[data-create=true], [data-create=true] *")) {
@@ -98,37 +97,33 @@ export const Category = (props:{default?:string, isRequired:boolean, name:string
         }
     }, [])
 
-    useEffect(()=>{
-        FetchCategory().then((data)=>{
+    useEffect(() => {
+        FetchCategory().then((data) => {
             setCategories(data)
         })
-    },[])
-    const Submit = async() => {
-        setSubmitting(true)
-        const res = await CreateCategory(inputRef.current!.value)
-        if(!res) {
-            setMessage("실패했습니다. 중복된 이름인가요?")
-        }else {
-            setMessage("대분류를 생성했습니다")
+    }, [])
+    const selectChanged = (e: ChangeEvent) => {
+        const val = (e.target as HTMLSelectElement).value
+        if (val != created) {
+            setCreated("")
         }
-        const data = await FetchCategory()
-        setCategories(data)
-        setSubmitting(false)
     }
     return (
         <Holder>
-            <Selector name={props.name} required={props.isRequired}>
-                {categories.map(elem=><option selected={props.default==elem} value={elem} key={elem}>{elem}</option>)}
+            <Selector name={props.name} required={props.isRequired} onChange={selectChanged}>
+                {created ? <option value={created} selected={true}>{created}</option> : <></>}
+                {categories.map(elem => <option selected={props.default == elem} value={elem} key={elem}>{elem}</option>)}
             </Selector>
             <CreateHolder data-create={true}>
-                <CreateBtn type="button" onClick={()=>setShown(!isShown)}>+ 새로운 대분류 만들기</CreateBtn>
-                {isShown?
-                <Create>
-                    <p><b>대분류명</b></p>
-                    <input ref={inputRef} type="text"></input>
-                    {message!=""?<p>{message}</p>:<></>}
-                    <button type="button" onClick={Submit} disabled={submitting}>{submitting?"생성중..":"확인"}</button>
-                </Create>:<></>}
+                <CreateBtn type="button" onClick={() => setShown(!isShown)}>+ 새로운 대분류 만들기</CreateBtn>
+                {isShown ?
+                    <Create>
+                        <p><b>대분류명</b></p>
+                        <input ref={inputRef} type="text"></input>
+                        <button type="button" onClick={() => {
+                            setCreated(inputRef.current!.value)
+                        }}>확인</button>
+                    </Create> : <></>}
             </CreateHolder>
         </Holder>
     )

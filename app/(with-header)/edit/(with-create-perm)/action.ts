@@ -10,6 +10,7 @@ export const Create = async (prevState: any, formData: FormData) => {
     const data = formData.get("data")
     const category = formData.get("cat")
     const cf_tk = formData.get("cf-turnstile-response")?.toString()
+    const usertags = formData.getAll("tags")
 
     let user = headers().get("x-user-id")
     let ip = headers().get("x-forwarded-for")
@@ -56,9 +57,26 @@ export const Create = async (prevState: any, formData: FormData) => {
                 title_dis: disassembleHangul(title),
                 chosung: getChosung(title),
                 subject: {
-                    connect: {
-                        id: category
+                    connectOrCreate: {
+                        where: {
+                            id: category
+                        },
+                        create: {
+                            id: category
+                        }
                     }
+                },
+                tags: {
+                    connectOrCreate: usertags.map((elem)=>{return {
+                        where: {
+                            id: elem,
+                        },
+                        create: {
+                            id: elem,
+                            id_dis: disassembleHangul(elem as string),
+                            chosung: getChosung(elem as string)
+                        }
+                    }})
                 },
                 contributions: {
                     create: {

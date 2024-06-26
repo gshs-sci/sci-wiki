@@ -7,7 +7,7 @@ import { Create } from "./action";
 import { Textarea } from "@/app/components/edit/editor";
 import { useSearchParams } from "next/navigation";
 import { Category } from "@/app/components/edit/category/category";
-
+import { Tags } from "@/app/components/edit/tags/tags";
 const BottomBtns = styled.div`
     display: flex;   
     margin-top: 20px;
@@ -99,6 +99,7 @@ export default function Document() {
             <form action={formAction}>
                 <TitleInput placeholder="제목을 입력하세요" spellCheck={false} name="title" required defaultValue={title}/>
                 <Category isRequired={true} name="cat"/>
+                <Tags name="tags"/>
                 <Textarea defaultValue="" />
                 <BottomBtns>
                     <SubmitButton isSuccess={state?.success} message={state?.message} />

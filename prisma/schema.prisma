@@ -62,5 +62,7 @@ model Doc {
 model Tag {
     id String @id
     doc Doc[]
+    id_dis     String         @default("")
+    chosung       String         @default("")
 }
 //the value in the relation fields or references fields should not be inserted, since it is a control element controlled by relations defined in prisma

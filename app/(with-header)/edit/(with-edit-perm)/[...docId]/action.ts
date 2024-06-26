@@ -1,10 +1,27 @@
 "use server"
 import prisma from "@/app/lib/prisma";
-import { cookies } from 'next/headers'
 import { headers } from 'next/headers'
 import { Verify } from "@/app/lib/turnstile";
 import { createHash } from "crypto";
-import { checkDelete,checkEdit } from "@/app/lib/permission";
+import { checkDelete, checkEdit } from "@/app/lib/permission";
+import { disassembleHangul, getChosung } from "es-hangul"
+
+const DeleteEmptySubject = async (subjectId: any, tagsId:any) => {
+    await prisma.$transaction([
+        prisma.subject.deleteMany({
+            where: {
+                id: subjectId,
+                doc: { none: {} }
+            }
+        }),
+        prisma.tag.deleteMany({
+            where: {
+                id: {in: tagsId},
+                doc: { none: {} }
+            }
+        })
+    ])
+}
 
 export const Edit = async (prevState: any, formData: FormData) => {
     const data = formData.get("data")?.toString()
@@ -12,6 +29,7 @@ export const Edit = async (prevState: any, formData: FormData) => {
     const category = formData.get("cat")
     const cf_tk = formData.get("cf-turnstile-response")?.toString()
     const commitmsg = formData.get("commitmsg")?.toString()
+    const usertags = formData.getAll("tags")
 
     let verified = await Verify(cf_tk ?? "", process.env.TURNSTILE_KEY ?? "")
     if (!verified) {
@@ -35,7 +53,7 @@ export const Edit = async (prevState: any, formData: FormData) => {
         }
     }
     let uid = headers().get("x-user-id")
-    if(!await checkEdit(uid)) {
+    if (!await checkEdit(uid)) {
         return {
             success: false,
             message: "오류: 권한이 없습니다."
@@ -57,35 +75,58 @@ export const Edit = async (prevState: any, formData: FormData) => {
         },
         select: {
             content: true,
-            subject:{
-                select:{
-                    id:true
+            subject: {
+                select: {
+                    id: true
+                }
+            },
+            tags: {
+                select: {
+                    id: true
                 }
             }
-            
+
         }
-    })  
-    if(docData===null){
+    })
+    if (docData === null) {
         return {
             success: false,
             message: "오류: 존재하지 않는 문서입니다"
         }
     }
 
-    if (createHash('sha256').update(docData.content).digest('hex') == createHash('sha256').update(data ?? "").digest('hex') 
-        && 
+    if (createHash('sha256').update(docData.content).digest('hex') == createHash('sha256').update(data ?? "").digest('hex')
+        &&
         category == docData.subject.id
-    
+        &&
+        (usertags.length==docData.tags.length||usertags.every(e=>docData.tags.indexOf(e)!=-1))
     )
         return {
             success: false,
             message: "오류: 변경사항이 존재하지 않습니다"
         }
-    try{
-        await prisma.$transaction([
+    try {
+        const [{ subject, tags }] = await prisma.$transaction([
+            prisma.doc.findFirst({
+                where: {
+                    id: docId
+                },
+                select: {
+                    subject: {
+                        select: {
+                            id: true
+                        }
+                    },
+                    tags: {
+                        select: {
+                            id: true
+                        }
+                    }
+                }
+            }),
             prisma.contribution.create({
                 data: {
-                    note:commitmsg,
+                    note: commitmsg,
                     ...contributionPayload,
                     before: docData.content,
                     after: data
@@ -97,15 +138,34 @@ export const Edit = async (prevState: any, formData: FormData) => {
                 },
                 data: {
                     content: data,
-                    subject:{
-                        connect:{
-                            id:category
+                    subject: {
+                        connectOrCreate: {
+                            where: {
+                                id: category
+                            },
+                            create: {
+                                id: category
+                            }
                         }
+                    },
+                    tags: {
+                        set: [],
+                        connectOrCreate: usertags.map((elem)=>{return {
+                            where: {
+                                id: elem,
+                            },
+                            create: {
+                                id: elem,
+                                id_dis: disassembleHangul(elem as string),
+                                chosung: getChosung(elem as string)
+                            }
+                        }})
                     }
                 }
             })
         ])
-    }catch(e) {
+        await DeleteEmptySubject(subject.id,tags.map((e:any)=>e.id))
+    } catch (e) {
         return {
             success: false,
             message: "오류가 발생했습니다"
@@ -140,14 +200,26 @@ export const Delete = async (id: string, cf_tk: string) => {
         }
     }
     try {
-        const { title } = await prisma.doc.delete({
+        const { title, subject,tags } = await prisma.doc.delete({
             where: {
                 id: id
             },
             select: {
-                title: true
+                title: true,
+                subject: {
+                    select: {
+                        id: true
+                    }
+                },
+                tags: {
+                    select: {
+                        id: true
+                    }
+                }
             },
         })
+        console.log(subject.id)
+        await DeleteEmptySubject(subject.id,tags.map((e:any)=>e.id))
         if (title) {
             return {
                 success: true,

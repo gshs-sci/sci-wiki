@@ -36,6 +36,11 @@ export default async function Document({ params }: { params: { docId: Array<stri
                 select:{
                     id:true
                 }
+            },
+            tags:{
+                select:{
+                    id:true
+                }
             }
         }
     })
@@ -54,7 +59,7 @@ export default async function Document({ params }: { params: { docId: Array<stri
     const precompile = await CompileMD(content)
     return (
         <>
-            <EditArea category={other.subject.id} title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} preCompile={precompile} user={user} ip={!user?ip!:undefined}/>
+            <EditArea category={other.subject.id} tags={other.tags.map((d:any)=>d.id)} title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} preCompile={precompile} user={user} ip={!user?ip!:undefined}/>
         </>
     )
 }

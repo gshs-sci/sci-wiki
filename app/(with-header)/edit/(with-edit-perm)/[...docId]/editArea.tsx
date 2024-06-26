@@ -9,6 +9,7 @@ import { Edit, Delete } from "./action";
 import { Textarea } from "@/app/components/edit/editor";
 import Link from "next/link";
 import { Category } from "@/app/components/edit/category/category";
+import { Tags } from "@/app/components/edit/tags/tags";
 
 const BottomBtns = styled.div`
     display: flex;   
@@ -278,13 +279,14 @@ const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm
     )
 }
 
-export const EditArea = (props: { title: string, category:string, content: string, docId: string, deletePerm: boolean, user:string|null, ip?:string, preCompile?: JSX.Element }) => {
+export const EditArea = (props: { title: string, category:string, tags: Array<string>, content: string, docId: string, deletePerm: boolean, user:string|null, ip?:string, preCompile?: JSX.Element }) => {
     const { title, content, docId,user,ip } = props
     const [state, formAction] = useFormState(Edit, null)
     return (
         <form action={formAction}>
             <h1>{title}</h1>
             <Category default={props.category} isRequired={true} name="cat"/>
+            <Tags name="tags" default={props.tags}/>
             <Textarea defaultValue={content} preCompiled={props.preCompile}></Textarea>
             <input type="hidden" name="docId" defaultValue={docId} />
             <SubmitButton isSuccess={state?.success} message={state?.message} deletePerm={props.deletePerm} docId={docId} user={user} ip={ip}/>
