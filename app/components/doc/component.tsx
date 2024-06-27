@@ -59,7 +59,7 @@ export const Tags = styled.ul`
     align-items: center;
     margin-top: 20px;
     border-radius: 5px;
-    overflow-x: scroll;
+    overflow-x: auto;
     white-space: nowrap;
     flex-wrap: wrap;
     & li.main {

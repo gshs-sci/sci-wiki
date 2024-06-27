@@ -76,6 +76,7 @@ z-index: 10;
     cursor: pointer;
     font-size: 14px;
     width: 130px;
+    white-space: nowrap;
     &:hover {
         background-color: #e9e9e9;
     }
@@ -96,6 +97,8 @@ z-index: 10;
         display: block;
         padding: 5px 10px;
         line-height: 18px;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 }
 `
