@@ -77,6 +77,7 @@ const SearchBarInputHolder = styled.div`
     font-size: 12px;
     cursor: pointer;
     position: absolute;
+    color: #000;
 }
 
 `

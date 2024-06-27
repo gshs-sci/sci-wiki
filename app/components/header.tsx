@@ -47,6 +47,7 @@ justify-content: center;
 cursor: pointer;
 padding: 6px;
 border-radius: 3px;
+color: #000;
 &:hover {
     background-color: #f0f0f0;
 }
