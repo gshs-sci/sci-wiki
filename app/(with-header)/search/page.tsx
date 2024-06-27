@@ -1,6 +1,7 @@
 import prisma from "@/app/lib/prisma";
 import { SearchResult } from "./search";
 import removeMd from "remove-markdown"
+import { redirect } from "next/navigation";
 
 export default async function Page({
     params,
@@ -10,17 +11,19 @@ export default async function Page({
     searchParams?: { [key: string]: string | string[] | undefined };
 }) {
 
-    if (!searchParams || typeof searchParams["q"] !== "string") {
-        return (
-            <>
-                검색어 입력부탁
-            </>
-        )
+    if (!searchParams || typeof searchParams["q"] !== "string" || !searchParams["q"]) {
+        return redirect("/")
     }
     let where
     let cat
     const query = searchParams["q"]
     const subject = searchParams["s"]
+    const page = searchParams["page"]
+    let parsedpage=0
+    if(page && !isNaN(page as any)) {
+        parsedpage=parseInt(page as any)
+    }
+    const resultPerPage=20
 
     if (typeof searchParams["s"] !== "string" || searchParams["s"] == "") {
         cat = ""
@@ -57,6 +60,7 @@ export default async function Page({
     const [res, count, cats] = await prisma.$transaction([
         prisma.doc.findMany({
             where: where,
+            skip:resultPerPage*parsedpage,
             select: {
                 title: true,
                 id: true,
@@ -66,8 +70,9 @@ export default async function Page({
                         id: true
                     }
                 },
-                lastUpdated: true
-            }
+                lastUpdated: true,
+            },
+            take: resultPerPage
         }),
         prisma.doc.count({ where: where }),
         prisma.subject.findMany(
@@ -86,6 +91,6 @@ export default async function Page({
         }
     })
     return (
-        <SearchResult query={query} count={count} cat={cats} activecat={cat} data={returnData} />
+        <SearchResult page={parsedpage} query={query} count={count} cat={cats} activecat={cat} data={returnData} />
     )
 }

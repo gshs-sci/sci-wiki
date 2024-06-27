@@ -31,7 +31,7 @@ const SelectTagHolder = styled.ul`
     }
 `
 const SelectTag = styled.li`
-    font-size: 13px;
+    font-size: 12px;
     user-select: none;
     cursor: pointer;
     padding: 2px 4px;

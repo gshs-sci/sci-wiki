@@ -5,8 +5,10 @@ import prisma from "@/app/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import 'katex/dist/katex.css';
 import { extractTitles, CompileMD } from "@/app/lib/document/compileMd";
-import { Banner, Title } from "@/app/components/doc/component";
+import { Banner, Title, Tags } from "@/app/components/doc/component";
 import Link from "next/link";
+import { MdArrowForwardIos } from "react-icons/md";
+
 export async function generateMetadata({ params, searchParams }: any) {
     const data = await prisma.doc.findFirst({
         where: {
@@ -42,6 +44,12 @@ export default async function Document({ params, searchParams }: { params: { doc
                 doc: {
                     select: {
                         title: true,
+                        tags:{
+                            select:{id:true}
+                        },
+                        subject:{
+                            select:{id:true}
+                        }
                     }
                 }
             }
@@ -52,7 +60,9 @@ export default async function Document({ params, searchParams }: { params: { doc
         data = {
             content: contData.after,
             title: contData.doc.title,
-            lastUpdated: contData.date
+            lastUpdated: contData.date,
+            tags: contData.doc.tags,
+            subject: contData.doc.subject,
         }
     } else {
         data = await prisma.doc.findFirst({
@@ -62,20 +72,34 @@ export default async function Document({ params, searchParams }: { params: { doc
             select: {
                 content: true,
                 title: true,
-                lastUpdated:true
+                lastUpdated:true,
+                tags:{
+                    select:{id:true}
+                },
+                subject:{
+                    select:{id:true}
+                }
             }
         })
     }
     if (data === null) {
         return notFound()
     }
-    const { content, title,lastUpdated } = data
+    const { content, title,lastUpdated,tags,subject } = data
     const compiled = await CompileMD(content)
     return (
         <>
             <Index titles={extractTitles(content)} />
             <div className="md_doc">
                 {rev ? <Banner>주의: 이 문서의 이전 리비전({rev})을 보고 있습니다. <Link href={"/d/" + params.docId.join("/")} scroll={false}>최신 버전 보기</Link></Banner> : <></>}
+                {tags?<Tags>
+                    <p>분류:
+                    </p>
+                    <li className="main">
+                        {subject.id}
+                    </li>
+                    {tags.map((elem:{id:string})=><li><Link href={"/tag/"+encodeURIComponent(elem.id)}>{elem.id}</Link></li>)}
+                </Tags>:<></>}
                 <Title>
                     <div className="left">
                         <h1>{title}</h1>

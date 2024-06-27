@@ -46,3 +46,67 @@ export const Title = styled.div`
         align-items: flex-start;
     }
 `
+
+export const Tags = styled.ul`
+    list-style-type: none;
+    font-size: 13px;
+    padding: 0;
+    margin: 0;
+    padding: 3px 8px;
+    background-color: transparent;
+    border: solid 1px #e0e0e0;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    border-radius: 5px;
+    overflow-x: scroll;
+    white-space: nowrap;
+    flex-wrap: wrap;
+    & li.main {
+        height: 13px;
+        font-weight: 600;
+        border: none;
+        margin: 0px 5px;
+        color: #000000;
+        &:after {
+            width: 5px;
+            height: 5px;
+            margin-left: 5px;
+            content: "";
+            border: solid 1px #a5a5a5;
+            border-left: none;
+            border-bottom: none;
+            rotate: 45deg;
+        }
+        
+    }
+    & li {
+        margin: 5px 0px;
+        display: flex;
+        align-items: center;
+        color: #cccccc;
+        margin-right: 10px;
+        padding-right: 10px;
+        border-right: solid 1px #cccccc;
+        height: 13px;
+        display: flex;
+        align-items: center;
+    }
+    & li:last-child {
+        border-right: none;
+    }
+    & a {
+        padding: 0;
+        margin: 0;
+        color: #2776af;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    & p {
+        font-size: 13px;
+        margin: 0;
+        padding: 0;
+    }
+`

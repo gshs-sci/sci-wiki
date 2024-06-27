@@ -104,34 +104,27 @@ const SearchBtn = styled.button`
   
 `
 
-const SearchSuggestions = styled.ul`
+const Navigation = styled.ul`
+    list-style-type: none;
+    display: flex;
     margin: 0;
     padding: 0;
-    position: absolute;
-    left: 0;
-    background-color: #fff;
-    width: calc(100% - 2px);
-    border: solid 1px #848484;
-    top: 50px;
-    list-style-type: none;
-    border-radius: 4px;
-`
-const Suggestions = styled.li`
-    display: flex;
-    flex-direction: column;
-    margin: 5px;
-    border: solid 1px transparent;
-    border-radius: 3px;
-    &:hover {
-        border: solid 1px #dbdbdb;
-        background-color: #f4f4f4;
-        text-decoration: underline;
-    }
+    margin-top: 30px;
     & a {
-        padding:4px;
-        color: #000;
-        font-size: 14px;
+        display: flex;
+        width: 25px;
+        height: 25px;
+        align-items: center;
+        justify-content: center;
         text-decoration: none;
+        color: #2776af;
+    }
+    & li {
+        border: solid 1px transparent;
+        border-radius: 3px;
+    }
+    & li.active {
+        border: solid 1px #9a9a9a;
     }
 `
 
@@ -140,6 +133,7 @@ export const SearchResult = (props: {
     cat: Array<{ id: string }>,
     activecat: string,
     count: number,
+    page: number,
     data: Array<{
         title: string,
         id: string,
@@ -148,7 +142,8 @@ export const SearchResult = (props: {
         preview: string
     }>
 }) => {
-    const { query, cat, count, data, activecat } = props
+    const { query, cat, count, data, activecat, page } = props
+    console.log(page)
     const router = useRouter()
     const form = useRef<HTMLFormElement>(null)
     const [changeFn, Suggestion] = useSuggestion()
@@ -165,7 +160,7 @@ export const SearchResult = (props: {
             <DocTitle>검색 결과</DocTitle>
             <SearchBarHolder onSubmit={submit} ref={form}>
                 <SearchBarInputHolder>
-                    <SearchBar data-sug="true" autoComplete="off" type="text" name="q" defaultValue={query} onChange={(e)=>changeFn(e.target.value)}></SearchBar>
+                    <SearchBar data-sug="true" autoComplete="off" type="text" name="q" defaultValue={query} onChange={(e) => changeFn(e.target.value)}></SearchBar>
                     <select name="s">
                         <option value="" selected={activecat == "전체"}>전체</option>
                         {cat.map(elem => <option selected={activecat == elem.id} value={elem.id}>{elem.id}</option>)}
@@ -174,7 +169,7 @@ export const SearchResult = (props: {
                 </SearchBarInputHolder>
                 <SearchBtn type="submit"><IoSearch /></SearchBtn>
             </SearchBarHolder>
-            <Banner $normal={true}>제목이 "{query}"인 문서로 바로 이동하려면 <Link href={"/d/" + query}>여기</Link>를 클릭하세요.</Banner>
+            <Banner $normal={true}>제목이 "{query}"인 문서로 바로 이동하려면 <Link href={"/d/" + encodeURIComponent(query)}>여기</Link>를 클릭하세요.</Banner>
             <Holder>
                 전체: {count}개
                 {data.map((elem, index) => {
@@ -189,6 +184,20 @@ export const SearchResult = (props: {
                         </Elem>
                     )
                 })}
+                <Navigation>
+                    {Array(Math.ceil(count / 20)).fill(0).map((elem, index) => {
+                        const d = new URLSearchParams(document.location.search)
+                        d.set("page", String(index))
+
+                        return (
+                            <li className={index == page ? "active" : ""}>
+                                <Link href={"/search?" + d.toString()}>
+                                    {index}
+                                </Link>
+                            </li>
+                        )
+                    })}
+                </Navigation>
             </Holder>
         </Body>
     )
