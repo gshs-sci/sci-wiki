@@ -24,7 +24,7 @@ RUN npm run prisma:generate
 RUN npm run build
 
 # Expose the port on which the Next.js application will run
-EXPOSE 80
+EXPOSE 3000
 
 # Set the command to start the Next.js application
 CMD dockerize -wait tcp://db:3306 -timeout 20s && npx prisma db push && npm start
