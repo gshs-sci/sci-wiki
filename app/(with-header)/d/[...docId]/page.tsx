@@ -30,7 +30,7 @@ export async function generateMetadata({ params, searchParams }: any) {
 export default async function Document({ params, searchParams }: { params: { docId: Array<string> }, searchParams?: { [key: string]: string | string[] | undefined } }) {
     const rev = searchParams!["rev"]
     let data
-    if (rev) {
+    if (typeof rev=="string" && rev) {
         let contData = await prisma.contribution.findFirst({
             where: {
                 id: rev,

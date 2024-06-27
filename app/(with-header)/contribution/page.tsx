@@ -32,7 +32,7 @@ export default async function Page({
     } else {
         cursor = {}
     }
-    let where
+    let where:any
     if (user) {
         where = {
             author: {

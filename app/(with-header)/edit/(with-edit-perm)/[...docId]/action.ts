@@ -38,7 +38,7 @@ export const Edit = async (prevState: any, formData: FormData) => {
             message: "오류: CAPTCHA 검증에 실패했습니다."
         }
     }
-    if (!docId) {
+    if (!docId || typeof docId !== 'string') {
         return {
             success: false,
             message: "오류: 올바르지 않은 문서 아이디입니다."

@@ -16,6 +16,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /home/opc/sci-wiki
+          rm -rf .env
           touch .env
           echo JWT_KEY="${{secrets.JWT_KEY}}" >> .env
           echo TURNSTILE_KEY="${{secrets.TURNSTILE_KEY}}" >> .env
@@ -23,4 +24,4 @@ jobs:
           
           git pull https://${{ secrets.GH_SECRET }}@github.com/gshs-sci/sci-wiki/
           docker compose --profile prod down
-          docker compose --profile prod up -d
+          docker compose --profile prod up --build -d

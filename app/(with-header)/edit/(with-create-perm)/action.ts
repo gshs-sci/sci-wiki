@@ -38,6 +38,19 @@ export const Create = async (prevState: any, formData: FormData) => {
             message: "제목을 입력해 주세요."
         }
     }
+
+    if (!data || typeof data !=="string") {
+        return {
+            success: false,
+            message: "본문을 입력해 주세요."
+        }
+    }
+    if(!category || typeof category !=="string") {
+        return {
+            success: false,
+            message: "대분류를 선택해 주세요"
+        }
+    }
     let d: any = {}
     if (user) {
         d = {
@@ -69,10 +82,10 @@ export const Create = async (prevState: any, formData: FormData) => {
                 tags: {
                     connectOrCreate: usertags.map((elem)=>{return {
                         where: {
-                            id: elem,
+                            id: elem as string,
                         },
                         create: {
-                            id: elem,
+                            id: elem as string,
                             id_dis: disassembleHangul(elem as string),
                             chosung: getChosung(elem as string)
                         }
