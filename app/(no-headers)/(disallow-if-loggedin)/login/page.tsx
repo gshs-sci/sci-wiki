@@ -101,7 +101,7 @@ const Btn = () => {
     )
 }
 
-export default function loginPage() {
+export default function LoginPage() {
     const [state, formAction] = useFormState(Login, null)
     const router = useRouter()
     const searchParams =useSearchParams()

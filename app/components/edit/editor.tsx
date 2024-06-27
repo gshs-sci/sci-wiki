@@ -10,12 +10,22 @@ import "@/app/lib/document/highlight.css"
 import "@/app/lib/document/doc.css"
 
 import { CompileMD } from "@/app/lib/document/compileMd";
-import styled from 'styled-components';
 const sansNormal = Noto_Sans_KR({ subsets: ["latin"] })
 
 export const Textarea = (props: { defaultValue: string, preCompiled?:JSX.Element }) => {
     const [value, setValue] = useState<any>(props.defaultValue)
+    const {preCompiled} = props
 
+    const Previewer = (source:string, state:any, dispatch:any) => {
+        const [data,setData] = useState<JSX.Element|undefined>(preCompiled)
+        useEffect(()=>{
+            CompileMD(source).then((res)=>{
+                setData(res)
+            })
+        },[source]) 
+        return <div className="md_doc">{data}</div>
+    }
+    
     return (
         <>
             <MDEditor value={value} onChange={setValue}
@@ -43,15 +53,7 @@ export const Textarea = (props: { defaultValue: string, preCompiled?:JSX.Element
                     commands.image,
                 ]}
                 components={{
-                    preview: (source, state, dispatch) => {
-                        const [data,setData] = useState<JSX.Element|undefined>(props.preCompiled)
-                        useEffect(()=>{
-                            CompileMD(source).then((res)=>{
-                                setData(res)
-                            })
-                        },[source]) 
-                        return <div className="md_doc">{data}</div>
-                    }
+                    preview: Previewer
                 }}
 
             />

@@ -53,12 +53,12 @@ export const Tags = (props: { tag: string, docs: Array<{ id: string, title: stri
                 {
                     Object.keys(kv).map((key) => {
                         return (
-                            <CharHolder>
+                            <CharHolder key={key}>
                                 <h3>{key}</h3>
                                 {
                                     kv[key].map((elem) => {
                                         return (
-                                            <li>
+                                            <li key={elem.id}>
                                                 <Link href={"/d/" + elem.id}>{elem.title}</Link>
                                             </li>
                                         )

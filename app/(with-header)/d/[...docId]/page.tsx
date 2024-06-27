@@ -98,7 +98,7 @@ export default async function Document({ params, searchParams }: { params: { doc
                     <li className="main">
                         {subject.id}
                     </li>
-                    {tags.map((elem:{id:string})=><li><Link href={"/tag/"+encodeURIComponent(elem.id)}>{elem.id}</Link></li>)}
+                    {tags.map((elem:{id:string})=><li key={elem.id}><Link href={"/tag/"+encodeURIComponent(elem.id)}>{elem.id}</Link></li>)}
                 </Tags>:<></>}
                 <Title>
                     <div className="left">

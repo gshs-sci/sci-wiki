@@ -82,7 +82,7 @@ const ContinueBtn = () => {
     )
 }
 
-export default function validatePage({
+export default function ValidatePage({
     children,
 }: Readonly<{
     children: React.ReactNode;

@@ -1,7 +1,6 @@
 "use client"
 import styled from "styled-components"
-import { Noto_Serif_KR, Playfair } from "next/font/google";
-import { useFormStatus, useFormState } from 'react-dom'
+import { Playfair } from "next/font/google";
 import { Register } from "./action";
 import { useRef, useState, useEffect, useTransition } from "react";
 import Turnstile, { useTurnstile } from "react-turnstile";
@@ -75,11 +74,7 @@ const NextBtn = styled.button`
     font-size: 13px;
 `
 
-const serifNormal = Noto_Serif_KR({ weight: "400", subsets: ["latin"] })
-const serifBold = Noto_Serif_KR({ weight: "600", subsets: ["latin"] })
-
-
-export default function registerPage() {
+export default function RegisterPage() {
     const formRef = useRef<HTMLFormElement>(null)
     const [isPending, startTransition] = useTransition()
     const [submitState, setSubmitState] = useState<any>()

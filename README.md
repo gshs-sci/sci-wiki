@@ -9,8 +9,9 @@ docker and docker-compose must be installed
 After cloning this repository to your local development environment, build and start the necessary containers by running:
 
 ```bash
-docker-compose --profile dev up
-docker-compose --profile dev up -V --build
+docker-compose --profile dev up -d
+# If you need rebuild
+docker-compose --profile dev up --build -d
 ```
 
 the development server container along with the redis,mariadb container will start automatically.
@@ -24,6 +25,10 @@ when you alter the DB schema, run `npx prisma db push` or `npx prisma migrate de
 Also, you can view the database schema by running `npx prisma studio` and visiting [http://localhost:5555](http://localhost:5555).
 If you need a sample data for development, run `node db.js`. A sample dataset will be automatically inserted into the database.
 
+You may stop the container by running
+```
+docker-compose --profile dev down
+```
 ## Tech stack
 
 - **Web framework**: NextJS, ReactJS, 

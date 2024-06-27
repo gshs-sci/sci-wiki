@@ -9,7 +9,7 @@ export default async function Page({
 }) {
     let before,after
     if(searchParams!.after && !searchParams!.before) {
-        ({ before,after } = await prisma.contribution.findFirst({
+        const data = await prisma.contribution.findFirst({
             where:{
                 id:searchParams!.after
             },
@@ -17,7 +17,12 @@ export default async function Page({
                 before:true,
                 after:true
             }
-        }))
+        })
+        if(data!=null) {
+            ({ before,after } = data)
+        }else {
+            redirect("/contribution")
+        }
     }else if(searchParams!.after && searchParams!.before) {
         const [before_cont, after_cont] = await prisma.$transaction([
             prisma.contribution.findFirst({
@@ -37,8 +42,8 @@ export default async function Page({
                 }
             })
         ])
-        before = before_cont.after
-        after = after_cont.after
+        before = before_cont!.after
+        after = after_cont!.after
     }else {
         redirect("/contribution")
     }

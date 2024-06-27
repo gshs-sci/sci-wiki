@@ -163,18 +163,18 @@ export const SearchResult = (props: {
                     <SearchBar data-sug="true" autoComplete="off" type="text" name="q" defaultValue={query} onChange={(e) => changeFn(e.target.value)}></SearchBar>
                     <select name="s">
                         <option value="" selected={activecat == "전체"}>전체</option>
-                        {cat.map(elem => <option selected={activecat == elem.id} value={elem.id}>{elem.id}</option>)}
+                        {cat.map(elem => <option key={elem.id} selected={activecat == elem.id} value={elem.id}>{elem.id}</option>)}
                     </select>
                     <Suggestion />
                 </SearchBarInputHolder>
                 <SearchBtn type="submit"><IoSearch /></SearchBtn>
             </SearchBarHolder>
-            <Banner $normal={true}>제목이 "{query}"인 문서로 바로 이동하려면 <Link href={"/d/" + encodeURIComponent(query)}>여기</Link>를 클릭하세요.</Banner>
+            <Banner $normal={true}>제목이 &quot;{query}&quot;인 문서로 바로 이동하려면 <Link href={"/d/" + encodeURIComponent(query)}>여기</Link>를 클릭하세요.</Banner>
             <Holder>
                 전체: {count}개
                 {data.map((elem, index) => {
                     return (
-                        <Elem>
+                        <Elem key={elem.id}>
                             <Link href={"/d/" + elem.id}>
                                 {elem.title}
                             </Link>
@@ -190,7 +190,7 @@ export const SearchResult = (props: {
                         d.set("page", String(index))
 
                         return (
-                            <li className={index == page ? "active" : ""}>
+                            <li className={index == page ? "active" : ""} key={index}>
                                 <Link href={"/search?" + d.toString()}>
                                     {index}
                                 </Link>

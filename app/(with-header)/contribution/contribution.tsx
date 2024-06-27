@@ -6,7 +6,7 @@ import { Source_Code_Pro } from "next/font/google";
 import { TbDots } from "react-icons/tb";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
-const sourceCodePro = Source_Code_Pro({ subsets: ["latin"], weight: "400" })
+const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] })
 
 export const TitleH1 = styled.h1`
 

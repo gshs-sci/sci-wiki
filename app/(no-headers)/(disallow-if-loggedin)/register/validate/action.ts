@@ -5,9 +5,9 @@ import { redirect } from 'next/navigation'
 import prisma from "@/app/lib/prisma";
 
 interface Reg {
-    mail: String
-    id: String
-    pw: String
+    mail: string
+    id: string
+    pw: string
 }
 export async function Validate(prevState: any, formData: FormData) {
     const client = await createClient({

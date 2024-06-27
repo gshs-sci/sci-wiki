@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const sansBold = Noto_Sans_KR({ weight: "600", subsets: ["latin"] })
+const sansBold = Noto_Sans_KR({ subsets: ["latin"] })
 const Body = styled.div`
   width: var(--cont-width);
   margin-left: auto;

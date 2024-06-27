@@ -39,7 +39,7 @@ const SubmitBtn = styled.button`
     font-size: 13px;
 `
 
-export const SubmitButton = (props: { isSuccess?: boolean, message?: string }) => {
+const SubmitButton = (props: { isSuccess?: boolean, message?: string }) => {
     const { pending } = useFormStatus()
     const [isVerified, setVerified] = useState(false)
     const turnstile = useTurnstile()
