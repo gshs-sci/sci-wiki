@@ -75,6 +75,7 @@ const SearchBarInputHolder = styled.div`
     font-size: 12px;
     cursor: pointer;
     position: absolute;
+    color: #000;
 }
 
 `
@@ -144,6 +145,19 @@ const HDoc = styled.li`
     color: #555555;
   }
 `
+const H3Holder = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & a {
+    color: #2776af;
+    text-decoration: none;
+    font-size: 15px;
+  }
+  & a:hover {
+    text-decoration: underline;
+  }
+`
 const TimeDifference = (props:{time:Date}) => {
     const [displayTime,setDisplay] = useState(false)
     useEffect(()=>{
@@ -204,7 +218,10 @@ export const MainPage = (props: {
                 </SearchImg>
             </SearchArea>
             <DisplayH>
-                <h3>새로 업데이트된 문서</h3>
+              <H3Holder>
+              <h3>새로 업데이트된 문서</h3>
+              <Link href="/recents">더보기</Link>
+              </H3Holder>
                 {props.newUpdated.map((elem, index) => {
                     return (
                         <HDoc key={elem.id+index}>
