@@ -47,7 +47,6 @@ const TagHolder = styled.ul`
     position: relative;
     padding-left: 10px;
     white-space: nowrap;
-    overflow: scroll;
 
 `
 const Tag = styled.li`
