@@ -81,7 +81,7 @@ const Create = styled.div`
     }
 `
 export const Category = (props: { default?: string, isRequired: boolean, name: string }) => {
-    const [categories, setCategories] = useState([])
+    const [categories, setCategories] = useState<Array<string>>([])
     const [isShown, setShown] = useState(false)
     const [created, setCreated] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)

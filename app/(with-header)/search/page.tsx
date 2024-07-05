@@ -2,6 +2,7 @@ import prisma from "@/app/lib/prisma";
 import { SearchResult } from "./search";
 import removeMd from "remove-markdown"
 import { redirect } from "next/navigation";
+import { Prisma } from "@prisma/client";
 
 export default async function Page({
     params,
@@ -14,10 +15,9 @@ export default async function Page({
     if (!searchParams || typeof searchParams["q"] !== "string" || !searchParams["q"]) {
         return redirect("/")
     }
-    let where
-    let cat
+    let where:Prisma.DocWhereInput
     const query = searchParams["q"]
-    const subject = searchParams["s"]
+    const subject = searchParams["s"] as string
     const page = searchParams["page"]
     let parsedpage=0
     if(page && !isNaN(page as any)) {
@@ -26,7 +26,6 @@ export default async function Page({
     const resultPerPage=20
 
     if (typeof searchParams["s"] !== "string" || searchParams["s"] == "") {
-        cat = ""
         where = {
             OR: [{
                 content: {
@@ -40,7 +39,6 @@ export default async function Page({
             }]
         }
     } else {
-        cat = searchParams["s"]
         where = {
             subject: {
                 id: subject
@@ -91,6 +89,6 @@ export default async function Page({
         }
     })
     return (
-        <SearchResult page={parsedpage} query={query} count={count} cat={cats} activecat={cat} data={returnData} />
+        <SearchResult page={parsedpage} query={query} count={count} cat={cats} activecat={subject} data={returnData} />
     )
 }

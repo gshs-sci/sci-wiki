@@ -41,7 +41,7 @@ export const checkAdmin = async (userId: string | undefined | null) => {
     let id = ""
     let email = ""
     if (userId) {
-        ({ isAdmin, id, email } = await prisma.user.findFirst({
+        let res = await prisma.user.findFirst({
             where: {
                 id: userId
             },
@@ -50,8 +50,12 @@ export const checkAdmin = async (userId: string | undefined | null) => {
                 id: true,
                 email: true
             }
-        }))
-    }else {
+        })
+        if (!res) {
+            return false
+        }
+        ({ isAdmin, id, email } = res)
+    } else {
         return false
     }
     if (conditionalPermission(id, email).includes("admin")) {
@@ -67,7 +71,7 @@ export const checkDelete = async (userId: string | undefined | null) => {
     if (!userId) {
         return false
     }
-    const { deletePermission, isAdmin, id, email } = await prisma.user.findFirst({
+    const res = await prisma.user.findFirst({
         where: {
             id: userId
         },
@@ -80,6 +84,10 @@ export const checkDelete = async (userId: string | undefined | null) => {
             email: true
         }
     })
+    if (!res) {
+        return false
+    }
+    const { deletePermission, isAdmin, id, email } = res
     if (isAdmin) {
         return true
     }
@@ -100,7 +108,7 @@ export const checkEdit = async (userId: string | undefined | null) => {
     if (!userId) {
         return false
     }
-    const { editPermission, isAdmin, id, email } = await prisma.user.findFirst({
+    const res = await prisma.user.findFirst({
         where: {
             id: userId
         },
@@ -113,6 +121,10 @@ export const checkEdit = async (userId: string | undefined | null) => {
             email: true
         }
     })
+    if (!res) {
+        return false
+    }
+    const { editPermission, isAdmin, id, email } = res
     if (isAdmin) {
         return true
     }
@@ -134,7 +146,7 @@ export const checkCreate = async (userId: string | undefined | null) => {
     if (!userId) {
         return false
     }
-    const { createPermission, isAdmin, id, email } = await prisma.user.findFirst({
+    const res = await prisma.user.findFirst({
         where: {
             id: userId
         },
@@ -147,6 +159,8 @@ export const checkCreate = async (userId: string | undefined | null) => {
             email: true
         }
     })
+    if (!res) return false
+    const { createPermission, isAdmin, id, email } = res
     if (isAdmin) {
         return true
     }
