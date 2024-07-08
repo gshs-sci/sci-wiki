@@ -1,7 +1,7 @@
 import prisma from "./prisma";
 import * as fs from 'node:fs/promises';
 
-const configPath = "config/sci-config.json"
+const configPath = __dirname+"/sci-config.json"
 const defaultConfig={
     "allow_unauthorized_edit": true,
     "allow_unauthorized_delete": false,
