@@ -43,8 +43,13 @@ const readConfig = async () => {
     }catch(e:any) {
         if(e.code==='ENOENT') {
             console.log("creating new configuration file..")
-            await fs.writeFile(configPath,JSON.stringify(defaultConfig),"utf8")
-            return defaultConfig as Config
+            try{
+                await fs.writeFile(configPath,JSON.stringify(defaultConfig),"utf8")
+                return defaultConfig as Config
+            }catch(e) {
+                console.log(e)
+                return defaultConfig as Config
+            }
         }else {
             console.error("unable to read from configuration file. please ensure you have the permission to write to the config/ directory. Using the default config as fallback..")
             return defaultConfig as Config
