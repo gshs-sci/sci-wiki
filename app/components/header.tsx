@@ -103,7 +103,7 @@ z-index: 10;
 }
 `
 
-export const Header = (props: { userIp?: string, userId?: string }) => {
+export const Header = (props: { userIp?: string, userId?: string, isAdmin?:boolean }) => {
     const [userExpanded, setUserExpanded] = useState(false)
     const router = useRouter()
     const pathname = usePathname()
@@ -141,6 +141,13 @@ export const Header = (props: { userIp?: string, userId?: string }) => {
                                 : <></>
                             }
                         </li>
+                        {props.isAdmin?
+                        <li>
+                            <Link href={"/admin"}>
+                                관리자 패널
+                            </Link>
+                        </li>
+                        :<></>}
                         <li>
                             <Link href={"/contribution"}>
                                 기여 목록

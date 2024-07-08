@@ -28,7 +28,6 @@ table th,td {
 
 .md_doc pre > code {
   padding: 16px;
-  overflow: auto;
   display: block;
   background-color: transparent;
 }

@@ -30,7 +30,7 @@ export default async function TagPage({
                 }
             }
         })
-        const {doc} = result
+        const {doc} = result!
     
         return (
             <Tags docs={doc} tag={tag}/>

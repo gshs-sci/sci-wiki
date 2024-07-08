@@ -5,8 +5,9 @@ import { Verify } from "@/app/lib/turnstile";
 import { createHash } from "crypto";
 import { checkDelete, checkEdit } from "@/app/lib/permission";
 import { disassembleHangul, getChosung } from "es-hangul"
+import { Prisma } from "@prisma/client";
 
-const DeleteEmptySubject = async (subjectId: any, tagsId:any) => {
+const DeleteEmptySubject = async (subjectId: any, tagsId: any) => {
     await prisma.$transaction([
         prisma.subject.deleteMany({
             where: {
@@ -16,7 +17,7 @@ const DeleteEmptySubject = async (subjectId: any, tagsId:any) => {
         }),
         prisma.tag.deleteMany({
             where: {
-                id: {in: tagsId},
+                id: { in: tagsId },
                 doc: { none: {} }
             }
         })
@@ -25,8 +26,8 @@ const DeleteEmptySubject = async (subjectId: any, tagsId:any) => {
 
 export const Edit = async (prevState: any, formData: FormData) => {
     const data = formData.get("data")?.toString()
-    const docId = formData.get("docId")
-    const category = formData.get("cat")
+    const docId = formData.get("docId") as string
+    const category = formData.get("cat") as string
     const cf_tk = formData.get("cf-turnstile-response")?.toString()
     const commitmsg = formData.get("commitmsg")?.toString()
     const usertags = formData.getAll("tags")
@@ -38,7 +39,7 @@ export const Edit = async (prevState: any, formData: FormData) => {
             message: "오류: CAPTCHA 검증에 실패했습니다."
         }
     }
-    if (!docId || typeof docId !== 'string') {
+    if (!docId) {
         return {
             success: false,
             message: "오류: 올바르지 않은 문서 아이디입니다."
@@ -99,7 +100,7 @@ export const Edit = async (prevState: any, formData: FormData) => {
         &&
         category == docData.subject.id
         &&
-        (usertags.length==docData.tags.length||usertags.every(e=>docData.tags.indexOf(e)!=-1))
+        (usertags.length == docData.tags.length || usertags.every(e => docData.tags.map(q => q.id).indexOf(e as string) != -1))
     )
         return {
             success: false,
@@ -150,21 +151,24 @@ export const Edit = async (prevState: any, formData: FormData) => {
                     },
                     tags: {
                         set: [],
-                        connectOrCreate: usertags.map((elem)=>{return {
-                            where: {
-                                id: elem,
-                            },
-                            create: {
-                                id: elem,
-                                id_dis: disassembleHangul(elem as string),
-                                chosung: getChosung(elem as string)
+                        connectOrCreate: usertags.map((elem) => {
+                            return {
+                                where: {
+                                    id: elem,
+                                },
+                                create: {
+                                    id: elem,
+                                    id_dis: disassembleHangul(elem as string),
+                                    chosung: getChosung(elem as string)
+                                }
                             }
-                        }})
+                        }) as Array<Prisma.TagCreateOrConnectWithoutDocInput>
                     }
                 }
             })
-        ])
-        await DeleteEmptySubject(subject.id,tags.map((e:any)=>e.id))
+        ]) as Array<{ subject: { id: string }, tags: Array<{ id: string }> }>
+
+        await DeleteEmptySubject(subject.id, tags.map((e: any) => e.id))
     } catch (e) {
         return {
             success: false,
@@ -200,7 +204,7 @@ export const Delete = async (id: string, cf_tk: string) => {
         }
     }
     try {
-        const { title, subject,tags } = await prisma.doc.delete({
+        const { title, subject, tags } = await prisma.doc.delete({
             where: {
                 id: id
             },
@@ -219,7 +223,7 @@ export const Delete = async (id: string, cf_tk: string) => {
             },
         })
         console.log(subject.id)
-        await DeleteEmptySubject(subject.id,tags.map((e:any)=>e.id))
+        await DeleteEmptySubject(subject.id, tags.map((e: any) => e.id))
         if (title) {
             return {
                 success: true,

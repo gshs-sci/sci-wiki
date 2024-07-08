@@ -1,6 +1,5 @@
 "use client"
 import styled from "styled-components";
-import { Noto_Serif_KR } from "next/font/google";
 import { Noto_Sans_KR } from "next/font/google";
 import { IoSearch } from "react-icons/io5";
 import { useEffect, useState,useRef } from "react";

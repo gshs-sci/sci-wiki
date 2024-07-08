@@ -49,7 +49,6 @@ const Table = styled.table`
     border-radius: 10px;
     width: 100%;
     height: 100%;
-    overflow: scroll;
     font-size: 13px;
     & thead {
         background-color: #f7f7f7;

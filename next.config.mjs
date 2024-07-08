@@ -4,9 +4,6 @@ const nextConfig = {
         styledComponents: true,
     },
     output: "standalone",
-    typescript: {
-        ignoreBuildErrors: true
-      }
 };
 
 export default nextConfig;
