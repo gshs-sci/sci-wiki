@@ -1,15 +1,11 @@
-# Use the official Node.js image as the base
 FROM node:18
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
 RUN npm i
 
-# Copy the entire project directory to the working directory
 COPY . .
 
 ENV DOCKERIZE_VERSION v0.7.0
@@ -23,8 +19,6 @@ RUN npm run prisma:generate
 
 RUN npm run build
 
-# Expose the port on which the Next.js application will run
 EXPOSE 3000
 
-# Set the command to start the Next.js application
 CMD dockerize -wait tcp://db:3306 -timeout 20s && npx prisma db push && npm start

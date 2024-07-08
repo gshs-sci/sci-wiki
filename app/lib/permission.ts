@@ -1,8 +1,28 @@
-"use server"
 import prisma from "./prisma";
-import * as config from "@/sci-config.json"
+import * as fs from 'node:fs/promises';
 
-interface Config {
+const configPath = "config/sci-config.json"
+const defaultConfig={
+    "allow_unauthorized_edit": true,
+    "allow_unauthorized_delete": false,
+    "allow_unauthorized_create": false,
+    "conditional_permission": [
+        {
+            "condition": {
+                "email": "\\b[A-Za-z0-9._%+-]+@gs\\.hs\\.kr\\b"
+            },
+            "permission": ["delete","create","edit"]
+        },
+        {
+            "condition": {
+                "email": "^gs22048@gs.hs.kr$"
+            },
+            "permission": ["admin"]
+        }
+    ]
+}
+
+export interface Config {
     allow_unauthorized_edit: boolean,
     allow_unauthorized_delete: boolean,
     allow_unauthorized_create: boolean,
@@ -15,11 +35,26 @@ interface Config {
     }>
 }
 
-const typedConfig = config as Config
 
-const conditionalPermission = (id: string, email: string): Array<"admin" | "delete" | "create" | "edit"> => {
+const readConfig = async () => {
+    try{
+        const data = await fs.readFile(configPath, "utf8")
+        return JSON.parse(data) as Config
+    }catch(e:any) {
+        if(e.code==='ENOENT') {
+            console.log("creating new configuration file..")
+            await fs.writeFile(configPath,JSON.stringify(defaultConfig),"utf8")
+            return defaultConfig as Config
+        }else {
+            console.error("unable to read from configuration file. please ensure you have the permission to write to the config/ directory. Using the default config as fallback..")
+            return defaultConfig as Config
+        }
+    }
+}
+
+const conditionalPermission = async (id: string, email: string): Promise<Array<"admin" | "delete" | "create" | "edit">> => {
     let permissions = new Set()
-
+    const typedConfig = await readConfig()
     typedConfig["conditional_permission"].forEach((data) => {
         const condition = data["condition"]
         let valid = false
@@ -58,13 +93,14 @@ export const checkAdmin = async (userId: string | undefined | null) => {
     } else {
         return false
     }
-    if (conditionalPermission(id, email).includes("admin")) {
+    if ((await conditionalPermission(id, email)).includes("admin")) {
         return true
     }
     return isAdmin
 }
 
 export const checkDelete = async (userId: string | undefined | null) => {
+    const typedConfig = await readConfig()
     if (typedConfig["allow_unauthorized_delete"]) {
         return true
     }
@@ -94,7 +130,7 @@ export const checkDelete = async (userId: string | undefined | null) => {
     if (deletePermission) {
         return true
     }
-    const cond = conditionalPermission(id, email)
+    const cond = await conditionalPermission(id, email)
     if (cond.includes("admin") || cond.includes("delete")) {
         return true
     }
@@ -102,6 +138,7 @@ export const checkDelete = async (userId: string | undefined | null) => {
 }
 
 export const checkEdit = async (userId: string | undefined | null) => {
+    const typedConfig = await readConfig()
     if (typedConfig["allow_unauthorized_edit"]) {
         return true
     }
@@ -131,7 +168,7 @@ export const checkEdit = async (userId: string | undefined | null) => {
     if (editPermission) {
         return true
     }
-    const cond = conditionalPermission(id, email)
+    const cond = await conditionalPermission(id, email)
     if (cond.includes("admin") || cond.includes("edit")) {
         return true
     }
@@ -140,6 +177,7 @@ export const checkEdit = async (userId: string | undefined | null) => {
 
 
 export const checkCreate = async (userId: string | undefined | null) => {
+    const typedConfig = await readConfig()
     if (typedConfig["allow_unauthorized_create"]) {
         return true
     }
@@ -167,9 +205,26 @@ export const checkCreate = async (userId: string | undefined | null) => {
     if (createPermission) {
         return true
     }
-    const cond = conditionalPermission(id, email)
+    const cond = await conditionalPermission(id, email)
     if (cond.includes("admin") || cond.includes("create")) {
         return true
     }
     return false
+}
+
+export class ConfigClient {
+    async getCurrentConfig() {
+        return await readConfig()
+    }
+
+    async writeToConfig(data:Config) {
+        try{
+            await fs.writeFile(configPath,JSON.stringify(data))
+        }catch(e) {
+            return false
+        }
+        return true
+
+    }
+
 }

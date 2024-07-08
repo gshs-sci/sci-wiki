@@ -7,7 +7,6 @@ import 'katex/dist/katex.css';
 import { extractTitles, CompileMD } from "@/app/lib/document/compileMd";
 import { Banner, Title, Tags } from "@/app/components/doc/component";
 import Link from "next/link";
-import { MdArrowForwardIos } from "react-icons/md";
 
 export async function generateMetadata({ params, searchParams }: any) {
     const data = await prisma.doc.findFirst({
