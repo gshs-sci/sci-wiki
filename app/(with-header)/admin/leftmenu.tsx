@@ -77,11 +77,11 @@ export const Menu = (props: { activeKey: string }) => {
                     전역 설정
                 </Link>
             </MenuElem>
-            <MenuElem $active={props.activeKey == "user"}>
+            {/* <MenuElem $active={props.activeKey == "user"}>
                 <Link href="/admin/user">
                     사용자 관리
                 </Link>
-            </MenuElem>
+            </MenuElem> */}
         </MenuHolder>
         <ToggleBtn onClick={()=>setMenuShown(!menuShown)}><MdMenu /></ToggleBtn>
         </>

@@ -1,6 +1,6 @@
 "use server"
-import { Config, ConfigClient } from "@/app/lib/permission"
-
+import { checkAdmin, Config, ConfigClient } from "@/app/lib/permission"
+import { headers } from "next/headers";
 function parseFormData(formData: FormData): any {
     const result: any = {
         edit: '',
@@ -32,6 +32,10 @@ function parseFormData(formData: FormData): any {
 }
 
 export const Apply = async (prevState: any, formData: FormData) => {
+    let uid = headers().get("x-user-id")
+    if(!await checkAdmin(uid)) {
+        return { success: false }
+    }
     const parsed = parseFormData(formData)
 
     const allowedit = parsed.edit ? true : false
