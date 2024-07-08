@@ -61,6 +61,6 @@ services:
     depends_on:
       - redis
       - db
-    volumes:
 volumes:
   db_data:
+  config:
