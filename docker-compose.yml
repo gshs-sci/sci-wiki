@@ -40,7 +40,7 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
-      - config:/config
+      - sci-config.json:/app/sci-config.json
 
   frontend-prod:
     profiles: ["prod"]
@@ -63,7 +63,7 @@ services:
       - redis
       - db
     volumes:
-      - config:/config
+      - sci-config.json:/app/sci-config.json
 volumes:
   db_data:
   config:
