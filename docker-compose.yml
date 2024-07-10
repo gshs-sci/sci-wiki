@@ -2,7 +2,8 @@ version: '3'
 services:
   redis:
     image: redis:alpine
-
+    volumes:
+      - redis_data:/data
   db:
     image: mariadb:latest
     restart: always
@@ -63,4 +64,4 @@ services:
       - db
 volumes:
   db_data:
-  config:
+  redis_data:

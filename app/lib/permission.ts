@@ -1,8 +1,8 @@
 import prisma from "./prisma";
 import * as fs from 'node:fs/promises';
+import { createClient } from 'redis';
 
-const configPath = __dirname+"/sci-config.json"
-const defaultConfig={
+const defaultConfig = {
     "allow_unauthorized_edit": true,
     "allow_unauthorized_delete": false,
     "allow_unauthorized_create": false,
@@ -11,7 +11,7 @@ const defaultConfig={
             "condition": {
                 "email": "\\b[A-Za-z0-9._%+-]+@gs\\.hs\\.kr\\b"
             },
-            "permission": ["delete","create","edit"]
+            "permission": ["delete", "create", "edit"]
         },
         {
             "condition": {
@@ -37,24 +37,20 @@ export interface Config {
 
 
 const readConfig = async () => {
-    try{
-        const data = await fs.readFile(configPath, "utf8")
-        return JSON.parse(data) as Config
-    }catch(e:any) {
-        if(e.code==='ENOENT') {
-            console.log("creating new configuration file..")
-            try{
-                await fs.writeFile(configPath,JSON.stringify(defaultConfig),"utf8")
-                return defaultConfig as Config
-            }catch(e) {
-                console.log(e)
-                return defaultConfig as Config
-            }
-        }else {
-            console.error("unable to read from configuration file. please ensure you have the permission to write to the config/ directory. Using the default config as fallback..")
-            return defaultConfig as Config
-        }
+    const client = await createClient({
+        url: 'redis://redis:6379'
+    })
+        .on('error', err => console.log('Redis Client Error', err))
+        .connect();
+    let stored = await client.get("sci_configuration")
+    let config
+    if (!stored) {
+        await client.set("sci_configuration", JSON.stringify(defaultConfig))
+        config = defaultConfig as Config
+    } else {
+        config = JSON.parse(stored) as Config
     }
+    return config
 }
 
 const conditionalPermission = async (id: string, email: string): Promise<Array<"admin" | "delete" | "create" | "edit">> => {
@@ -222,14 +218,18 @@ export class ConfigClient {
         return await readConfig()
     }
 
-    async writeToConfig(data:Config) {
-        try{
-            await fs.writeFile(configPath,JSON.stringify(data))
-        }catch(e) {
+    async writeToConfig(data: Config) {
+        try {
+            const client = await createClient({
+                url: 'redis://redis:6379'
+            })
+                .on('error', err => console.log('Redis Client Error', err))
+                .connect();
+            await client.set("sci_configuration", JSON.stringify(data))
+            return true
+        } catch (e) {
             return false
         }
-        return true
-
     }
 
 }
