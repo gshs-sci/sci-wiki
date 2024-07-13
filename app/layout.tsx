@@ -13,12 +13,15 @@ const notoSans = Noto_Sans_KR({
 })
 
 const getLocalStorageTheme = () => {
-  let res = localStorage.getItem("sci-config")
-  try{
-    return JSON.parse(res!).theme
-  }catch(e) {
-    return "light"
+  if (typeof window !== 'undefined') {
+    let res = localStorage.getItem("sci-config")
+    try{
+      return JSON.parse(res!).theme
+    }catch(e) {
+      return "light"
+    }
   }
+  return "light"
 }
 
 export default function RootLayout({
