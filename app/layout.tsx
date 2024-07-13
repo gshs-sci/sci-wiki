@@ -4,7 +4,7 @@ import { Inter, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import StyledComponentsRegistry from './lib/registry'
 import NextTopLoader from 'nextjs-toploader';
-import { useState,createContext } from "react";
+import { useState,createContext, useEffect } from "react";
 import { ThemeContext } from "./themeContext";
 
 const notoSans = Noto_Sans_KR({
@@ -13,15 +13,15 @@ const notoSans = Noto_Sans_KR({
 })
 
 const getLocalStorageTheme = () => {
-  if (typeof window !== 'undefined') {
+  try{
     let res = localStorage.getItem("sci-config")
-    try{
       return JSON.parse(res!).theme
     }catch(e) {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return "dark"
+      }
       return "light"
     }
-  }
-  return "light"
 }
 
 export default function RootLayout({
@@ -29,8 +29,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [theme, setTheme] = useState(getLocalStorageTheme);
+  const [theme, setTheme] = useState("light");
  
+  useEffect(()=>{
+    setTheme(getLocalStorageTheme())
+  },[])
   const toggleTheme = () => {
 
     localStorage.setItem("sci-config",JSON.stringify({theme:theme === 'light' ? 'dark' : 'light'}))
