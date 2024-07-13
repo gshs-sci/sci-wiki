@@ -15,7 +15,7 @@ const Logo = styled.div`
     font-size: 35px;
     & a {
         text-decoration: none;
-        color: #000;
+        color: var(--color-font-primary);
     }
 `
 
@@ -36,15 +36,17 @@ const Holder = styled.div`
 const InputElem = styled.input<{ $isError?: boolean }>`
     padding: 10px 10px;
     border: none;
-    border: solid 1px ${props => props.$isError ? "#eb4034" : "#000"};
+    border: solid 1px ${props => props.$isError ? "#eb4034" : "var(--color-border-primary)"};
     border-radius: 4px;
     font-size: 15px;
     margin-top: 12px;
+    background-color: transparent;
 `
 const InputLabel = styled.b`
     margin: 0;
     padding: 0;
     font-size: 14px;
+    color: var(--color-font-primary);
     &::after {
         content: "*";
         color: #eb4034;
@@ -60,8 +62,8 @@ const InputErr = styled.p`
     color: #eb4034;
 `
 const NextBtn = styled.button`
-    background-color: #000;
-    color: #fff;
+    background-color: var(--color-button-background);
+    color: var(--color-button-text);
     padding: 10px 0px;
     border: none;
     border-radius: 4px;
@@ -74,6 +76,10 @@ const InputExp = styled.p`
     padding: 0;
     font-size: 12px;
     margin-top: 10px;
+    color: var(--color-font-primary);
+    & a {
+        color: var(--color-link);
+    }
 `
 const Btn = () => {
     const { pending } = useFormStatus()

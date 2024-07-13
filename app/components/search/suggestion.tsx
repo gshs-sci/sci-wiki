@@ -8,9 +8,9 @@ const SearchSuggestions = styled.ul`
     padding: 0;
     position: absolute;
     left: 0;
-    background-color: #fff;
+    background-color: var(--color-background);
     width: calc(100% - 2px);
-    border: solid 1px #848484;
+    border: solid 1px var(--color-border-primary);
     top: 50px;
     list-style-type: none;
     border-radius: 4px;
@@ -22,13 +22,13 @@ const Suggestions = styled.li`
     border: solid 1px transparent;
     border-radius: 3px;
     &:hover {
-        border: solid 1px #dbdbdb;
-        background-color: #f4f4f4;
+        border: solid 1px var(--color-border-secondary);
+        background-color: var(--color-background-hover);
         text-decoration: underline;
     }
     & a {
         padding:4px;
-        color: #000;
+        color: var(--color-font-primary);
         font-size: 14px;
         text-decoration: none;
     }

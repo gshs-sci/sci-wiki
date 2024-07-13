@@ -27,11 +27,12 @@ const Entry = styled.li`
     justify-content: space-between;
     align-items: center;
     font-size: 14px;
-    border: solid 1px #cacaca;
+    border: solid 1px var(--color-border-primary);
     margin-bottom: 10px;
     border-radius: 3px;
+    color: var(--color-font-primary);
     & input[type="checkbox"] {
-        accent-color: rgb(39, 118, 175);
+        accent-color: var(--color-link);
     }
 `
 const ConditionEntry = styled(Entry)`
@@ -53,7 +54,7 @@ const ConditionalBox = styled.div`
     border-radius: 3px;
     height: 41px;
     padding: 0px 7px;
-    border: solid 1px #cacaca;
+    border: solid 1px var(--color-border-primary);
     width: 50%;
     @media(max-width: 800px) {
         flex-direction: column;
@@ -63,7 +64,8 @@ const ConditionalBox = styled.div`
 const Condition = styled(ConditionalBox)`
 align-items: center;
 & button {
-    border: solid 1px #dedede;
+    border: solid 1px var(--color-border-secondary);
+    color: var(--color-font-secondary);
     border-radius: 5px;
     cursor: pointer;
     background-color: transparent;
@@ -77,7 +79,7 @@ align-items: center;
     margin-right: 10px;
 }
 & select:not([multiple]) {
-    background-color: #fff;
+    background-color: var(--color-background);
     border: none;
     appearance: none;
     -webkit-appearance: none;
@@ -90,7 +92,7 @@ align-items: center;
     right: 10px;
     font-size: 14px;
     cursor: pointer;
-    color: #000;
+    color: var(--color-font-primary);
 }
 & select:focus {
     outline: none;
@@ -102,6 +104,8 @@ align-items: center;
     text-align: end;
     padding: 5px 2px;
     width: 100%;
+    background-color: transparent;
+    color: var(--color-font-primary);
 }
 & input[type='text']:focus {
     outline: none;
@@ -125,7 +129,7 @@ const Permission = styled(ConditionalBox)`
         height: 1px;
         width: 10px;
         left: -10px;
-        background-color: #cacaca;
+        background-color: var(--color-border-primary);
     }
     @media(max-width: 800px) {
         margin-left: 0px;
@@ -137,15 +141,14 @@ const Permission = styled(ConditionalBox)`
             width: 1px;
             height: 10px;
             top:-11px;
-            background-color: #cacaca;
+            background-color: var(--color-border-primary);
         }
     }
     
 `
 const Perm = styled.span`
-    background-color: #fff;
-    background-color: rgba(39, 118, 175,.1);
-    color: rgb(39, 118, 175);
+    background-color: var(--color-background);
+    color: var(--color-link);
     padding: 0px 7px;
     height: 21.5px;
     padding-right: 25px;
@@ -168,7 +171,7 @@ const Perm = styled.span`
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #fff;
+        color: var(--color-background);
         cursor: pointer;
     }
 `
@@ -179,8 +182,8 @@ const SaveArea = styled.div`
         padding: 7px 10px;
     border-radius: 3px;
     border: none;
-    background-color: #000000;
-    color: #fff;
+    background-color: var(--color-button-background);
+    color: var(--color-button-text);
     cursor: pointer;
     font-size: 13px;
     }
@@ -190,21 +193,21 @@ const SaveArea = styled.div`
 const AddPerm = styled.div`
     position: relative;
     font-size: 13px;
-    color: #818181;
+    color: var(--color-font-secondary);
     cursor: pointer;
     &:hover {
         overflow: visible;
     }
     overflow: hidden;
     & ul {
-        color: #000;
+        color: var(--color-font-primary);
         position: absolute;
-        background-color: #fff;
+        background-color: var(--color-background);
         z-index: 1;
         list-style-type: none;
         padding: 0;
         padding: 3px;
-        border: solid 1px #cacaca;
+        border: solid 1px var(--color-border-primary);
         border-radius: 3px;
         right: 0;
     }
@@ -214,7 +217,7 @@ const AddPerm = styled.div`
         font-size: 13px;
     }
     & li:hover {
-        background-color: #ededed;
+        background-color: var(--color-background-hover);
     }
 
 `
@@ -222,7 +225,7 @@ const AdditionBtn = styled.button`
     padding: 7px 10px;
     border-radius: 3px;
     border: none;
-    color: #7c7c7c;
+    color: var(--color-font-secondary);
     cursor: pointer;
     font-size: 13px;
     background-color: transparent;
@@ -230,7 +233,7 @@ const AdditionBtn = styled.button`
     padding: 0;
     margin: 10px 3px;
     &:hover {
-        color: #000;
+        color: var(--color-font-primary);
     }
 `
 

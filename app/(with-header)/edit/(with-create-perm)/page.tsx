@@ -24,7 +24,7 @@ const Msg = styled.p`
     align-items: center;
     font-size: 13px;
     & a{
-        color: blue;
+        color: var(--color-link);
         margin-left: 5px;
         text-decoration: none;
     }
@@ -33,8 +33,8 @@ const SubmitBtn = styled.button`
     padding: 7px 10px;
     border-radius: 3px;
     border: none;
-    background-color: #000000;
-    color: #fff;
+    background-color: var(--color-button-background);
+    color: var(--color-button-text);
     cursor: pointer;
     font-size: 13px;
 `

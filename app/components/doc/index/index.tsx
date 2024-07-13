@@ -41,16 +41,16 @@ const IndexParent = styled.div`
     @media(max-width: 800px) {
         display: none;
         position: fixed;
-        background-color: #fff;
+        background-color: var(--color-background);
         height: 100%;
-        border-right: solid 1px #cacaca;
+        border-right: solid 1px var(--color-border-primary);
         &[aria-expanded="true"]{
             display: flex;
         }
     }
 `
 const IndexHeader = styled.p`
-    border-bottom: solid 1px #f0f0f0;
+    border-bottom: solid 1px var(--color-border-third);
     padding: 0;
     margin: 0;
     padding: 5px 0px;
@@ -61,7 +61,7 @@ const Ul = styled.ul`
     padding: 0;
     list-style-type: none;
     padding-left: 20px;
-    border-left: solid 1px #dadada;
+    border-left: solid 1px var(--color-border-secondary);
     display: block;
     &[aria-expanded="false"] {
         display: none;
@@ -71,7 +71,7 @@ const Li = styled.li<{ $isActive: boolean }>`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color:${props => props.$isActive ? "#000" : "#4287f5"};
+    color:${props => props.$isActive ? "var(--color-font-primary)" : "var(--color-link)"};
     font-weight: normal;
     font-size: 15px;
 `
@@ -99,12 +99,12 @@ const ToggleBtn = styled.span`
     position: fixed;
     bottom:10px;
     left: 10px;
-    background-color: #fff;
+    background-color: var(--color-background);
     width: 40px;
     height: 40px;
     justify-content: center;
     align-items: center;
-    border: solid 1px #cacaca;
+    border: solid 1px var(--color-border-primary);
     display: none;
     z-index: 2;
     @media(max-width: 800px) {

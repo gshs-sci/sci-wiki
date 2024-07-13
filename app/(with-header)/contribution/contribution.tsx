@@ -29,33 +29,33 @@ const Date = styled.p`
     margin: 0;
     margin: 10px;
     font-size: 17px;
-    color: #727272;
+    color: var(--color-font-secondary);
 `
 const Elem = styled.li`
-border-bottom: solid 1px #dadada;
+border-bottom: solid 1px var(--color-border-secondary);
 padding: 7px 20px;
 display: flex;
 flex-direction: column;
-border-left: solid 1px #dadada;
-border-right: solid 1px #dadada;
+border-left: solid 1px var(--color-border-secondary);
+border-right: solid 1px var(--color-border-secondary);
 position: relative;
 &:hover {
-    background-color: #f7f7f7;
+    background-color: var(--color-background-hover);
 }
 &:first-child {
-    border-top: solid 1px #dadada;
+    border-top: solid 1px var(--color-border-secondary);
 }
 & .bottom {
     display: flex;
     align-items: center;
     font-size: 14px;
-    color: #757575;
+    color: var(--color-font-secondary);
 }
 & .bottom .id {
     margin: 0;
     padding: 5px;
     margin-right: 5px;
-    color: #000;
+    color: var(--color-font-primary);
     font-size: 13px;
 
 }
@@ -74,11 +74,11 @@ position: relative;
 }
 a {
     text-decoration: none;
-    color: #000;
+    color: var(--color-font-primary);
 }
 a:hover {
     text-decoration: underline;
-    color: #2776af;
+    color: var(--color-link);
 }
 .top .change {
     margin: 0;
@@ -109,7 +109,7 @@ a:hover {
 }
 & .right .id {
     font-size: 12px;
-    color: #828282;
+    color: var(--color-font-secondary);
     font-family: ${sourceCodePro.style.fontFamily};
 }
 
@@ -124,8 +124,8 @@ const ElemDropdown = styled.ul`
     list-style-type: none;
     padding: 0;
     margin: 0;
-    background-color: #fff;
-    border: solid 1px #bfbfbf;
+    background-color: var(--color-background);
+    border: solid 1px var(--color-border-primary);
     padding: 10px;
     top: 10px;
     right: 10px;
@@ -148,11 +148,11 @@ const ElemDropdown = styled.ul`
         line-height: 18px;
     }
     & a:hover {
-        color: #000;
+        color: var(--color-font-primary);
         text-decoration: none;
     }
     & li:hover {
-        background-color: rgb(233, 233, 233);
+        background-color: var(--color-background-hover);
     }
     position: absolute;
     z-index: 2;
@@ -163,7 +163,7 @@ const Btns = styled.div`
     display: flex;
 `
 const NavigationBtn = styled.button`
-    color: #2776af;
+    color: var(--color-link);
     margin-right: 10px;
     background-color: transparent;
     border: none;
@@ -176,7 +176,7 @@ const NavigationBtn = styled.button`
         cursor: pointer;
     }
     &:disabled {
-        color: #949494;
+        color: var(--color-text-disabled);
     }
     &:enabled:hover {
         text-decoration: underline;
@@ -185,7 +185,7 @@ const NavigationBtn = styled.button`
 
 const NoteBtn = styled.button`
     border: none;
-    background-color: #e5e5e5;
+    background-color: var(--color-border-third);
     font-size: 10px;
     padding: 0px 4px;
     margin: 0;
@@ -197,7 +197,7 @@ const Note = styled.div`
     margin: 0;
     padding: 5px 10px;
     font-size: 13px;
-    color: #5b5b5b;
+    color: var(--color-font-secondary);
 `
 
 interface Contribution {

@@ -4,8 +4,7 @@ import { Playfair } from "next/font/google";
 const playfair = Playfair({ subsets: ["latin"] });
 
 const Holder = styled.footer`
-    border-top: solid 1px #cacaca;
-    width: 100vw;
+    border-top: solid 1px var(--color-border-primary);
     margin-top: 50px;
 `
 const Elem = styled.div`

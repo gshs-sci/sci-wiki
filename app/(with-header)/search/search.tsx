@@ -31,21 +31,21 @@ const DocTitle = styled.h1`
 const Elem = styled.li`
     margin: 0;
     padding: 0;
-    border-bottom: solid 1px #cacaca;
+    border-bottom: solid 1px var(--color-border-primary);
     padding: 15px 5px;
     & a {
         text-decoration: none;
         font-size: 18px;
-        color: #000;
+        color: var(--color-font-primary);
     }
     & a:hover {
-        color: #2776af;
+        color: var(--color-link);
         text-decoration: underline;
     }
 `
 const ElemBody = styled.p`
     font-size: 13px;
-    color:#6f6f6f;
+    color:var(--color-font-secondary);
     padding: 5px 0px;
     margin: 0;
 `
@@ -63,21 +63,18 @@ const SearchBarInputHolder = styled.div`
   align-items: center;
   width: 500px;
   & select:not([multiple]) {
-    background-color: #fff;
+    background-color: var(--color-background);
     border: none;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-position: right 50%;
-    background-repeat: no-repeat;
-    background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1"><path d="M4 8L0 4h8z"/></svg>');
     padding: 3px;
     padding-right: 1.5em;
     right: 10px;
     font-size: 12px;
     cursor: pointer;
     position: absolute;
-    color: #000;
+    color: var(--color-font-primary);
 }
 
 `
@@ -85,15 +82,17 @@ const SearchBar = styled.input`
   padding: 10px 10px;
   font-size: 15px;
   border-radius: 0;
-  border: solid 1px #848484;
+  background-color: var(--color-background);
+  color:var(--color-font-primary);
+  border: solid 1px var(--color-border-primary);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   width: 100%;
 `
 const SearchBtn = styled.button`
-  background-color: #fff;
-  color:#000;
-  border: solid 1px #000;
+  background-color: var(--color-background);
+  color:var(--color-font-primary);
+  border: solid 1px var(--color-border-primary);
   border-left: none;
   font-size: 15px;
   padding: 9px 20px;

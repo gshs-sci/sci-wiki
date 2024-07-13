@@ -55,12 +55,12 @@ export const AElem = (prop: any) => {
 }
 
 const Section = styled.section`
-    border-top: solid 1px #d0d7de;
+    border-top: solid 1px var(--color-border-secondary);
     & h2 {
         margin-top: 24px;
         margin-bottom: 16px;
         font-size: 18px;
-        color: #505050;
+        color: var(--color-font-secondary);
     }
 `
 export const SectionElem = (prop:any) => {

@@ -19,15 +19,15 @@ const SelectTagHolder = styled.ul`
     flex-direction: column;
     position: absolute;
     padding: 5px;
-    background-color: #fff;
-    border: solid 1px #cccccc;
+    background-color: var(--color-background);
+    border: solid 1px var(--color-border-primary);
     z-index: 10;
     margin-top: 10px;
     border-radius: 3px;
     list-style-type: none;
     & span {
         font-size: 11px;
-        color: #979797;
+        color: var(--color-font-secondary);
     }
 `
 const SelectTag = styled.li`
@@ -36,7 +36,7 @@ const SelectTag = styled.li`
     cursor: pointer;
     padding: 2px 4px;
     &:hover {
-        background-color: #eeeeee;
+        background-color: var(--color-background-hover);
     }
 `
 const TagHolder = styled.ul`
@@ -50,8 +50,8 @@ const TagHolder = styled.ul`
 
 `
 const Tag = styled.li`
-    background-color: #fff;
-    border: solid 1px #cccccc;
+    background-color: var(--color-background);
+    border: solid 1px var(--color-border-primary);
     padding: 1px 7px;
     padding-right: 25px;
     right: 10px;
@@ -68,17 +68,17 @@ const Tag = styled.li`
         font-size: 10px;
         line-height: 10px;
         position: absolute;
-        background-color: #cecece;
+        background-color: var(--color-border-primary);
         right: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #fff;
+        color: var(--color-background);
         cursor: pointer;
     }
 `
 const NewTag = styled.input`
-    background-color: #fff;
+    background-color: var(--color-background);
     border: none;
     padding-right: 1.5em;
     right: 10px;
@@ -87,6 +87,7 @@ const NewTag = styled.input`
     margin-right: 10px;
     margin: 0;
     padding: 7px 5px;
+    color: var(--color-font-primary);
     &:focus {
         outline: none;
     }

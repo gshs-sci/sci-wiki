@@ -31,9 +31,10 @@ padding: 100px 0px;
   font-family: ${sansBold.style.fontFamily};
   max-width: 300px;
   margin: 0;
+  word-break: keep-all;
 }
 & p {
-  color: #7a7a7a;
+  color: var(--color-font-secondary);
 }
 `
 const SearchTexts = styled.div`
@@ -60,21 +61,18 @@ const SearchBarInputHolder = styled.div`
   align-items: center;
   width: 500px;
   & select:not([multiple]) {
-    background-color: #fff;
+    background-color: var(--color-background);
     border: none;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-position: right 50%;
-    background-repeat: no-repeat;
-    background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1"><path d="M4 8L0 4h8z"/></svg>');
     padding: 3px;
     padding-right: 1.5em;
     right: 10px;
     font-size: 12px;
     cursor: pointer;
     position: absolute;
-    color: #000;
+    color: var(--color-font-primary);
 }
 
 `
@@ -82,14 +80,16 @@ const SearchBar = styled.input`
   padding: 10px 10px;
   font-size: 15px;
   border-radius: 0;
-  border: solid 1px #848484;
+  border: solid 1px var(--color-border-primary);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   width: 100%;
+  background-color: transparent;
+  color: var(--color-font-primary);
 `
 const SearchBtn = styled.button`
-  background-color: #000;
-  color:#fff;
+  background-color: var(--color-button-background);
+  color:var(--color-button-text);
   font-size: 15px;
   padding: 10px 20px;
   border-radius: 0;
@@ -110,7 +110,7 @@ margin-top: 20px;
 `
 const HDoc = styled.li`
 & a {
-    border-bottom: solid 1px #cecece;
+    border-bottom: solid 1px var(--color-border-primary);
   margin: 0;
   padding: 12px 5px;
   display: flex;
@@ -120,7 +120,7 @@ const HDoc = styled.li`
   text-decoration: none;
 }
   &:hover {
-    background-color: #ededed;
+    background-color: var(--color-background-hover);
   }
   & .title {
     margin-right: auto;
@@ -132,7 +132,7 @@ const HDoc = styled.li`
     margin: 0;
     padding: 0;
     font-size: 13px;
-    color: #a4a4a4;
+    color: var(--color-font-secondary);
     margin-right: 5px;
   }
   & .date {
@@ -141,7 +141,7 @@ const HDoc = styled.li`
     margin-right: 0;
     margin-left: auto;
     font-size: 12px;
-    color: #555555;
+    color: var(--color-font-secondary);
   }
 `
 const H3Holder = styled.div`
@@ -149,7 +149,7 @@ const H3Holder = styled.div`
   justify-content: space-between;
   align-items: center;
   & a {
-    color: #2776af;
+    color: var(--color-link);
     text-decoration: none;
     font-size: 15px;
   }
@@ -196,7 +196,7 @@ export const MainPage = (props: {
             <SearchArea>
                 <SearchTexts>
                     <h1>
-                        과학, 수학, 정보에 특화된 문서를 제공합니다
+                        경기과학고등학교 SCI 학술위키
                     </h1>
                     <p>모르는 정보를 검색해 보세요</p>
                     <SearchBarHolder onSubmit={submit} ref={form}>
@@ -212,9 +212,7 @@ export const MainPage = (props: {
                         <SearchBtn><IoSearch /></SearchBtn>
                     </SearchBarHolder>
                 </SearchTexts>
-                <SearchImg>
-                    <Image priority={true} src="/undraw_connected_world_wuay.svg" alt="globe" width={280} height={280}></Image>
-                </SearchImg>
+
             </SearchArea>
             <DisplayH>
               <H3Holder>

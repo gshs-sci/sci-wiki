@@ -9,14 +9,14 @@ const MenuHolder = styled.ul`
     padding: 0;
     margin: 0;
     padding: 10px;
-    border-right: solid 1px #f5f5f5;
+    border-right: solid 1px var(--color-border-third);
     margin-right: 30px;
     width: 200px;
     flex-shrink: 0;
     @media(max-width: 800px) {
         display: none;
         position: fixed;
-        background-color: #fff;
+        background-color: var(--color-background);
         height: 100%;
         z-index: 1;
         top:0;
@@ -29,16 +29,17 @@ const MenuHolder = styled.ul`
 `
 const MenuElem = styled.li<{ $active: boolean }>`
     font-size: 15px;
+    color: var(--color-font-primary);
     & a {
         display: block;
         padding: 5px 10px;
-        color: ${props => props.$active ? "#000" : "rgb(39, 118, 175)"};
+        color: ${props => props.$active ? "var(--color-font-primary)" : "var(--color-link)"};
         text-decoration: none;
     }
     user-select: none;
     cursor: pointer;
     &:hover {
-        background-color: #f2f2f2;
+        background-color: var(--color-background-hover);
         text-decoration: underline;
     }
 `
@@ -48,12 +49,12 @@ const ToggleBtn = styled.span`
     position: fixed;
     bottom:10px;
     left: 10px;
-    background-color: #fff;
+    background-color: var(--color-background);
     width: 40px;
     height: 40px;
     justify-content: center;
     align-items: center;
-    border: solid 1px #cacaca;
+    border: solid 1px var(--color-border-primary);
     display: none;
     z-index: 2;
     @media(max-width: 800px) {
@@ -72,16 +73,11 @@ export const Menu = (props: { activeKey: string }) => {
                     콘솔 홈
                 </Link>
             </MenuElem>
-            <MenuElem $active={props.activeKey == "config"}>
-                <Link href="/admin/config">
-                    전역 설정
-                </Link>
-            </MenuElem>
-            {/* <MenuElem $active={props.activeKey == "user"}>
+            <MenuElem $active={props.activeKey == "user"}>
                 <Link href="/admin/user">
                     사용자 관리
                 </Link>
-            </MenuElem> */}
+            </MenuElem>
         </MenuHolder>
         <ToggleBtn onClick={()=>setMenuShown(!menuShown)}><MdMenu /></ToggleBtn>
         </>

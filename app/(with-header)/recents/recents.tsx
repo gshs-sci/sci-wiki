@@ -21,7 +21,7 @@ const Holder = styled.div`
 `
 
 const NavigationBtn = styled.button`
-    color: #2776af;
+    color: var(--color-link);
     margin-right: 10px;
     background-color: transparent;
     border: none;
@@ -34,7 +34,7 @@ const NavigationBtn = styled.button`
         cursor: pointer;
     }
     &:disabled {
-        color: #949494;
+        color: var(--color-text-disabled);
     }
     &:enabled:hover {
         text-decoration: underline;
@@ -51,7 +51,7 @@ margin-top: 20px;
 `
 const HDoc = styled.li`
 & a {
-    border-bottom: solid 1px #cecece;
+  border-bottom: solid 1px var(--color-border-primary);
   margin: 0;
   padding: 12px 5px;
   display: flex;
@@ -61,7 +61,7 @@ const HDoc = styled.li`
   text-decoration: none;
 }
   &:hover {
-    background-color: #ededed;
+    background-color: var(--color-background-hover);
   }
   & .title {
     margin-right: auto;
@@ -73,7 +73,7 @@ const HDoc = styled.li`
     margin: 0;
     padding: 0;
     font-size: 13px;
-    color: #a4a4a4;
+    color: var(--color-font-secondary);
     margin-right: 5px;
   }
   & .date {
@@ -82,7 +82,7 @@ const HDoc = styled.li`
     margin-right: 0;
     margin-left: auto;
     font-size: 12px;
-    color: #555555;
+    color: var(--color-font-secondary);
   }
 `
 const TimeDifference = (props: { time: Date }) => {

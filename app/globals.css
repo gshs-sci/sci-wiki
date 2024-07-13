@@ -1,6 +1,8 @@
 body,html {
   margin: 0;
   padding: 0;
+  background-color: var(--color-background);
+  color: var(--color-font-primary);
 }
 
 :root {
@@ -14,6 +16,46 @@ form {
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+html[data-color-mode="light"] {
+  --color-background:#fff;
+  --color-font-primary: #000;
+  --color-font-secondary: #7e7e7e;
+
+  --color-background-hover: #f2f2f2;
+  --color-link: #2776af;
+
+  --color-border-primary: #cacaca;
+  --color-border-secondary: #dadada;
+  --color-border-third: #f0f0f0;
+
+  --color-text-disabled: #949494;
+  --color-button-background: #000;
+  --color-button-text: #fff;
+
+  --color-banner-alert: #fffdc7;
+  --color-banner-normal: #f6f6f6;
+}
+
+html[data-color-mode="dark"] {
+  --color-background:#0f0f0f;
+  --color-font-primary: #fff;
+  --color-font-secondary: #7e7e7e;
+
+  --color-background-hover: #161616;
+  --color-link: #2776af;
+
+  --color-border-primary: #454545;
+  --color-border-secondary: #1f1f1f;
+  --color-border-third: #141414;
+
+  --color-text-disabled: #949494;
+  --color-button-background: #2c2c2c;
+  --color-button-text: #fff;
+
+  --color-banner-alert: #49492a;
+  --color-banner-normal: #131313;
 }
 
 @media(max-width: 1500px) {

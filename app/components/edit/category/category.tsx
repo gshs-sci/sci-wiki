@@ -10,8 +10,9 @@ const Holder = styled.div`
 const Selector = styled.select`
     
     &:not([multiple]){
-    background-color: #fff;
-    border: solid 1px #cccccc;
+    background-color: var(--color-background);
+    border: solid 1px var(--color-border-primary);
+    color: var(--color-font-primary);
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -29,12 +30,13 @@ const Selector = styled.select`
 const CreateBtn = styled.button`
     font-size: 12px;
     border-radius: 3px;
-    background-color: #fff;
-    border: solid 1px #cccccc;
+    background-color: var(--color-background);
+    border: solid 1px var(--color-border-primary);
     padding: 5px 10px;
+    color: var(--color-font-primary);
     cursor: pointer;
     &:hover {
-        background-color: #efefef;
+        background-color: var(--color-background-hover);
     }
 `
 const CreateHolder = styled.div`
@@ -47,27 +49,29 @@ const Create = styled.div`
     align-items: flex-start;
     position: absolute;
     padding: 10px;
-    background-color: #fff;
-    border: solid 1px #cccccc;
+    background-color: var(--color-background);
+    border: solid 1px var(--color-border-primary);
     z-index: 10;
     margin-top: 10px;
     border-radius: 3px;
     & p {
         margin: 0px;
         font-size: 11px;
-        color: #4f4f4f;
+        color: var(--color-font-secondary);
         line-height: 20px;
     }
     & b {
         font-weight: 500;
         font-size: 13px;
-        color: #000000;
+        color: var(--color-font-primary);
     }
     & input {
         padding: 5px 7px;
-        border: solid 1px #cccccc;
+        border: solid 1px var(--color-border-primary);
         border-radius: 2px;
         margin-top: 5px;
+        background-color: transparent;
+        color: var(--color-font-primary);
     }
     & button {
         padding: 5px 10px;

@@ -10,7 +10,7 @@ const CharHolder = styled.ul`
     & a {
         padding: 0;
         margin: 0;
-        color: #2776af;
+        color: var(--color-link);
         text-decoration: none;
         &:hover {
             text-decoration: underline;

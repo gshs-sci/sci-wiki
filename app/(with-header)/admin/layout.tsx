@@ -2,6 +2,7 @@ import { checkAdmin } from "@/app/lib/permission";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Holder } from "./holder";
+
 export default async function AdminPage({
     children,
   }: Readonly<{

@@ -12,6 +12,7 @@ export const TitleH1 = styled.h1`
     padding: 20px 0px;
     margin-bottom: 20px;
     font-weight: 700;
+    color: var(--color-font-primary);
 `
 
 const Td = styled.td`
@@ -19,9 +20,10 @@ const Td = styled.td`
     margin-left: 30px;
     position: relative;
     vertical-align: top;
-    border: solid 1px #cecece;
+    border: solid 1px var(--color-border-primary);
     white-space: pre-wrap;
     text-align: left;
+    color: var(--color-font-primary);
     & div {
         min-width: 300px;
         max-width: 500px;
@@ -36,27 +38,28 @@ const Num = styled(Td)`
         background-color: transparent;
     }
     & button:hover {
-        background-color: #f1f1f1;
+        background-color: var(--color-background-hover);
     }
     & span {
         width: 40px;
     }
 `
 const Table = styled.table`
-    border: solid 1px #cecece;
+    border: solid 1px var(--color-border-primary);
     margin-top: 30px;
     border-collapse: collapse;
     border-radius: 10px;
     width: 100%;
     height: 100%;
     font-size: 13px;
+    color: var(--color-font-primary);
     & thead {
-        background-color: #f7f7f7;
+        background-color: var(--color-background-hover);
     }
     & th {
         padding: 5px 10px;
         font-weight: 400;
-        border-bottom: solid 1px #cecece;
+        border: solid 1px var(--color-border-primary);
     }
 `
 const Added = styled(Td)`
@@ -79,8 +82,9 @@ const Removed = styled(Td)`
     }
 `
 const Reversion = styled.div`
-    background-color: #f6f6f6;
-    border: solid 1px #e5e5e5;
+    background-color: var(--color-background-hover);
+    border: solid 1px var(--color-border-primary);
+    color: var(--color-font-primary);
     border-radius: 5px;
     margin-top: 10px;
     padding: 7px;

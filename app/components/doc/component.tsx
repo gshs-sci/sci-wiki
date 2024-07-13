@@ -3,15 +3,15 @@
 import styled from "styled-components"
 
 export const Banner = styled.div<{$normal?:boolean}>`
-    background-color: ${props=>props.$normal?"#f6f6f6":"#fffdc7"};
-    border: solid 1px #e5e5e5;
+    background-color: ${props=>props.$normal?"var(--color-banner-normal)":"var(--color-banner-alert)"};
+    border: solid 1px var( --color-border-secondary);
     border-radius: 5px;
     margin-top: 20px;
     padding: 8px;
     font-size: 13px;
     line-height: 18px;
     a {
-        color: #2776af;
+        color: var(--color-link);
     }
 `
 
@@ -25,7 +25,7 @@ export const Title = styled.div`
     }
     p.date {
         margin: 0;
-        color: #7e7e7e;
+        color: var(--color-font-secondary);
         margin: 5px 0px;
     }
     div.right {
@@ -39,7 +39,7 @@ export const Title = styled.div`
     a {
         font-size: 15px;
         margin-left: 10px;
-        color: #2776af;
+        color: var(--color-link);
     }
     @media(max-width: 800px) {
         flex-direction: column;
@@ -54,7 +54,7 @@ export const Tags = styled.ul`
     margin: 0;
     padding: 3px 8px;
     background-color: transparent;
-    border: solid 1px #e0e0e0;
+    border: solid 1px var(--color-border-secondary);
     display: flex;
     align-items: center;
     margin-top: 20px;
@@ -66,13 +66,13 @@ export const Tags = styled.ul`
         font-weight: 600;
         border: none;
         margin: 0px 5px;
-        color: #000000;
+        color: var(--color-font-primary);
         &:after {
             width: 5px;
             height: 5px;
             margin-left: 5px;
             content: "";
-            border: solid 1px #a5a5a5;
+            border: solid 1px var(--color-text-disabled);
             border-left: none;
             border-bottom: none;
             rotate: 45deg;
@@ -83,10 +83,10 @@ export const Tags = styled.ul`
         margin: 5px 0px;
         display: flex;
         align-items: center;
-        color: #cccccc;
+        color: var(--color-font-secondary);
         margin-right: 10px;
         padding-right: 10px;
-        border-right: solid 1px #cccccc;
+        border-right: solid 1px var(--color-border-primary);
         height: 13px;
         display: flex;
         align-items: center;
@@ -97,7 +97,7 @@ export const Tags = styled.ul`
     & a {
         padding: 0;
         margin: 0;
-        color: #2776af;
+        color: var(--color-link);
         text-decoration: none;
         &:hover {
             text-decoration: underline;

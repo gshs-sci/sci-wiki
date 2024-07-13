@@ -2,18 +2,19 @@
 import styled from "styled-components";
 import { Playfair } from "next/font/google";
 import { RiUserFill } from "react-icons/ri";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Cookies from 'js-cookie'
 import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ThemeContext } from "../themeContext";
 
 const playfair = Playfair({ subsets: ["latin"] });
 
 const _Header = styled.header`
     list-style-type: none;
-    border-bottom: solid 1px #cacaca;
+    border-bottom: solid 1px var(--color-border-primary);
     display: flex;
 `
 
@@ -32,7 +33,7 @@ const Logo = styled.div`
     font-size: 25px;
     & a {
         text-decoration: none;
-        color: #000;
+        color: var(--color-font-primary);
     }
 `
 const UserArea = styled.button`
@@ -47,9 +48,9 @@ justify-content: center;
 cursor: pointer;
 padding: 6px;
 border-radius: 3px;
-color: #000;
+color: var(--color-font-primary);
 &:hover {
-    background-color: #f0f0f0;
+    background-color: var(--color-background-hover);
 }
 `
 
@@ -58,11 +59,11 @@ display: none;
 position: absolute;
 top: 30px;
 padding: 10px;
-border: solid 1px #bfbfbf;
+border: solid 1px var(--color-border-primary);
 border-radius: 3px;
 right: 0;
 list-style-type: none;
-background-color: #fff;
+background-color: var(--color-background);
 z-index: 10;
 &[aria-expanded="true"] {
     display: flex;
@@ -75,17 +76,18 @@ z-index: 10;
     user-select: none;
     cursor: pointer;
     font-size: 14px;
-    width: 130px;
+    width: 200px;
     white-space: nowrap;
     &:hover {
-        background-color: #e9e9e9;
+        background-color: var(--color-background-hover);
     }
     & a {
         margin: 0;
         padding: 0;
         text-decoration: none;
-        color: #000;
-        display: block;
+        color: var(--color-font-primary);
+        display: flex;
+        flex-direction: row;
         padding: 5px 10px;
         line-height: 18px;
     }
@@ -93,7 +95,7 @@ z-index: 10;
         margin: 0;
         padding: 0;
         text-decoration: none;
-        color: #000;
+        color: var(--color-font-primary);
         display: block;
         padding: 5px 10px;
         line-height: 18px;
@@ -103,10 +105,11 @@ z-index: 10;
 }
 `
 
-export const Header = (props: { userIp?: string, userId?: string, isAdmin?:boolean }) => {
+export const Header = (props: { userIp?: string, userId?: string, isAdmin?: boolean }) => {
     const [userExpanded, setUserExpanded] = useState(false)
     const router = useRouter()
     const pathname = usePathname()
+    const { toggleTheme } = useContext(ThemeContext)
 
     const listner = (e: Event) => {
         if (!(e.target as HTMLTextAreaElement).matches("[data-header=true], [data-header=true] *")) {
@@ -141,15 +144,23 @@ export const Header = (props: { userIp?: string, userId?: string, isAdmin?:boole
                                 : <></>
                             }
                         </li>
-                        {props.isAdmin?
-                        <li>
-                            <Link href={"/admin"}>
-                                관리자 패널
-                            </Link>
+                        {props.isAdmin ?
+                            <li>
+                                <Link href={"/admin"}>
+
+                                    관리자 패널
+                                </Link>
+                            </li>
+                            : <></>}
+                        <li onClick={toggleTheme}>
+                            <a>
+
+                                테마 변경
+                            </a>
                         </li>
-                        :<></>}
                         <li>
                             <Link href={"/contribution"}>
+
                                 기여 목록
                             </Link>
                         </li>
@@ -160,6 +171,7 @@ export const Header = (props: { userIp?: string, userId?: string, isAdmin?:boole
                             :
                             <li>
                                 <Link href={"/login?next=" + pathname}>
+
                                     로그인
                                 </Link>
                             </li>

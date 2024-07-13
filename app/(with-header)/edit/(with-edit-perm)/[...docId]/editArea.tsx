@@ -28,7 +28,7 @@ const Msg = styled.p`
     align-items: center;
     font-size: 13px;
     & a{
-        color: blue;
+        color: var(--color-link);
         margin-left: 5px;
         text-decoration: none;
     }
@@ -37,8 +37,8 @@ const SubmitBtn = styled.button`
     padding: 7px 10px;
     border-radius: 3px;
     border: none;
-    background-color: #000000;
-    color: #fff;
+    background-color: var(--color-button-background);
+    color: var(--color-button-text);
     cursor: pointer;
     font-size: 13px;
 `
@@ -54,8 +54,8 @@ const DelPrompt = styled.div`
     width: 250px;
     position: absolute;
     right: 0;
-    background-color: #fff;
-    border: solid 1px rgb(202, 202, 202);
+    background-color: var(--color-background);
+    border: solid 1px var(--color-border-primary);
     bottom: 40px;
     padding: 20px;
     z-index: 5;
@@ -74,15 +74,15 @@ const DelPrompt = styled.div`
     }
     & p.delres {
         margin: 0;
-        color: #a8a8a8;
+        color: var(--color-font-secondary);
         margin-top: 10px;
     }
     & button {
         margin-top: 10px;
         border: none;
         border-radius: 3px;
-        background-color: #f6f6f6;
-        border: solid 1px #e2e2e2;
+        background-color: var(--color-background-hover);
+        border: solid 1px var(--color-border-secondary);
         color: #c90000;
         padding: 7px 10px;
         font-size: 12px;
@@ -112,19 +112,18 @@ const SubBtns = styled.div`
         margin-right: 10px;
     }
     & button.cancel {
-        background-color: #f6f6f6;
-        border: solid 1px #e2e2e2;
-        color: #000;
+        background-color: var(--color-border-third);
+        border: solid 1px var(--color-border-secondary);
+        color: var(--color-font-primary);
     }
     & button.submit {
-        border: solid 1px #e2e2e2;
+        border: solid 1px var(--color-border-secondary);
         background-color: #18891b;
         color:#fff;
 
     }
     & button.submit:hover {
         background-color: #1cb921;
-        border-color: #86d289;
         color: #fff;
     }
     
@@ -133,7 +132,8 @@ const Sub_bg = styled.div`
     z-index: 11;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(255,255,255,.5);
+    background-color: transparent;
+    backdrop-filter: brightness(0.5);
     position: fixed;
     top:0;
     left: 0;
@@ -142,8 +142,8 @@ const Sub_bg = styled.div`
     justify-content: center;
 `
 const Sub_Banner = styled.div<{$isAlert?:boolean}>`
-    background-color: ${props=>props.$isAlert?"#fffdc7":"#f6f6f6"};
-    border: solid 1px #e5e5e5;
+    background-color: ${props=>props.$isAlert?"var(--color-banner-alert)":"var(--color-banner-normal)"};
+    border: solid 1px var(--color-border-secondary);
     border-radius: 5px;
     margin-top: 10px;
     padding: 7px;
@@ -157,8 +157,8 @@ const Sub_Banner = styled.div<{$isAlert?:boolean}>`
 const SubPrompt = styled.div`
     width: 400px;
     left: 0;
-    background-color: #fff;
-    border: solid 1px rgb(202, 202, 202);
+    background-color: var(--color-background);
+    border: solid 1px var(--color-border-secondary);
     padding: 20px;
     z-index: 12;
     display: flex;
@@ -188,7 +188,8 @@ const CommitMsg = styled.textarea`
     resize: vertical;
     padding: 10px;
     border-radius: 5px;
-    border: solid 1px #c2c2c2;
+    border: solid 1px var(--color-border-secondary);
+    background-color: transparent;
     min-height: 100px;
     max-height: calc(100vh - 300px);
     font-size: 13px;
