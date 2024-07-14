@@ -133,7 +133,7 @@ export default function LoginPage({ params }: { params: { resetcode: string } })
     }
 
     useEffect(()=>{
-        if(submitState["success"]) {
+        if(submitState && submitState["success"]) {
             router.replace("/login")
         }
     },[submitState])
