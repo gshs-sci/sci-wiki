@@ -5,8 +5,8 @@ import Link from "next/link";
 import Turnstile, { useTurnstile } from "react-turnstile";
 import { useEffect, useState } from "react";
 import { useFormStatus, useFormState } from "react-dom";
-import { Login } from "./action";
-import { useRouter,useSearchParams } from "next/navigation";
+import { RequestPwReset } from "./action";
+
 
 const playfair = Playfair({ subsets: ["latin"] });
 
@@ -102,26 +102,14 @@ const Btn = () => {
                 onVerify={() => setVerified(true)}
                 refreshExpired="auto"
             />
-            <NextBtn type="submit" disabled={!isVerified || pending}>{pending ? "처리중.." : isVerified?"로그인":"잠시만 기다려 주세요.."}</NextBtn>
+            <NextBtn type="submit" disabled={!isVerified || pending}>{pending ? "처리중.." : isVerified?"비밀번호 초기화":"잠시만 기다려 주세요.."}</NextBtn>
         </>
 
     )
 }
 
 export default function LoginPage() {
-    const [state, formAction] = useFormState(Login, null)
-    const router = useRouter()
-    const searchParams =useSearchParams()
-    useEffect(()=>{
-        if(state?.success) {
-            let sp = searchParams.get("next")
-            if(sp==null){
-                router.replace("/")
-            }else {
-                router.replace(sp)
-            }
-        }
-    },[state?.success])
+    const [state, formAction] = useFormState(RequestPwReset,null)
     return (
         <Holder>
             <form action={formAction}>
@@ -130,14 +118,10 @@ export default function LoginPage() {
                         SCI
                     </Link>
                 </Logo>
-                <InputLabel>아이디</InputLabel>
-                <InputElem required type="id" name="id" placeholder="이메일 주소 또는 아이디" autoComplete="id" $isError={!!state?.errors?.id}></InputElem>
-                {state?.errors?.id && state?.errors?.id!=" " ? <InputErr>{state?.errors?.id}</InputErr> : <></>}
-                <InputLabel>비밀번호</InputLabel>
-                <InputElem required type="password" name="pw" placeholder="비밀번호" autoComplete="password" $isError={!!state?.errors?.pw}></InputElem>
-                {state?.errors?.pw ? <InputErr>{state?.errors?.pw}</InputErr> : <></>}
-                <InputExp><Link href={"/forgotpw"}>비밀번호를 잊어버리셨나요?</Link></InputExp>
-                <InputExp>계정이 없다면 <Link href={"/register"}>여기</Link>에서 만들 수 있습니다. 계정이 있으면 아이피 노출 없이 문서를 수정할 수 있습니다.</InputExp>
+                <InputLabel>이메일</InputLabel>
+                <InputElem required type="email" name="email" placeholder="가입 시 사용한 이메일 주소" autoComplete="email" $isError={!!state && !state.success}></InputElem>
+                {state && state?.message?state?.success ?  <InputExp>{state.message}</InputExp>:<InputErr>{state.message}</InputErr>:<></>}
+                <InputExp>올바른 이메일 주소를 입력하세요. 가입 시 사용한 이메일 주소로 비밀번호 초기화 링크를 전송합니다.</InputExp>
                 <Btn />
             </form>
         </Holder>

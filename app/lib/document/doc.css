@@ -3,6 +3,9 @@ p {
     line-height: 24px;
     font-size: 15px;
 }
+a {
+  color: var(--color-link);
+}
 h2 {
   border-bottom: none!important;
 }
@@ -12,7 +15,7 @@ table {
 }
 table th,td {
   padding: 6px 13px;
-  border: solid 1px #d0d7de;
+  border: solid 1px var(--color-border-primary);
   text-align: center;
 }
 .md_doc {
@@ -22,7 +25,7 @@ table th,td {
   padding: 0.2em 0.4em;
   margin: 0;
   font-size: 85%;
-  background-color: rgba(175, 184, 193, 0.2);
+  background-color: var(--color-border-secondary);
   border-radius: 6px;
 }
 
@@ -33,7 +36,7 @@ table th,td {
 }
 .md_doc pre {
   margin-bottom: 16px;
-  background-color: #f6f8fa;;
+  background-color: var(--color-banner-normal);
 }
 code.code-highlight {
   font-size: 14px;

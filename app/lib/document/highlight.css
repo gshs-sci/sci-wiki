@@ -4,7 +4,7 @@ pre code.hljs {
 }
 
 .hljs {
-    color: #24292e;
+    color: #767676;
 }
 
 .hljs-doctag,
@@ -51,7 +51,7 @@ pre code.hljs {
 .hljs-code,
 .hljs-comment,
 .hljs-formula {
-    color: #6a737d
+    color: #7b7b7b
 }
 
 .hljs-name,
@@ -62,7 +62,7 @@ pre code.hljs {
 }
 
 .hljs-subst {
-    color: #24292e
+    color: #7e7e7e
 }
 
 .hljs-section {
@@ -75,12 +75,12 @@ pre code.hljs {
 }
 
 .hljs-emphasis {
-    color: #24292e;
+    color: #526170;
     font-style: italic
 }
 
 .hljs-strong {
-    color: #24292e;
+    color: #797979;
     font-weight: 700
 }
 

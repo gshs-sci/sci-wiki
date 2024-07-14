@@ -85,8 +85,10 @@ const TitleInput = styled.input`
     font-weight: bold;
     margin: 20px 0px;
     border: none;
-    border: solid 1px rgb(202, 202, 202);
+    border: solid 1px var(--color-border-primary);
+    background-color: transparent;
     padding: 5px;
+    color: var(--color-font-primary);
     border-radius: 3px;
 `
 

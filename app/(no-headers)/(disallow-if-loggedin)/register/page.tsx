@@ -39,6 +39,7 @@ const InputElem = styled.input<{ $isError?: boolean }>`
     font-size: 15px;
     margin-top: 12px;
     background-color: transparent;
+    color: var(--color-font-primary);
 `
 const InputLabel = styled.b`
     margin: 0;

@@ -3,10 +3,11 @@ import styled from "styled-components"
 import { Playfair } from "next/font/google";
 import Link from "next/link";
 import Turnstile, { useTurnstile } from "react-turnstile";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useTransition } from "react";
 import { useFormStatus, useFormState } from "react-dom";
-import { Login } from "./action";
-import { useRouter,useSearchParams } from "next/navigation";
+import { ResetPW } from "./action";
+import { useRouter } from "next/router";
+
 
 const playfair = Playfair({ subsets: ["latin"] });
 
@@ -82,18 +83,18 @@ const InputExp = styled.p`
         color: var(--color-link);
     }
 `
-const Btn = () => {
-    const { pending } = useFormStatus()
+const Btn = (props:{pending:boolean}) => {
     const [isVerified, setVerified] = useState(false)
-    const turnstile =useTurnstile()
+    const turnstile = useTurnstile()
 
+    const {pending} = props
     useEffect(() => {
-        if(!turnstile) return
+        if (!turnstile) return
         if (!pending) {
             setVerified(false)
             turnstile.reset();
         }
-    }, [pending,turnstile])
+    }, [pending, turnstile])
 
     return (
         <>
@@ -102,43 +103,59 @@ const Btn = () => {
                 onVerify={() => setVerified(true)}
                 refreshExpired="auto"
             />
-            <NextBtn type="submit" disabled={!isVerified || pending}>{pending ? "처리중.." : isVerified?"로그인":"잠시만 기다려 주세요.."}</NextBtn>
+            <NextBtn type="submit" disabled={!isVerified || pending}>{pending ? "처리중.." : isVerified ? "비밀번호 재설정" : "잠시만 기다려 주세요.."}</NextBtn>
         </>
 
     )
 }
 
-export default function LoginPage() {
-    const [state, formAction] = useFormState(Login, null)
+export default function LoginPage({ params }: { params: { resetcode: string } }) {
+    const [submitState, setSubmitState] = useState<any>()
+    const formRef = useRef<HTMLFormElement>(null)
+    const [isPending, startTransition] = useTransition()
     const router = useRouter()
-    const searchParams =useSearchParams()
-    useEffect(()=>{
-        if(state?.success) {
-            let sp = searchParams.get("next")
-            if(sp==null){
-                router.replace("/")
-            }else {
-                router.replace(sp)
+    const SubmitForm = async () => {
+        const form = new FormData(formRef.current ?? undefined)
+        let result;
+        startTransition(async () => {
+            if (!(form.get("pw") == form.get("pwre"))) {
+                result = {
+                    success: false,
+                    errors: {
+                        pwre: "비밀번호가 일치하지 않습니다"
+                    }
+                }
+            } else {
+                form.delete("pwre")
+                result = await ResetPW("", form)
             }
+            setSubmitState(result)
+        })
+    }
+
+    useEffect(()=>{
+        if(submitState["success"]) {
+            router.replace("/login")
         }
-    },[state?.success])
+    },[submitState])
+
     return (
         <Holder>
-            <form action={formAction}>
+            <form action={SubmitForm} ref={formRef}>
                 <Logo>
                     <Link href="/">
                         SCI
                     </Link>
                 </Logo>
-                <InputLabel>아이디</InputLabel>
-                <InputElem required type="id" name="id" placeholder="이메일 주소 또는 아이디" autoComplete="id" $isError={!!state?.errors?.id}></InputElem>
-                {state?.errors?.id && state?.errors?.id!=" " ? <InputErr>{state?.errors?.id}</InputErr> : <></>}
-                <InputLabel>비밀번호</InputLabel>
-                <InputElem required type="password" name="pw" placeholder="비밀번호" autoComplete="password" $isError={!!state?.errors?.pw}></InputElem>
-                {state?.errors?.pw ? <InputErr>{state?.errors?.pw}</InputErr> : <></>}
-                <InputExp><Link href={"/forgotpw"}>비밀번호를 잊어버리셨나요?</Link></InputExp>
-                <InputExp>계정이 없다면 <Link href={"/register"}>여기</Link>에서 만들 수 있습니다. 계정이 있으면 아이피 노출 없이 문서를 수정할 수 있습니다.</InputExp>
-                <Btn />
+                <InputLabel>새로운 비밀번호</InputLabel>
+                <InputElem $isError={!!submitState?.errors?.pw} required type="password" name="pw" placeholder="사용할 비밀번호" autoComplete="pw" minLength={8}></InputElem>
+                {submitState?.errors?.pw ? <InputErr>{submitState?.errors?.pw}</InputErr> : <></>}
+                <InputLabel>비밀번호 재입력</InputLabel>
+                <InputElem $isError={!!submitState?.errors?.pwre} required type="password" name="pwre" placeholder="비밀번호 재입력" autoComplete="pw" ></InputElem>
+                <input type="hidden" value={params.resetcode} name="code"/>
+                {submitState?.errors?.pwre ? <InputErr>{submitState?.errors?.pwre}</InputErr> : <></>}
+                <InputExp>재설정할 비밀번호는 8글자 이상이어야 합니다. 다른 곳에서 사용하지 않는 비밀번호를 사용하세요</InputExp>
+                <Btn pending={isPending} />
             </form>
         </Holder>
     )

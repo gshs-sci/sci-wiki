@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link"
 import styled from "styled-components"
 export const H2Elem = (prop: any) => {
     return (
@@ -41,16 +42,16 @@ export const AElem = (prop: any) => {
     if (prop["data-footnote-ref"]==true || prop["data-footnote-ref"]=="") {
         const { href, ...d } = prop
         return (
-            <a {...d} href={href?"#sci-" + href.slice(1):"#"}>{prop.children}</a>
+            <Link {...d} href={href?"#sci-" + href.slice(1):"#"}>{prop.children}</Link>
         )
     }else if(prop["data-footnote-backref"]=="") {
         const { href, ...d } = prop
         return (
-            <a {...d} href={href?"#sci-" + href.slice(1):"#"}>&uarr;</a>
+            <Link {...d} href={href?"#sci-" + href.slice(1):"#"}>&uarr;</Link>
         )
     }
     return (
-        <a {...prop} >{prop.children}</a>
+        <Link {...prop} >{prop.children}</Link>
     )
 }
 

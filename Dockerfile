@@ -19,4 +19,4 @@ RUN npx prisma generate
 
 EXPOSE 3000
 EXPOSE 5555
-CMD dockerize -wait tcp://db:3306 -timeout 20s && npx prisma db push && npm run dev
+CMD dockerize -wait tcp://db:3306 -timeout 20s && npx prisma db push --accept-data-loss && npm run dev
