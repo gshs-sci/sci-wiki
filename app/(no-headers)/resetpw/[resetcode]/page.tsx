@@ -4,9 +4,8 @@ import { Playfair } from "next/font/google";
 import Link from "next/link";
 import Turnstile, { useTurnstile } from "react-turnstile";
 import { useEffect, useState, useRef, useTransition } from "react";
-import { useFormStatus, useFormState } from "react-dom";
 import { ResetPW } from "./action";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 
 const playfair = Playfair({ subsets: ["latin"] });
