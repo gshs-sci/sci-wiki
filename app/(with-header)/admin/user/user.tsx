@@ -4,7 +4,7 @@ import styled from "styled-components"
 import Link from "next/link"
 import { MdNavigateNext, MdNavigateBefore, MdMoreVert } from "react-icons/md";
 import { DeleteUser, SetUserPermission } from "./action";
-import { useRef, useState } from "react";
+import { useRef, useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { IoSearch } from "react-icons/io5";
 import * as NProgress from "nprogress";
@@ -205,11 +205,11 @@ const InputCheckBox = (props:
     const [confirmDelete, setConfirm] = useState(false)
     const [deleting, setdeleting] = useState(false)
     const router = useRouter()
-    const checked = async (e: Event, action: "create" | "delete" | "edit" | "admin") => {
+    const checked = async (e: ChangeEvent<HTMLInputElement>, action: "create" | "delete" | "edit" | "admin") => {
         e.preventDefault()
-        const res = await SetUserPermission(action, (e.target as HTMLInputElement).checked, props.user)
+        const res = await SetUserPermission(action, e.target.checked, props.user)
         if (res.success) {
-            (e.target as HTMLInputElement).checked = res.checked as boolean
+            (e.target as HTMLInputElement).checked = res.checked! as boolean
         }
     }
     const deleteusr = () => {
@@ -267,7 +267,7 @@ export const ManageUser = (props: { users: Array<User>, forward: boolean, backwa
 
     const d = new URLSearchParams(document.location.search)
     const { users, forward, backward } = props
-    const form = useRef()
+    const form = useRef<HTMLFormElement>(null)
     const router = useRouter()
 
     const submit = (e: any) => {
