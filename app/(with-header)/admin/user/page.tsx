@@ -10,16 +10,20 @@ export default async function UserControlPage({
     let cursor
     let where={}
     let forward = true
+    let search=""
+    if(typeof searchParams?.search=="string") {
+        search=searchParams?.search
+    }
     if(searchParams?.search) {
         where = {
             OR: [{
                 email: {
-                    contains: searchParams?.search,
+                    contains: search
                 }
             },
             {
                 id: {
-                    contains: searchParams?.search,
+                    contains: search
                 }
             }]
         }
@@ -97,7 +101,7 @@ export default async function UserControlPage({
     return (
         <>
             <Menu activeKey="user" />
-            <ManageUser users={data} forward={next!=null} backward={prev!=null} search={searchParams?.search}/>
+            <ManageUser users={data} forward={next!=null} backward={prev!=null} search={search}/>
         </>
     )
 }
