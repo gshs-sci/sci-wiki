@@ -6,6 +6,7 @@ import { Banner } from "@/app/components/doc/component";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSuggestion } from "@/app/components/search/suggestion";
+import * as NProgress from "nprogress";
 
 const Body = styled.div`
   width: var(--cont-width);
@@ -143,7 +144,6 @@ export const SearchResult = (props: {
     }>
 }) => {
     const { query, cat, count, data, activecat, page } = props
-    console.log(page)
     const router = useRouter()
     const form = useRef<HTMLFormElement>(null)
     const [changeFn, Suggestion] = useSuggestion()
@@ -153,6 +153,7 @@ export const SearchResult = (props: {
         const f = new FormData(form.current!)
         let q = f.get("q")
         let s = f.get("s")
+        NProgress.start()
         router.push("/search?q=" + q + "&s=" + s)
     }
     return (

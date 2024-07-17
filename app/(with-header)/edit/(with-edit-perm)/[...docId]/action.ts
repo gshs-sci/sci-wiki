@@ -222,7 +222,6 @@ export const Delete = async (id: string, cf_tk: string) => {
                 }
             },
         })
-        console.log(subject.id)
         await DeleteEmptySubject(subject.id, tags.map((e: any) => e.id))
         if (title) {
             return {

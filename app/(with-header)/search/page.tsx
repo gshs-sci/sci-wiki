@@ -84,7 +84,7 @@ export default async function Page({
     let returnData = res.map((elem: any) => {
         const { content, ...data } = elem
         return {
-            preview: removeMd(content).slice(0, 100),
+            preview: removeMd(content).slice(0, 150),
             ...data
         }
     })

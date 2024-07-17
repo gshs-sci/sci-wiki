@@ -7,6 +7,7 @@ import { useSuggestion } from "../components/search/suggestion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import * as NProgress from "nprogress";
 
 const sansBold = Noto_Sans_KR({ subsets: ["latin"] })
 const Body = styled.div`
@@ -189,6 +190,7 @@ export const MainPage = (props: {
         const f = new FormData(form.current!)
         let q = f.get("q")
         let s = f.get("s")
+        NProgress.start();
         router.push("/search?q=" + q + "&s=" + s)
     }
     return (
