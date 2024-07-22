@@ -36,6 +36,7 @@ const Num = styled(Td)`
         border: none;
         cursor: pointer;
         background-color: transparent;
+        color: var(--color-font-primary);
     }
     & button:hover {
         background-color: var(--color-background-hover);

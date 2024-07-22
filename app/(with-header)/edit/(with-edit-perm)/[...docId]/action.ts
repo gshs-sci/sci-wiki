@@ -107,7 +107,7 @@ export const Edit = async (prevState: any, formData: FormData) => {
             message: "오류: 변경사항이 존재하지 않습니다"
         }
     try {
-        const [{ subject, tags }] = await prisma.$transaction([
+        const subjectres = await prisma.$transaction([
             prisma.doc.findFirst({
                 where: {
                     id: docId
@@ -166,8 +166,14 @@ export const Edit = async (prevState: any, formData: FormData) => {
                     }
                 }
             })
-        ]) as Array<{ subject: { id: string }, tags: Array<{ id: string }> }>
-
+        ])
+        if (!subjectres[0] || !subjectres[0].subject || !subjectres[0].tags ) {
+            return {
+                success: false,
+                message: "존재하지 않습니다"
+            }
+        }
+        const [{ subject, tags }] = subjectres
         await DeleteEmptySubject(subject.id, tags.map((e: any) => e.id))
     } catch (e) {
         return {

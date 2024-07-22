@@ -102,7 +102,7 @@ const Dropdown = styled.div`
     padding: 10px;
     border: solid 1px var(--color-border-primary);
     z-index: 5;
-    top: 21px;
+    top: 22px;
     & label {
         display: flex;
         justify-content: flex-end;

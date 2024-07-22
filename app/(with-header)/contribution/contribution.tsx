@@ -1,10 +1,13 @@
 "use client"
 import styled from "styled-components";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { Source_Code_Pro } from "next/font/google";
 import { TbDots } from "react-icons/tb";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+import Turnstile, { useTurnstile } from "react-turnstile";
+import { ReviseDoc } from "./action";
+import { useRouter } from "next/navigation";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] })
 
@@ -186,6 +189,7 @@ const NavigationBtn = styled.button`
 const NoteBtn = styled.button`
     border: none;
     background-color: var(--color-border-third);
+    color: var(--color-fon-primary);
     font-size: 10px;
     padding: 0px 4px;
     margin: 0;
@@ -216,6 +220,31 @@ export const Contribution = (props: { data: Array<Contribution>, forward?: boole
     const [showDesc, setShowDesc] = useState("")
     const { forward, backward } = props
     const { data } = props
+
+    const turnstile = useTurnstile()
+    const [token, setToken] = useState("")
+    const [revisePending, startTransition] = useTransition()
+    const [reviseResult, setReviseResult] = useState<any>()
+
+    const router = useRouter()
+
+    const reviseDoc = async (docId:string, revId:string) => {
+        startTransition(async () => {
+            const res = await ReviseDoc(docId, revId, token)
+            setReviseResult(res)
+        })
+    }
+
+    useEffect(() => {
+        if (!turnstile) return
+        if (!revisePending) {
+            router.refresh()
+            setToken("")
+            turnstile.reset();
+        }
+    }, [revisePending])
+
+
     let fullData:
         {
             [key: string]:
@@ -243,6 +272,11 @@ export const Contribution = (props: { data: Array<Contribution>, forward?: boole
     }, [])
 
     return (<>
+        <Turnstile
+            sitekey="0x4AAAAAAAax0WPa0nug6v7L"
+            onVerify={(tk) => setToken(tk)}
+            refreshExpired="auto"
+        />
         {Object.keys(fullData).map((e) => {
             let elem = fullData[e]
             return (
@@ -271,7 +305,7 @@ export const Contribution = (props: { data: Array<Contribution>, forward?: boole
                                             <div className="id">
                                                 {data.id.slice(16, -1)}
                                             </div>
-                                            <div className="menubtn" onClick={() => setDropped(data.id)} data-cont={true}>
+                                            <div className="menubtn" onClick={() => {setDropped(data.id);setReviseResult("")}} data-cont={true}>
                                                 <TbDots />
                                             </div>
 
@@ -293,9 +327,9 @@ export const Contribution = (props: { data: Array<Contribution>, forward?: boole
                                             이 리비전 비교
                                             </Link>
                                         </li>
-                                        <li>
+                                        <li onClick={()=>reviseDoc(data.docId,data.id)}>
                                             <p>
-                                            이 리비전으로 되돌리기
+                                            {!token?"잠시만 기다려주세요..":revisePending?"처리중..":reviseResult?reviseResult.message:"이 리비전으로 되돌리기"}
                                             </p>
                                         </li>
                                     </ElemDropdown>
