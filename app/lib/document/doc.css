@@ -20,6 +20,7 @@ table th,td {
 }
 .md_doc {
   width: 100%;
+  position: relative;
 }
 .md_doc code {
   padding: 0.2em 0.4em;

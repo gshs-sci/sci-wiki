@@ -1,6 +1,9 @@
 "use client"
 import Link from "next/link"
 import styled from "styled-components"
+import { BsLink45Deg } from "react-icons/bs";
+import Image from "next/image";
+
 export const H2Elem = (prop: any) => {
     return (
         <div id={prop.id} data-type="md-title">
@@ -8,6 +11,15 @@ export const H2Elem = (prop: any) => {
         </div>
     )
 }
+
+var checkDomain = function (url: string) {
+    if (url.indexOf('//') === 0) { url = location.protocol + url; }
+    return url.toLowerCase().replace(/([a-z])?:\/\//, '$1').split('/')[0];
+};
+
+var isExternal = function (url: string) {
+    return ((url.indexOf(':') > -1 || url.indexOf('//') > -1) && checkDomain(location.href) !== checkDomain(url));
+};
 
 export const H3Elem = (prop: any) => {
     return (
@@ -37,22 +49,44 @@ export const H6Elem = (prop: any) => {
         </div>
     )
 }
+
+const InternalLink = styled.span`
+    & a {
+        color: var(--color-link);
+    }
+`
+const ExternalLink = styled.span`
+    & a {
+        color: #007812;
+    }
+
+`
 export const AElem = (prop: any) => {
-    
-    if (prop["data-footnote-ref"]==true || prop["data-footnote-ref"]=="") {
-        const { href, ...d } = prop
+
+    if (isExternal(prop.href)) {
         return (
-            <Link {...d} href={href?"#sci-" + href.slice(1):"#"}>{prop.children}</Link>
+            <ExternalLink>
+                <Link {...prop} >{prop.children}</Link>
+            </ExternalLink>
         )
-    }else if(prop["data-footnote-backref"]=="") {
-        const { href, ...d } = prop
+    } else {
+        if (prop["data-footnote-ref"] == true || prop["data-footnote-ref"] == "") {
+            const { href, ...d } = prop
+            return (
+                <Link {...d} href={href ? "#sci-" + href.slice(1) : "#"}>{prop.children}</Link>
+            )
+        } else if (prop["data-footnote-backref"] == "") {
+            const { href, ...d } = prop
+            return (
+                <Link {...d} href={href ? "#sci-" + href.slice(1) : "#"}>&uarr;</Link>
+            )
+        }
         return (
-            <Link {...d} href={href?"#sci-" + href.slice(1):"#"}>&uarr;</Link>
+            <InternalLink>
+                <Link {...prop} >{prop.children}</Link>
+            </InternalLink>
         )
     }
-    return (
-        <Link {...prop} >{prop.children}</Link>
-    )
 }
 
 const Section = styled.section`
@@ -64,14 +98,34 @@ const Section = styled.section`
         color: var(--color-font-secondary);
     }
 `
-export const SectionElem = (prop:any) => {
-    if(prop["data-footnotes"]==true||prop["data-footnotes"]=="") {
+export const SectionElem = (prop: any) => {
+    if (prop["data-footnotes"] == true || prop["data-footnotes"] == "") {
         return (
             <Section>
                 {prop.children}
             </Section>
         )
-    }else {
-        return <section {...prop}/>
+    } else {
+        return <section {...prop} />
     }
+}
+
+const ImgHolder = styled.span`
+    width: 100%;
+    position: relative;
+
+    & img {
+        object-fit: contain;
+        width: unset!important;;
+        max-width: 100%;
+        height: unset !important;
+        position: relative !important;
+    }
+`
+export const Img = (props: { src: string, alt: string }) => {
+    return (
+        <ImgHolder>
+            <Image src={props.src} alt={props.alt} loading="lazy" fill />
+        </ImgHolder>
+    )
 }

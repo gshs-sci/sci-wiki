@@ -2,9 +2,7 @@ FROM node:18
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm i
+COPY package*.json .
 
 COPY . .
 
@@ -14,6 +12,8 @@ RUN apt-get update \
     && apt-get install -y wget \
     && wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-arm64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \
     && apt-get autoremove -yqq --purge wget && rm -rf /var/lib/apt/lists/*
+
+RUN npm i
 
 RUN npx prisma generate
 

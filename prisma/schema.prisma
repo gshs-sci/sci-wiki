@@ -20,6 +20,7 @@ model User {
   createPermission Boolean
   editPermission Boolean @default(false)
   isAdmin     Boolean @default(false)
+  uploadedImg Img[]
 }
 
 model Contribution {
@@ -64,6 +65,14 @@ model Tag {
     doc Doc[]
     id_dis     String         @default("")
     chosung       String         @default("")
+}
+
+model Img {
+  date    DateTime @default(now())
+  uploader User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+  fileName String
+  fileId String @id
 }
 
 //the value in the relation fields or references fields should not be inserted, since it is a control element controlled by relations defined in prisma

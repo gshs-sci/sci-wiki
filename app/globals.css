@@ -17,6 +17,9 @@ button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+code {
+  overflow: auto;
+}
 
 html[data-color-mode="light"] {
   --color-background:#fff;

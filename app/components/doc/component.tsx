@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import styled from "styled-components"
 
 export const Banner = styled.div<{$normal?:boolean}>`

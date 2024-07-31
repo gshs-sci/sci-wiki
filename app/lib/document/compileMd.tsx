@@ -15,7 +15,7 @@ import * as prod from 'react/jsx-runtime'
 
 import katex from 'katex';
 
-import { H2Elem, H3Elem, H4Elem, H5Elem, H6Elem, AElem, SectionElem } from "@/app/components/doc/txt";
+import { H2Elem, H3Elem, H4Elem, H5Elem, H6Elem, AElem, SectionElem,Img } from "@/app/components/doc/txt";
 
 interface Title {
     level: number
@@ -85,6 +85,7 @@ export const CompileMD = (data: string): Promise<JSX.Element> => {
     const options: any = {
         Fragment: prod.Fragment, jsx: prod.jsx, jsxs: prod.jsxs, components: {
             h2: H2Elem, h3: H3Elem, h4: H4Elem, h5: H5Elem, h6: H6Elem, a: AElem, section: SectionElem,
+            img:Img,
             code: ({ children = [], className, ...props }: any) => {
                 if (typeof children === 'string' && /^\$\$(.*)\$\$/.test(children)) {
                     const html = katex.renderToString(children.replace(/^\$\$(.*)\$\$/, '$1'), {

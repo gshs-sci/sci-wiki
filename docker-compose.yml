@@ -40,7 +40,6 @@ services:
       - db
     volumes:
       - ./:/app
-      - /app/node_modules
 
   frontend-prod:
     profiles: ["prod"]
