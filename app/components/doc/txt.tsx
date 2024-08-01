@@ -123,9 +123,17 @@ const ImgHolder = styled.span`
     }
 `
 export const Img = (props: { src: string, alt: string }) => {
-    return (
-        <ImgHolder>
-            <Image src={props.src} alt={props.alt} loading="lazy" fill />
-        </ImgHolder>
-    )
+    if(/^https:\/\/img\.sciwiki\.org(\/.*)?$/.test(props.src)) {
+        return (
+            <ImgHolder>
+                <Image src={props.src} alt={props.alt} loading="lazy" fill />
+            </ImgHolder>
+        )
+    }else {
+        return (
+            <ImgHolder>
+                 <img src={props.src} alt={props.alt} loading="lazy"/>
+             </ImgHolder>
+        )
+    }
 }

@@ -3,7 +3,6 @@ import prisma from "@/app/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import { EditArea } from "./editArea";
 import { headers } from "next/headers";
-import { CompileMD } from "@/app/lib/document/compileMd";
 import { checkDelete, checkEdit } from "@/app/lib/permission";
 
 export async function generateMetadata({ params }: any) {
@@ -56,10 +55,9 @@ export default async function Document({ params }: { params: { docId: Array<stri
         redirect("/")
     }
     const deletePerm = await checkDelete(user)
-    const precompile = await CompileMD(content)
     return (
         <>
-            <EditArea category={other.subject.id} tags={other.tags.map((d:any)=>d.id)} title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} preCompile={precompile} user={user} ip={!user?ip!:undefined}/>
+            <EditArea category={other.subject.id} tags={other.tags.map((d:any)=>d.id)} title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} user={user} ip={!user?ip!:undefined}/>
         </>
     )
 }

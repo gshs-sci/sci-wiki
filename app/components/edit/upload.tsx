@@ -4,10 +4,14 @@ import prisma from "@/app/lib/prisma"
 import crypto from "crypto"
 import { headers } from "next/headers";
 import { checkEdit } from "@/app/lib/permission";
-
+import { createClient } from "redis";
 
 export const fileUpload = async (formData: FormData) => {
-
+    const client = await createClient({
+        url: 'redis://redis:6379'
+    })
+        .on('error', err => console.log('Redis Client Error', err))
+        .connect();
     let user = headers().get("x-user-id")
     const editPerm = await checkEdit(user)
     if(!editPerm || !user) {
@@ -17,8 +21,15 @@ export const fileUpload = async (formData: FormData) => {
         }
     }
 
+    const count =  await client.get("img"+user)
     const file = formData.get('file') as File;
     const fileKey = crypto.randomBytes(16).toString('hex');
+    if(count && parseInt(count)>20) {
+        return {
+            success:false,
+            message:"10분당 20개의 파일만 업로드할 수 있습니다"
+        }
+    }
     if(["jpeg","png","jpg","gif"].indexOf(file.name.split(".").pop()!)==-1) {
         return {
             success:false,
@@ -44,12 +55,17 @@ export const fileUpload = async (formData: FormData) => {
         }
     })
     try{
+        if(!count) {
+            await client.set("img"+user,1,{EX:600})
+        }else {
+            await client.incr("img"+user)
+        }
         const s3 = new S3Client({
             region: "auto",
-            endpoint: `https://${process.env.R2_ACC}.r2.cloudflarestorage.com`,
+            endpoint: `https://${process.env.R2_ACC?? ""}.r2.cloudflarestorage.com`,
             credentials: {
-              accessKeyId: process.env.R2_ACCESS,
-              secretAccessKey: process.env.R2_ACCESS_PRIVATE,
+              accessKeyId: process.env.R2_ACCESS?? "",
+              secretAccessKey: process.env.R2_ACCESS_PRIVATE?? "",
             }
         })
         const ab = await file.arrayBuffer()

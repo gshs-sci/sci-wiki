@@ -288,7 +288,7 @@ export const EditArea = (props: { title: string, category:string, tags: Array<st
             <h1>{title}</h1>
             <Category default={props.category} isRequired={true} name="cat"/>
             <Tags name="tags" default={props.tags}/>
-            <Textarea defaultValue={content} preCompiled={props.preCompile}></Textarea>
+            <Textarea defaultValue={content}></Textarea>
             <input type="hidden" name="docId" defaultValue={docId} />
             <SubmitButton isSuccess={state?.success} message={state?.message} deletePerm={props.deletePerm} docId={docId} user={user} ip={ip}/>
         </form>
