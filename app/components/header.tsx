@@ -91,6 +91,17 @@ z-index: 10;
         padding: 5px 10px;
         line-height: 18px;
     }
+    button {
+        padding: 0;
+        margin: 0;
+        border: none;
+        background-color: transparent;
+        color: var(--color-font-primary);
+        display: flex;
+        flex-direction: row;
+        padding: 5px 10px;
+        line-height: 18px;
+    }
     & p {
         margin: 0;
         padding: 0;
@@ -132,7 +143,7 @@ export const Header = (props: { userIp?: string, userId?: string, isAdmin?: bool
                             SCI
                         </Link>
                     </Logo>
-                    <UserArea onClick={() => setUserExpanded(!userExpanded)} data-header="true">
+                    <UserArea onClick={() => setUserExpanded(!userExpanded)} data-header="true" aria-label="메뉴">
                         <RiUserFill />
                     </UserArea>
                     <ExpandedUser aria-expanded={userExpanded} data-header="true">
@@ -153,10 +164,10 @@ export const Header = (props: { userIp?: string, userId?: string, isAdmin?: bool
                             </li>
                             : <></>}
                         <li onClick={toggleTheme}>
-                            <a>
+                            <button aria-label="테마 변경">
 
                                 테마 변경
-                            </a>
+                            </button>
                         </li>
                         <li>
                             <Link href={"/contribution"}>

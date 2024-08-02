@@ -2,6 +2,7 @@ import * as diff from 'diff'
 import prisma from '@/app/lib/prisma';
 import { redirect } from 'next/navigation';
 import { Compare } from './compare';
+
 export default async function Page({
     searchParams,
 }: {

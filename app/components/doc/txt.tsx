@@ -3,6 +3,7 @@ import Link from "next/link"
 import styled from "styled-components"
 import { BsLink45Deg } from "react-icons/bs";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export const H2Elem = (prop: any) => {
     return (
@@ -18,7 +19,7 @@ var checkDomain = function (url: string) {
 };
 
 var isExternal = function (url: string) {
-    return ((url.indexOf(':') > -1 || url.indexOf('//') > -1) && checkDomain(location.href) !== checkDomain(url));
+    return ((url.indexOf(':') > -1 || url.indexOf('//') > -1) && checkDomain(window.location.href) !== checkDomain(url));
 };
 
 export const H3Elem = (prop: any) => {
@@ -62,8 +63,13 @@ const ExternalLink = styled.span`
 
 `
 export const AElem = (prop: any) => {
+    const [external,setExternal] = useState(false)
 
-    if (isExternal(prop.href)) {
+    useEffect(()=>{
+        setExternal(isExternal(prop.href))
+    },[])
+
+    if (external) {
         return (
             <ExternalLink>
                 <Link {...prop} >{prop.children}</Link>
