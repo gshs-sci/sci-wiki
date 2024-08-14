@@ -79,7 +79,7 @@ export const fileUpload = async (formData: FormData) => {
             Bucket: "sciwiki",
             Key: `${fileKey}.webp`,
             Body: new Uint8Array(ab),
-            ContentType: file.type,
+            ContentType: "image/webp",
         }))
 
         if (result.$metadata.httpStatusCode == 200) {
