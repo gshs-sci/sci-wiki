@@ -98,9 +98,12 @@ z-index: 10;
         background-color: transparent;
         color: var(--color-font-primary);
         display: flex;
+        width: 100%;
         flex-direction: row;
         padding: 5px 10px;
         line-height: 18px;
+        font-size: 14px;
+        cursor: pointer;
     }
     & p {
         margin: 0;
@@ -163,8 +166,8 @@ export const Header = (props: { userIp?: string, userId?: string, isAdmin?: bool
                                 </Link>
                             </li>
                             : <></>}
-                        <li onClick={toggleTheme}>
-                            <button aria-label="테마 변경">
+                        <li>
+                            <button aria-label="테마 변경" onClick={toggleTheme}>
 
                                 테마 변경
                             </button>

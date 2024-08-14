@@ -4,7 +4,6 @@ import { Noto_Sans_KR } from "next/font/google";
 import { IoSearch } from "react-icons/io5";
 import { useEffect, useState,useRef } from "react";
 import { useSuggestion } from "../components/search/suggestion";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as NProgress from "nprogress";

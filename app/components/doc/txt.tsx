@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { BsLink45Deg } from "react-icons/bs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import bs58 from 'bs58'
 
 export const H2Elem = (prop: any) => {
     return (
@@ -119,27 +120,44 @@ export const SectionElem = (prop: any) => {
 const ImgHolder = styled.span`
     width: 100%;
     position: relative;
+    display: block;
 
     & img {
         object-fit: contain;
         width: unset!important;;
         max-width: 100%;
         height: unset !important;
-        position: relative !important;
+        position: relative;
+        top:0;
+        left: 0;
+    }
+    & img.real {
+        position: absolute;
+        top:0;
+        left: 0;
     }
 `
 export const Img = (props: { src: string, alt: string }) => {
     if(/^https:\/\/img\.sciwiki\.org(\/.*)?$/.test(props.src)) {
-        return (
-            <ImgHolder>
-                <Image src={props.src} alt={props.alt} loading="lazy" fill />
-            </ImgHolder>
-        )
-    }else {
-        return (
-            <ImgHolder>
-                 <img src={props.src} alt={props.alt} loading="lazy"/>
-             </ImgHolder>
-        )
+        try{
+            const dec = new TextDecoder()
+            const plain = dec.decode(bs58.decodeUnsafe(new URL(props.src).pathname.split("/")[1].split("_")[0])).split("w")[1].split("h")
+            const imgsize = [parseInt(plain[0]), parseInt(plain[1].split("t")[0])]
+            const d = btoa(`<svg width="${imgsize[0]}" height="${imgsize[1]}" xmlns="http://www.w3.org/2000/svg" />`)
+
+            return (
+                <ImgHolder>
+                <img src={`data:image/svg+xml;base64,${d}`} />
+                <img className="real" src={props.src} alt={props.alt} width={imgsize[0]} height={imgsize[1]} loading="lazy" />
+                </ImgHolder>
+            )
+        }catch(e){
+            return (
+                <ImgHolder>
+                    <img src={props.src} alt={props.alt} loading="lazy" />
+                </ImgHolder>
+            )
+        }
+        return <></>
     }
 }
