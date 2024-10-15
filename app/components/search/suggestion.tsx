@@ -1,7 +1,7 @@
-import { useState, useEffect, ChangeEvent } from "react"
-import { TitleSearch } from "./action"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import Link from "next/link"
+import { disassembleHangul } from "es-hangul"
 
 const SearchSuggestions = styled.ul`
     margin: 0;
@@ -41,10 +41,25 @@ export const useSuggestion = (): [
     const [suggestion, setSug] = useState<Array<{ title: string, id: string }>>([])
     const [displayed, setDisplayed] = useState(false)
 
-    const changeFn = (value:string) => {
-        TitleSearch(value).then((res) => {
-            setSug(res as Array<{ title: string, id: string }>)
-        })
+    let rqList:Array<AbortController> = []
+    const changeFn = async (value:string) => {
+        if(!value) {
+            setSug([])
+        }else {
+            if(rqList.length>0) {
+                rqList.forEach(e=>e.abort("new request started"))
+                rqList=[]
+            }
+            
+            const controller = new AbortController()
+            const signal = controller.signal
+            rqList.push(controller)
+            try {
+                const res = await fetch("/api/autocomplete",{method:"POST",signal: signal,body:JSON.stringify({query:disassembleHangul(value)})})
+                const data = await res.json() as Array<{ title: string, id: string }>
+                setSug(data)   
+            }catch(e) {}
+        }
     }
     const listner = (e: Event) => {
         if (!(e.target as HTMLTextAreaElement).matches("[data-sug=true], [data-sug=true] *")) {
