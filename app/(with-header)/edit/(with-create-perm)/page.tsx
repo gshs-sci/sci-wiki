@@ -10,11 +10,7 @@ export async function generateMetadata({ params }: any) {
     }
 }
 
-export default async function checkCreatePerm({
-    children
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default async function checkCreatePerm() {
     let user = headers().get("x-user-id")
     
     let createPerm = await checkCreate(user)
