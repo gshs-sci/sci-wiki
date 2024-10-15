@@ -1,20 +1,15 @@
 "use server"
 import { disassembleHangul,getChosung } from "es-hangul"
 import prisma from "@/app/lib/prisma"
+import { createClient } from 'redis';
 
 export const TitleSearch = async(query:string) => {
     if(query=="") {
-        return {
-            success:true,
-            data:[]
-        }
+        return []
     }
     const res = await prisma.doc.findMany({
         where:{
-            OR:[
-                {title_dis:{contains:disassembleHangul(query)}},
-                {chosung:{contains:getChosung(query)}}
-            ]
+                title_dis:{contains:disassembleHangul(query)}
         },
         select:{
             title:true,
@@ -22,8 +17,5 @@ export const TitleSearch = async(query:string) => {
         },
         take: 10
     })
-    return {
-        success:true,
-        data:res
-    }
+    return res
 }
