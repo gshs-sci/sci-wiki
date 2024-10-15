@@ -54,6 +54,8 @@ model Doc {
   created       DateTime       @default(now())
   title_dis     String         @default("")
   chosung       String         @default("")
+  pinned        Boolean        @default(false)
+  adminEditable Boolean        @default(false)
   
   @@unique([id,title])
   @@index([title_dis])

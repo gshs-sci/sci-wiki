@@ -3,7 +3,7 @@ import prisma from "@/app/lib/prisma"
 import { Verify } from "@/app/lib/turnstile"
 import { headers } from "next/headers"
 import { disassembleHangul, getChosung } from "es-hangul"
-import { checkCreate } from "@/app/lib/permission"
+import { checkCreate,checkAdmin } from "@/app/lib/permission"
 
 export const Create = async (prevState: any, formData: FormData) => {
     const title = formData.get("title")?.toString()
@@ -11,6 +11,9 @@ export const Create = async (prevState: any, formData: FormData) => {
     const category = formData.get("cat")
     const cf_tk = formData.get("cf-turnstile-response")?.toString()
     const usertags = formData.getAll("tags")
+
+    const pin = (formData.get("pin") as string) == "on"
+    const editPermAdmin = (formData.get("editPermAdmin") as string) == "on"
 
     let user = headers().get("x-user-id")
     let ip = headers().get("x-forwarded-for")
@@ -24,6 +27,7 @@ export const Create = async (prevState: any, formData: FormData) => {
     }
 
     const createPermission = await checkCreate(user)
+    let isAdmin = await checkAdmin(user)
 
     if (!createPermission) {
         return {
@@ -62,6 +66,10 @@ export const Create = async (prevState: any, formData: FormData) => {
         }
     }
     try {
+        const permissionPayload = isAdmin?{
+            pinned:pin,
+            adminEditable:editPermAdmin
+        }:{}
         const { id } = await prisma.doc.create({
             data: {
                 id: encodeURIComponent(title),
@@ -98,7 +106,8 @@ export const Create = async (prevState: any, formData: FormData) => {
                         ...d,
                         ip: ip
                     }
-                }
+                },
+                ...permissionPayload
             },
             select: {
                 id: true

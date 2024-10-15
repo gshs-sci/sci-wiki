@@ -45,6 +45,8 @@ export const useSuggestion = (): [
     const changeFn = async (value:string) => {
         if(!value) {
             setSug([])
+            rqList.forEach(e=>e.abort("searchbox is now empty"))
+            rqList=[]
         }else {
             if(rqList.length>0) {
                 rqList.forEach(e=>e.abort("new request started"))

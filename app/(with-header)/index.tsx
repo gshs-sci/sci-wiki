@@ -107,6 +107,7 @@ list-style-type: none;
 display: flex;
 flex-direction: column;
 margin-top: 20px;
+margin-bottom: 40px;
 `
 const HDoc = styled.li`
 & a {
@@ -178,7 +179,8 @@ const TimeDifference = (props:{time:Date}) => {
 }
 export const MainPage = (props: {
     subjects: Array<{ id: string }>,
-    newUpdated: Array<{ subject: { id: string }, id: string, title: string, lastUpdated: Date }>
+    newUpdated: Array<{ subject: { id: string }, id: string, title: string, lastUpdated: Date }>,
+    pinned: Array<{ subject: { id: string }, id: string, title: string, lastUpdated: Date }>
 }) => {
     const router = useRouter()
     const form = useRef<HTMLFormElement>(null)
@@ -215,6 +217,21 @@ export const MainPage = (props: {
                 </SearchTexts>
 
             </SearchArea>
+            <DisplayH>
+              <H3Holder>
+              <h3>고정된 문서</h3>
+              </H3Holder>
+                {props.pinned.map((elem, index) => {
+                    return (
+                        <HDoc key={elem.id+index}>
+                            <Link href={"/d/" + elem.id}>
+                                <p className="sub">{elem.subject.id} &gt;</p>
+                                <p className="title">{elem.title}</p>
+                                <p className="date"><TimeDifference time={elem.lastUpdated}/></p>
+                            </Link>
+                        </HDoc>)
+                })}
+            </DisplayH>
             <DisplayH>
               <H3Holder>
               <h3>새로 업데이트된 문서</h3>

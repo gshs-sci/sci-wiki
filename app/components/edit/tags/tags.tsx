@@ -127,7 +127,7 @@ export const Tags = (props: { default?: Array<string>, name: string }) => {
     const Changed = async (e: ChangeEvent) => {
         const input = inputRef.current!.value
 
-        if (input.length > 1) {
+        if (input.length > 0) {
             setShown(true)
             const res = await FetchTags(inputRef.current!.value)
             setTags(res)

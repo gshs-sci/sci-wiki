@@ -3,7 +3,7 @@ import prisma from "@/app/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 import { EditArea } from "./editArea";
 import { headers } from "next/headers";
-import { checkDelete, checkEdit } from "@/app/lib/permission";
+import { checkDelete, checkEdit, checkAdmin } from "@/app/lib/permission";
 
 export async function generateMetadata({ params }: any) {
     const data = await prisma.doc.findFirst({
@@ -31,33 +31,51 @@ export default async function Document({ params }: { params: { docId: Array<stri
         select: {
             content: true,
             title: true,
-            subject:{
-                select:{
-                    id:true
+            subject: {
+                select: {
+                    id: true
                 }
             },
-            tags:{
-                select:{
-                    id:true
+            tags: {
+                select: {
+                    id: true
                 }
-            }
+            },
+            pinned:true,
+            adminEditable:true
         }
     })
     if (data === null) {
         return notFound()
     }
-    const { content, title,...other }=data
+    const { content, title,pinned,adminEditable, ...other } = data
 
     let user = headers().get("x-user-id")
     let ip = headers().get("x-forwarded-for")
     const editPerm = await checkEdit(user)
-    if(!editPerm) {
+    if (!editPerm) {
+        redirect("/")
+    }
+    const isAdmin = await checkAdmin(user)
+    if(adminEditable && !isAdmin) {
         redirect("/")
     }
     const deletePerm = await checkDelete(user)
     return (
         <>
-            <EditArea category={other.subject.id} tags={other.tags.map((d:any)=>d.id)} title={title} content={content} docId={params.docId.join("/")} deletePerm={deletePerm} user={user} ip={!user?ip!:undefined}/>
+            <EditArea
+                category={other.subject.id}
+                tags={other.tags.map((d: any) => d.id)}
+                title={title}
+                content={content}
+                docId={params.docId.join("/")}
+                deletePerm={deletePerm}
+                user={user}
+                ip={!user ? ip! : undefined}
+                isAdmin={isAdmin} 
+                pinned={pinned}
+                adminEditable={adminEditable}
+            />
         </>
     )
 }

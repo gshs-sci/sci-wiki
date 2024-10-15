@@ -3,7 +3,7 @@ import prisma from "@/app/lib/prisma";
 import { headers } from 'next/headers'
 import { Verify } from "@/app/lib/turnstile";
 import { createHash } from "crypto";
-import { checkDelete, checkEdit } from "@/app/lib/permission";
+import { checkDelete, checkEdit,checkAdmin } from "@/app/lib/permission";
 import { disassembleHangul, getChosung } from "es-hangul"
 import { Prisma } from "@prisma/client";
 
@@ -31,6 +31,9 @@ export const Edit = async (prevState: any, formData: FormData) => {
     const cf_tk = formData.get("cf-turnstile-response")?.toString()
     const commitmsg = formData.get("commitmsg")?.toString()
     const usertags = formData.getAll("tags")
+
+    const pin = (formData.get("pin") as string) == "on"
+    const editPermAdmin = (formData.get("editPermAdmin") as string) == "on"
 
     let verified = await Verify(cf_tk ?? "", process.env.TURNSTILE_KEY ?? "")
     if (!verified) {
@@ -60,6 +63,7 @@ export const Edit = async (prevState: any, formData: FormData) => {
             message: "오류: 권한이 없습니다."
         }
     }
+    let isAdmin = await checkAdmin(uid)
     if (uid) {
         contributionPayload = {
             ...contributionPayload,
@@ -85,10 +89,17 @@ export const Edit = async (prevState: any, formData: FormData) => {
                 select: {
                     id: true
                 }
-            }
-
+            },
+            pinned:true,
+            adminEditable:true
         }
     })
+    if(docData?.adminEditable && !isAdmin) {
+        return {
+            success: false,
+            message: "오류: 권한이 없습니다"
+        }
+    }
     if (docData === null) {
         return {
             success: false,
@@ -101,12 +112,20 @@ export const Edit = async (prevState: any, formData: FormData) => {
         category == docData.subject.id
         &&
         (usertags.length == docData.tags.length || usertags.every(e => docData.tags.map(q => q.id).indexOf(e as string) != -1))
+        &&
+        docData.pinned == pin
+        &&
+        docData.adminEditable == editPermAdmin
     )
         return {
             success: false,
             message: "오류: 변경사항이 존재하지 않습니다"
         }
     try {
+        const permissionPayload = isAdmin?{
+            pinned:pin,
+            adminEditable:editPermAdmin
+        }:{}
         const subjectres = await prisma.$transaction([
             prisma.doc.findFirst({
                 where: {
@@ -163,7 +182,8 @@ export const Edit = async (prevState: any, formData: FormData) => {
                                 }
                             }
                         }) as Array<Prisma.TagCreateOrConnectWithoutDocInput>
-                    }
+                    },
+                    ...permissionPayload
                 }
             })
         ])

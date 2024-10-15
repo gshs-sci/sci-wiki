@@ -10,6 +10,7 @@ import { Textarea } from "@/app/components/edit/editor";
 import Link from "next/link";
 import { Category } from "@/app/components/edit/category/category";
 import { Tags } from "@/app/components/edit/tags/tags";
+import { RiArrowDownSLine } from "react-icons/ri";
 
 const BottomBtns = styled.div`
     display: flex;   
@@ -20,19 +21,7 @@ const BottomBtns = styled.div`
 const LBtn = styled.div`
     display: flex;
 `
-const Msg = styled.p`
-    margin: 0;
-    padding: 0;
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
-    font-size: 13px;
-    & a{
-        color: var(--color-link);
-        margin-left: 5px;
-        text-decoration: none;
-    }
-`
+
 const SubmitBtn = styled.button`
     padding: 7px 10px;
     border-radius: 3px;
@@ -141,8 +130,8 @@ const Sub_bg = styled.div`
     align-items: center;
     justify-content: center;
 `
-const Sub_Banner = styled.div<{$isAlert?:boolean}>`
-    background-color: ${props=>props.$isAlert?"var(--color-banner-alert)":"var(--color-banner-normal)"};
+const Sub_Banner = styled.div<{ $isAlert?: boolean }>`
+    background-color: ${props => props.$isAlert ? "var(--color-banner-alert)" : "var(--color-banner-normal)"};
     border: solid 1px var(--color-border-secondary);
     border-radius: 5px;
     margin-top: 10px;
@@ -195,8 +184,8 @@ const CommitMsg = styled.textarea`
     font-size: 13px;
 `
 
-const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm: boolean, docId: string, user:string|null, ip?:string}) => {
-    const {user,ip} = props
+const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm: boolean, docId: string, user: string | null, ip?: string }) => {
+    const { user, ip } = props
     const { pending } = useFormStatus()
     const [token, setToken] = useState("")
     const turnstile = useTurnstile()
@@ -242,18 +231,18 @@ const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm
                             <SubPrompt>
                                 <b>문서 수정하기</b>
                                 <p>설명 추가</p>
-                                <CommitMsg placeholder="무엇을 변경하셨나요?" name="commitmsg"/>
-                                {user==null||user==""?
+                                <CommitMsg placeholder="무엇을 변경하셨나요?" name="commitmsg" />
+                                {user == null || user == "" ?
                                     <Sub_Banner $isAlert={true}>로그인되지 않았습니다. 아이피 ({ip})가 문서의 기여 목록에 저장됩니다.
-                                    <Link href="/login">로그인하기</Link>
-                                    </Sub_Banner>:
+                                        <Link href="/login">로그인하기</Link>
+                                    </Sub_Banner> :
                                     <Sub_Banner $isAlert={false}>아이디 ({user})가 문서의 기여 목록에 저장됩니다.
-                                    </Sub_Banner>    
+                                    </Sub_Banner>
                                 }
-                                {props.message?<Sub_Banner $isAlert={!props.isSuccess}>{props.message}
-                                </Sub_Banner>:<></>}
+                                {props.message ? <Sub_Banner $isAlert={!props.isSuccess}>{props.message}
+                                </Sub_Banner> : <></>}
                                 <SubBtns>
-                                    <button className="submit" type="submit" disabled={pending || !token}>{pending ? "저장중.." : token?"변경사항 적용하기":"잠시만 기다려 주세요.."}</button>
+                                    <button className="submit" type="submit" disabled={pending || !token}>{pending ? "저장중.." : token ? "변경사항 적용하기" : "잠시만 기다려 주세요.."}</button>
                                     <button className="cancel" type="button" onClick={() => setSubmitPrompt(false)}>취소</button>
                                 </SubBtns>
                             </SubPrompt>
@@ -280,17 +269,121 @@ const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm
     )
 }
 
-export const EditArea = (props: { title: string, category:string, tags: Array<string>, content: string, docId: string, deletePerm: boolean, user:string|null, ip?:string, preCompile?: JSX.Element }) => {
-    const { title, content, docId,user,ip } = props
+const PermissionHolder = styled.div`
+    width: 100%;
+    display: flex;
+    color: var(--color-font-secondary);
+    margin-top: 20px;
+    flex-direction: column;
+    user-select: none;
+`
+const PermissionHeader = styled.div<{ $rotate?: boolean }>`
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    cursor: pointer;
+    border: solid 1px var(--color-border-primary);
+    border-radius: 2px;
+    padding: 5px 7px;
+    color:${props => props.$rotate ? "var(--color-font-primary)" : "var(--color-font-secondary)"};
+
+    &:hover {
+        color: var(--color-font-primary);
+    }
+    & span {
+        rotate:${props => props.$rotate ? "180deg" : "0deg"};
+        font-size: 16px;
+        margin-left: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+`
+const PermissionBody = styled.div<{ $show: boolean }>`
+    display: ${props => props.$show ? "flex" : "none"};
+    flex-direction: column;
+    & ul {
+        margin: 0;
+        list-style-type: none;
+        font-size: 13px;
+        display: flex;
+        flex-direction: column;
+        border-bottom: solid 1px var(--color-border-primary);
+        padding: 10px;
+    }
+    & li {
+        margin: 3px 0px;
+        display: flex;
+        justify-content: space-between;
+        max-width: 200px;
+    }
+
+    & ul:nth-last-child(1) {
+        border-bottom: none;
+    }
+`
+
+const Permission = (props: { isShown: boolean, toggleFn: any, isAdmin: boolean,pinned:boolean, adminEditable:boolean }) => {
+    const { isShown, toggleFn,pinned,adminEditable } = props
+    return (
+        <PermissionHolder>
+            <PermissionHeader onClick={() => toggleFn()} $rotate={isShown}>
+                권한 설정 {isShown ? "접기" : "펼치기"}
+                <span>
+                    <RiArrowDownSLine />
+                </span>
+            </PermissionHeader>
+            <PermissionBody $show={isShown}>
+                {props.isAdmin ? <ul>
+                    <li>
+                        <label htmlFor="pin">메인에 고정하기</label>
+                        <input type="checkbox" name="pin" id="pin" defaultChecked={pinned}/>
+                    </li>
+                    <li>
+                        <label htmlFor="editPermAdmin">관리자만 편집 가능</label>
+                        <input type="checkbox" name="editPermAdmin" id="editPermAdmin" defaultChecked={adminEditable}/>
+                    </li>
+
+                </ul> : <ul>사용 가능한 권한 설정이 없습니다</ul>}
+
+            </PermissionBody>
+        </PermissionHolder>)
+}
+
+export const EditArea = (props: {
+    title: string,
+    category: string,
+    tags: Array<string>,
+    content: string,
+    docId: string,
+    deletePerm: boolean,
+    user: string | null,
+    ip?: string,
+    preCompile?: JSX.Element,
+    isAdmin: boolean,
+
+    pinned:boolean,
+    adminEditable:boolean
+}) => {
+    const { title, content, docId, user, ip, isAdmin,adminEditable,pinned } = props
     const [state, formAction] = useFormState(Edit, null)
+    const [isPermissionOpen, setPermissionOpen] = useState(false)
     return (
         <form action={formAction}>
             <h1>{title}</h1>
-            <Category default={props.category} isRequired={true} name="cat"/>
-            <Tags name="tags" default={props.tags}/>
+            <Category default={props.category} isRequired={true} name="cat" />
+            <Tags name="tags" default={props.tags} />
             <Textarea defaultValue={content}></Textarea>
             <input type="hidden" name="docId" defaultValue={docId} />
-            <SubmitButton isSuccess={state?.success} message={state?.message} deletePerm={props.deletePerm} docId={docId} user={user} ip={ip}/>
+            <Permission 
+            isShown={isPermissionOpen} 
+            toggleFn={() => setPermissionOpen(!isPermissionOpen)} 
+            isAdmin={isAdmin}
+            adminEditable={adminEditable}
+            pinned={pinned}
+            />
+            <SubmitButton isSuccess={state?.success} message={state?.message} deletePerm={props.deletePerm} docId={docId} user={user} ip={ip} />
         </form>
     )
 }

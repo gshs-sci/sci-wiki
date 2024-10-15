@@ -8,10 +8,7 @@ export const FetchTags = async (query: string) => {
             id: true
         },
         where: {
-            OR:[
-                {id_dis:{contains:disassembleHangul(query)}},
-                {chosung:{contains:getChosung(query)}}
-            ]
+            id_dis: { contains: disassembleHangul(query) }
         },
         take: 10
     })

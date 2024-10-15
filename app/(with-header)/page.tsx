@@ -7,7 +7,25 @@ export const metadata = {
 }
 
 export default async function Page() {
-  const [updatedDocs, Subjects] = await prisma.$transaction([
+  const [pinnedDocs, updatedDocs, Subjects] = await prisma.$transaction([
+    prisma.doc.findMany({
+      orderBy: {
+        lastUpdated: "desc"
+    },
+    where:{
+      pinned:true
+    },
+    select:{
+      subject:{
+        select:{
+          id:true
+        }
+      },
+      title:true,
+      lastUpdated:true,
+      id:true
+    },
+    }),
     prisma.doc.findMany({
       orderBy: {
         lastUpdated: "desc"
@@ -30,5 +48,5 @@ export default async function Page() {
       }
     })
   ])
-  return <MainPage subjects={Subjects} newUpdated={updatedDocs} />
+  return <MainPage subjects={Subjects} newUpdated={updatedDocs} pinned={pinnedDocs}/>
 }
