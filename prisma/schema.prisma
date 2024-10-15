@@ -56,7 +56,7 @@ model Doc {
   chosung       String         @default("")
   
   @@unique([id,title])
-
+  @@index([title_dis])
 
 }
 

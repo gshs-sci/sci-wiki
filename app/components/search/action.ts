@@ -7,15 +7,12 @@ export const TitleSearch = async(query:string) => {
     if(query=="") {
         return []
     }
-    const res = await prisma.doc.findMany({
-        where:{
-                title_dis:{contains:disassembleHangul(query)}
-        },
-        select:{
-            title:true,
-            id:true
-        },
-        take: 10
-    })
+    const res = await prisma.$queryRaw`
+    SELECT title, id 
+    FROM Doc 
+    WHERE title_dis LIKE ${disassembleHangul(query) + '%'} 
+    ORDER BY title_dis ASC 
+    LIMIT 10
+    `;
     return res
 }

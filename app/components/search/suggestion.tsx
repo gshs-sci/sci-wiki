@@ -43,7 +43,7 @@ export const useSuggestion = (): [
 
     const changeFn = (value:string) => {
         TitleSearch(value).then((res) => {
-            setSug(res)
+            setSug(res as Array<{ title: string, id: string }>)
         })
     }
     const listner = (e: Event) => {
