@@ -63,8 +63,7 @@ export async function Validate(prevState: any, formData: FormData) {
                 createPermission: createPerm,
             },
         })
-    } catch (e) {
-        console.log(e)
+    } catch (_) {
         return {
             success: false,
             errors: {

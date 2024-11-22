@@ -16,8 +16,7 @@ export async function middleware(request: NextRequest) {
             const { payload } = await jose.jwtVerify(auth.value, JWT_KEY)
             const uid = payload.uid as string
             requestHeaders.set("x-user-id", uid)
-        } catch (e) {
-            console.log(e)
+        } catch (_) {
         }
     }
 

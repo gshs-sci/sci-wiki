@@ -100,10 +100,11 @@ const Holder = styled.div`
     position: relative;
 `
 
-const Text = styled.textarea`
+const Text = styled.textarea<{$show:boolean}>`
     width: calc(100% - 20px);
     height: 80vh;
     background-color: transparent;
+    display: ${props=>props.$show?"inherit":"none"};
     color: var(--color-font-primary);
     border: none;
     padding: 10px;
@@ -152,7 +153,7 @@ export const Textarea = (props: { defaultValue: string }) => {
 
     const [uploadProgress,setProgress] = useState([0,0])
 
-    const Previewer = (props:{source:string}) => {
+    const Previewer = (props:{source:string,show:boolean}) => {
         const {source} = props
         const [data,setData] = useState<JSX.Element|undefined>()
         useEffect(()=>{
@@ -160,7 +161,7 @@ export const Textarea = (props: { defaultValue: string }) => {
                 setData(res)
             })
         },[])
-        return <div className="md_doc" style={{padding: "10px",width:"calc(100% - 20px)"}}>{data}</div>
+        return <div className="md_doc" style={{padding: "10px",width:"calc(100% - 20px)", display:props.show?"inherit":"none"}}>{data}</div>
     }
     
     return (
@@ -169,10 +170,11 @@ export const Textarea = (props: { defaultValue: string }) => {
                 <EditBtns type="button" $isActive={!isPreview} onClick={()=>setPreview(false)}>편집</EditBtns>
                 <EditBtns type="button" $isActive={isPreview} onClick={()=>setPreview(true)}>미리보기</EditBtns>
             </EditHeader>
-            {isPreview?<Previewer source={value}/>:
+            <Previewer source={value} show={isPreview}/>
             <Text value={value} onChange={(e)=>setValue(e.target.value)}
             onDragOver={(e)=>e.preventDefault()}
             name="data"
+            $show={!isPreview}
             style={
                 { 
                     fontFamily: sansNormal.style.fontFamily, 
@@ -198,7 +200,6 @@ export const Textarea = (props: { defaultValue: string }) => {
                 setUploading(false)
                 }}
         />
-            }
             <Footer>
                 {uploading?
                 <>

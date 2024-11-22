@@ -108,8 +108,7 @@ export async function Register(prevState: any, formData: FormData) {
                 },
             ],
         });
-    } catch (e) {
-        console.log(e)
+    } catch (_) {
         return {
             "success": false,
             errors: {
