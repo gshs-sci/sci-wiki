@@ -205,10 +205,6 @@ export const MainPage = (props: {
                     <SearchBarHolder onSubmit={submit} ref={form}>
                         <SearchBarInputHolder>
                             <SearchBar type="text" autoComplete="off" name="q" data-sug="true" onChange={(e)=>inputChanged(e.target.value)}></SearchBar>
-                            <select name="s">
-                                <option value="">전체</option>
-                                {props.subjects.map(elem=><option key={elem.id} value={elem.id}>{elem.id}</option>)}
-                            </select>
                             <Suggestion />
                         </SearchBarInputHolder>
 
@@ -241,7 +237,6 @@ export const MainPage = (props: {
                     return (
                         <HDoc key={elem.id+index}>
                             <Link href={"/d/" + elem.id}>
-                                <p className="sub">{elem.subject.id} &gt;</p>
                                 <p className="title">{elem.title}</p>
                                 <p className="date"><TimeDifference time={elem.lastUpdated}/></p>
                             </Link>

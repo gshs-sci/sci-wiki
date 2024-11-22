@@ -119,7 +119,6 @@ export const Recents = (props: {
                 return (
                     <HDoc key={elem.id + index}>
                         <Link href={"/d/" + elem.id}>
-                            <p className="sub">{elem.subject.id} &gt;</p>
                             <p className="title">{elem.title}</p>
                             <p className="date"><TimeDifference time={elem.lastUpdated} /></p>
                         </Link>

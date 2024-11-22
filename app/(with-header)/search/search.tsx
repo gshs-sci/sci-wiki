@@ -162,10 +162,6 @@ export const SearchResult = (props: {
             <SearchBarHolder onSubmit={submit} ref={form}>
                 <SearchBarInputHolder>
                     <SearchBar data-sug="true" autoComplete="off" type="text" name="q" defaultValue={query} onChange={(e) => changeFn(e.target.value)}></SearchBar>
-                    <select name="s">
-                        <option value="" selected={activecat == "전체"}>전체</option>
-                        {cat.map(elem => <option key={elem.id} selected={activecat == elem.id} value={elem.id}>{elem.id}</option>)}
-                    </select>
                     <Suggestion />
                 </SearchBarInputHolder>
                 <SearchBtn type="submit"><IoSearch /></SearchBtn>

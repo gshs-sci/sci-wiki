@@ -102,7 +102,7 @@ export default async function Document({ params, searchParams }: { params: { doc
                 <Title>
                     <div className="left">
                         <h1>{title}</h1>
-                        <p className="date">{rev?"리비전 수정:":"최근 수정:"} {new Date(lastUpdated).toLocaleString('en-GB', { timeZone: 'Asia/Seoul' })}</p>
+                        <p className="date">{rev?"리비전 수정:":"최근 수정:"} {new Date(lastUpdated).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}</p>
                     </div>
                     <div className="right">
                         <Link href={"/edit/" + params.docId.join("/")} scroll={false}>[편집]</Link>
