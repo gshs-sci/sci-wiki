@@ -1,7 +1,7 @@
 "use client"
 import styled from "styled-components";
 import { useFormStatus, useFormState } from "react-dom";
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import Turnstile, { useTurnstile } from "react-turnstile";
 import { Create } from "./action";
 import { Textarea } from "@/app/components/edit/editor";
@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { Category } from "@/app/components/edit/category/category";
 import { Tags } from "@/app/components/edit/tags/tags";
 import { RiArrowDownSLine } from "react-icons/ri";
+import Link from "next/link";
 
 const BottomBtns = styled.div`
     display: flex;   
@@ -41,7 +42,7 @@ const SubmitBtn = styled.button`
     font-size: 13px;
 `
 
-const SubmitButton = (props: { isSuccess?: boolean, message?: string }) => {
+const SubmitButton = (props: { isSuccess?: boolean, message?: string, titleRef: RefObject<HTMLElement> }) => {
     const { pending } = useFormStatus()
     const [isVerified, setVerified] = useState(false)
     const turnstile = useTurnstile()
@@ -62,10 +63,13 @@ const SubmitButton = (props: { isSuccess?: boolean, message?: string }) => {
                     refreshExpired="auto"
                 />
                 <SubmitBtn type="submit" disabled={pending || !isVerified}>
-                    {pending ? "저장중.." : isVerified?"변경사항 적용하기":"잠시만 기다려 주세요.."}
+                    {pending ? "저장중.." : isVerified ? "변경사항 적용하기" : "잠시만 기다려 주세요.."}
                 </SubmitBtn>
                 <Msg>
                     {props.message ? props.message : ""}
+                    {props.isSuccess ? <>
+                        <Link href={"/d/" + encodeURIComponent((props.titleRef.current as any).value)}>문서로 이동하기</Link>
+                    </> : <></>}
                 </Msg>
             </LBtn>
 
@@ -164,11 +168,11 @@ const Permission = (props: { isShown: boolean, toggleFn: any, isAdmin: boolean }
                 {props.isAdmin ? <ul>
                     <li>
                         <label htmlFor="pin">메인에 고정하기</label>
-                        <input type="checkbox" name="pin" id="pin"/>
+                        <input type="checkbox" name="pin" id="pin" />
                     </li>
                     <li>
                         <label htmlFor="editPermAdmin">관리자만 편집 가능</label>
-                        <input type="checkbox" name="editPermAdmin" id="editPermAdmin"/>
+                        <input type="checkbox" name="editPermAdmin" id="editPermAdmin" />
                     </li>
 
                 </ul> : <ul>사용 가능한 권한 설정이 없습니다</ul>}
@@ -177,26 +181,27 @@ const Permission = (props: { isShown: boolean, toggleFn: any, isAdmin: boolean }
         </PermissionHolder>)
 }
 
-export function Document(props:{isAdmin: boolean}) {
-    const {isAdmin} = props
+export function Document(props: { isAdmin: boolean }) {
+    const { isAdmin } = props
     const params = useSearchParams()
-    const title:any=typeof params.get("where") == "string"?params.get("where"):""
+    const title: any = typeof params.get("where") == "string" ? params.get("where") : ""
     const [state, formAction] = useFormState(Create, null)
     const [isPermissionOpen, setPermissionOpen] = useState(false)
+    const titleValue = useRef(null)
     return (
         <Holder>
             <form action={formAction}>
-                <TitleInput placeholder="제목을 입력하세요" spellCheck={false} name="title" required defaultValue={title}/>
-                <Category isRequired={true} name="cat"/>
-                <Tags name="tags"/>
+                <TitleInput type="text" placeholder="제목을 입력하세요" ref={titleValue} spellCheck={false} name="title" required defaultValue={title} />
+                <Category isRequired={true} name="cat" />
+                <Tags name="tags" />
                 <Textarea defaultValue="" />
-                <Permission 
-                isShown={isPermissionOpen} 
-                toggleFn={() => setPermissionOpen(!isPermissionOpen)} 
-                isAdmin={isAdmin}
+                <Permission
+                    isShown={isPermissionOpen}
+                    toggleFn={() => setPermissionOpen(!isPermissionOpen)}
+                    isAdmin={isAdmin}
                 />
                 <BottomBtns>
-                    <SubmitButton isSuccess={state?.success} message={state?.message} />
+                    <SubmitButton isSuccess={state?.success} message={state?.message} titleRef={titleValue} />
                 </BottomBtns>
             </form>
         </Holder>

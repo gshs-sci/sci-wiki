@@ -31,6 +31,6 @@ docker-compose --profile dev down
 ```
 ## Tech stack
 
-- **Web framework**: NextJS, ReactJS, 
-- **DB**: MariaDB+Prisma, Redis, 
-- **CI/CD**: Docker, Docker-Compose
+- **Web framework**: NextJS, ReactJS
+- **DB**: MariaDB+Prisma, Redis
+- **CI/CD**: Docker, Docker Compose, Github Actions

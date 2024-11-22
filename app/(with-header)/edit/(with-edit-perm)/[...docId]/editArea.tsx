@@ -240,6 +240,9 @@ const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm
                                     </Sub_Banner>
                                 }
                                 {props.message ? <Sub_Banner $isAlert={!props.isSuccess}>{props.message}
+                                    {props.isSuccess?<>
+                                        <Link href={"/d/"+props.docId+"?r="+Math.floor(Math.random()*100000)}>문서로 이동하기</Link>
+                                    </>:<></>}
                                 </Sub_Banner> : <></>}
                                 <SubBtns>
                                     <button className="submit" type="submit" disabled={pending || !token}>{pending ? "저장중.." : token ? "변경사항 적용하기" : "잠시만 기다려 주세요.."}</button>
