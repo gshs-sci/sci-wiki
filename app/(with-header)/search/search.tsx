@@ -3,7 +3,7 @@ import Link from "next/link"
 import styled from "styled-components"
 import { IoSearch } from "react-icons/io5"
 import { Banner } from "@/app/components/doc/component";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSuggestion } from "@/app/components/search/suggestion";
 import * as NProgress from "nprogress";
@@ -155,6 +155,7 @@ export const SearchResult = (props: {
         NProgress.start()
         router.push("/search?q=" + q)
     }
+    const d = new URLSearchParams(useSearchParams())
     return (
         <Body>
             <DocTitle>검색 결과</DocTitle>
@@ -182,9 +183,7 @@ export const SearchResult = (props: {
                 })}
                 <Navigation>
                     {Array(Math.ceil(count / 20)).fill(0).map((elem, index) => {
-                        const d = new URLSearchParams(document.location.search)
                         d.set("page", String(index))
-
                         return (
                             <li className={index == page ? "active" : ""} key={index}>
                                 <Link href={"/search?" + d.toString()}>
