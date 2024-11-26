@@ -190,9 +190,8 @@ export const MainPage = (props: {
         e.preventDefault()
         const f = new FormData(form.current!)
         let q = f.get("q")
-        let s = f.get("s")
         NProgress.start();
-        router.push("/search?q=" + q + "&s=" + s)
+        router.push("/search?q=" + q)
     }
     return (
         <Body>

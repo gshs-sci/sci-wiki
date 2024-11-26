@@ -182,6 +182,7 @@ const CommitMsg = styled.textarea`
     min-height: 100px;
     max-height: calc(100vh - 300px);
     font-size: 13px;
+    color: var(--color-font-primary);
 `
 
 const SubmitButton = (props: { isSuccess?: boolean, message?: string, deletePerm: boolean, docId: string, user: string | null, ip?: string }) => {
