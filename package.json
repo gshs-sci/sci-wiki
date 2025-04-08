@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.621.0",
-    "@prisma/client": "^5.13.0",
+    "@prisma/client": "^6.5.0",
     "bs58": "^6.0.0",
     "cloudflare-r2": "^1.0.0",
     "crypto-random-string": "^5.0.0",
@@ -22,7 +22,7 @@
     "jose": "^5.3.0",
     "js-cookie": "^3.0.5",
     "katex": "^0.16.10",
-    "next": "14.2.3",
+    "next": "^14.2.27",
     "nextjs-toploader": "^1.6.12",
     "react": "^18",
     "react-dom": "^18",
@@ -58,7 +58,7 @@
     "@types/remove-markdown": "^0.3.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
-    "prisma": "^5.13.0",
+    "prisma": "^6.5.0",
     "typescript": "^5"
   }
 }

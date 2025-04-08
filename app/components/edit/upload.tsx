@@ -46,7 +46,12 @@ export const fileUpload = async (formData: FormData) => {
         }
     }
     try {
-        const ab = await sharp(await file.arrayBuffer()).webp().toBuffer()
+        let img = sharp(await file.arrayBuffer())
+        const realWidth = (await img.metadata())["width"];
+        if (realWidth! > 900) {
+            img = img.resize({ width: 900 });
+        }
+        const ab = await img.webp().toBuffer()
         const { width, height } = sizeOf(new Uint8Array(ab))
 
         const fileKey = bs58.encode(new Uint8Array((new TextEncoder()).encode(`w${width}h${height}t${Date.now()}`))) + "_" + cryptoRandomString({ length: 16, type: 'alphanumeric' })
