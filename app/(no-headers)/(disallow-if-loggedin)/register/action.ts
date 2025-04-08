@@ -96,7 +96,7 @@ export async function Register(prevState: any, formData: FormData) {
     let registerCode = Math.random().toString(36).slice(2, 16);
     try {
         await resend.emails.send({
-            from: 'no-reply <noreply@gggg.ws>',
+            from: 'no-reply <noreply@sciwiki.org>',
             to: [email],
             subject: '[SCI wiki]: 인증번호',
             text: `인증번호는 ${code} 입니다. 본 코드는 10분 후 만료됩니다.`,

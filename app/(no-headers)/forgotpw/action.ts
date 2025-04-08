@@ -42,7 +42,7 @@ export async function RequestPwReset(prevState: any, formData: FormData) {
         const buffer = randomBytes(48)
         const code = buffer.toString('hex')
         await resend.emails.send({
-            from: 'no-reply <noreply@gggg.ws>',
+            from: 'no-reply <noreply@sciwiki.org>',
             to: [queryResult.email],
             subject: '[SCI wiki]: 비밀번호 초기화',
             text: `비밀번호를 초기화하려면 다음 링크를 클릭하세요. 링크는 10분 후 만료됩니다. 본인이 비밀번호 초기화를 요청하지 않았다면 이 메일은 무시해도 됩니다. https://sciwiki.org/resetpw/${code}`,
