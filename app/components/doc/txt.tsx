@@ -66,11 +66,11 @@ const ExternalLink = styled.span`
 export const AElem = (prop: any) => {
     const [external,setExternal] = useState(false)
 
-    if(!prop.href) return <a {...prop}/>
-
     useEffect(()=>{
         setExternal(isExternal(prop.href))
     },[])
+
+    if(!prop.href) return <a {...prop}/>
 
     if (external) {
         return (
