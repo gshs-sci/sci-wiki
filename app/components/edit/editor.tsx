@@ -153,15 +153,17 @@ export const Textarea = (props: { defaultValue: string }) => {
 
     const [uploadProgress,setProgress] = useState([0,0])
 
-    const Previewer = (props:{source:string,show:boolean}) => {
-        const {source} = props
+    const Previewer = () => {
         const [data,setData] = useState<JSX.Element|undefined>()
         useEffect(()=>{
-            CompileMD(source).then((res)=>{
+            if(isPreview){
+            CompileMD(value).then((res)=>{
                 setData(res)
-            })
-        },[])
-        return <div className="md_doc" style={{padding: "10px",width:"calc(100% - 20px)", display:props.show?"inherit":"none"}}>{data}</div>
+            }).catch(()=>{
+                setData(<p>Compile Error</p>)
+            }) }
+        },[isPreview])
+        return <div className="md_doc" style={{padding: "10px",width:"calc(100% - 20px)", display:isPreview?"inherit":"none"}}>{data}</div>
     }
     
     return (
@@ -170,7 +172,7 @@ export const Textarea = (props: { defaultValue: string }) => {
                 <EditBtns type="button" $isActive={!isPreview} onClick={()=>setPreview(false)}>편집</EditBtns>
                 <EditBtns type="button" $isActive={isPreview} onClick={()=>setPreview(true)}>미리보기</EditBtns>
             </EditHeader>
-            <Previewer source={value} show={isPreview}/>
+            <Previewer />
             <Text value={value} onChange={(e)=>setValue(e.target.value)}
             onDragOver={(e)=>e.preventDefault()}
             name="data"

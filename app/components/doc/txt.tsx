@@ -66,6 +66,8 @@ const ExternalLink = styled.span`
 export const AElem = (prop: any) => {
     const [external,setExternal] = useState(false)
 
+    if(!prop.href) return <a {...prop}/>
+
     useEffect(()=>{
         setExternal(isExternal(prop.href))
     },[])
@@ -73,7 +75,7 @@ export const AElem = (prop: any) => {
     if (external) {
         return (
             <ExternalLink>
-                <Link {...prop} >{prop.children}</Link>
+                <Link {...prop}>{prop.children}</Link>
             </ExternalLink>
         )
     } else {
@@ -147,8 +149,8 @@ export const Img = (props: { src: string, alt: string }) => {
 
             return (
                 <ImgHolder>
-                <img src={`data:image/svg+xml;base64,${d}`} />
-                <img className="real" src={props.src} alt={props.alt} width={imgsize[0]} height={imgsize[1]} loading="lazy" />
+                <img {...props} src={`data:image/svg+xml;base64,${d}`} />
+                <img className="real" {...props} src={props.src} alt={props.alt} width={imgsize[0]} height={imgsize[1]} loading="lazy" />
                 </ImgHolder>
             )
         }catch(e){
@@ -158,6 +160,5 @@ export const Img = (props: { src: string, alt: string }) => {
                 </ImgHolder>
             )
         }
-        return <></>
     }
 }

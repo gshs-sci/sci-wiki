@@ -15,14 +15,14 @@ export default async function Page({
         cursor = {
             skip: 1,
             cursor: {
-                id: searchParams!.from as string
+                id: encodeURIComponent(searchParams!.from as string)
             }
         }
     } else if (searchParams?.until) {
         cursor = {
             skip: 1,
             cursor: {
-                id: searchParams!.until as string
+                id: encodeURIComponent(searchParams!.until as string)
             }
         }
         forward = false

@@ -6,6 +6,7 @@ import rehypeReact from "rehype-react";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from 'rehype-raw'
 import { getCodeString } from 'rehype-rewrite';
 import { remarkExtendedTable, extendedTableHandlers } from 'remark-extended-table';
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -110,22 +111,25 @@ export const CompileMD = (data: string): Promise<JSX.Element> => {
         }
     }
 
-    return new Promise((resolve, _) => {
+    return new Promise((resolve, reject) => {
         unified()
             .use(remarkParse, { fragment: true })
             .use(remarkGfm)
             .use(remarkExtendedTable)
             .use(remarkRehype, {
+                allowDangerousHtml: true,
                 clobberPrefix: "uc-",
                 handlers: {
                     ...extendedTableHandlers
                 }
             })
+            .use(rehypeRaw)
             .use(rehypeSanitize, {
                 ...defaultSchema,
                 clobberPrefix: "sci-",
                 attributes: {
                     ...defaultSchema.attributes,
+                    '*':['style'],
                     code: [
                         ...(defaultSchema?.attributes?.code || []),
                         ['className', 'language-*']
@@ -144,6 +148,8 @@ export const CompileMD = (data: string): Promise<JSX.Element> => {
             .process(data)
             .then((val) => {
                 resolve(val.result)
+            }).catch((e)=>{
+                reject(e)
             });
     })
 
