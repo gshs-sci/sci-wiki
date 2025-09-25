@@ -16,13 +16,12 @@ docker-compose --profile dev up --build -d
 
 the development server container along with the redis,mariadb container will start automatically.
 
-Open [http://localhost:3000](http://localhost:3000) in any browser to view the running service.
+Open [http://localhost:3005](http://localhost:3005) in any browser to view the running service.
 
-enter the frontend container by running `docker exec -it sci-frontend-1 /bin/bash`
+enter the frontend container by running `docker exec -it sci-wiki-frontend-1 /bin/bash`
 
-when you alter the DB schema, run `npx prisma db push` or `npx prisma migrate dev`/
-`prisma generate` inside the **frontend** container. 
-Also, you can view the database schema by running `npx prisma studio` and visiting [http://localhost:5555](http://localhost:5555).
+when you alter the DB schema, run `npx prisma migrate dev` inside the **frontend** container. 
+Also, you can view the database schema by running `npx prisma studio` and visiting [http://localhost:5560](http://localhost:5555).
 If you need a sample data for development, run `node db.js`. A sample dataset will be automatically inserted into the database.
 
 You may stop the container by running

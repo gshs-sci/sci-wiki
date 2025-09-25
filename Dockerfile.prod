@@ -21,4 +21,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD dockerize -wait tcp://db:3306 -timeout 20s && npx prisma db push --accept-data-loss && npm start
+CMD dockerize -wait tcp://db:3306 -timeout 20s && npx prisma migrate deploy && npm start

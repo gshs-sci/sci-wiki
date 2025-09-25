@@ -16,6 +16,7 @@ services:
       - MARIADB_ROOT_PASSWORD=rootpassword
     volumes:
       - db_data:/var/lib/mysql
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
 
   frontend:
     profiles: ["dev"]
@@ -23,8 +24,8 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
-      - "5555:5555"
+      - "3005:3000"
+      - "5560:5555"
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
