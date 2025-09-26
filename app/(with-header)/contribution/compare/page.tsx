@@ -3,6 +3,10 @@ import prisma from '@/app/lib/prisma';
 import { redirect } from 'next/navigation';
 import { Compare } from './compare';
 
+export const metadata = {
+  title: '리비전 비교 - SCI'
+}
+
 export default async function Page({
     searchParams,
 }: {

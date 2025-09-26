@@ -2,7 +2,9 @@ import { headers } from "next/headers"
 import prisma from "@/app/lib/prisma"
 import { Contribution } from "../../contribution";
 import { TitleH1 } from "../../contribution";
-
+export const metadata = {
+  title: '편집 기록(IP) - SCI'
+}
 export default async function Page({
     params,
     searchParams,

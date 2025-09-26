@@ -1,2 +1,3 @@
 User-Agent: *
 Disallow: /edit/
+Sitemap: https://sciwiki.org/sitemap.xml

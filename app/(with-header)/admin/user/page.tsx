@@ -48,7 +48,7 @@ export default async function UserControlPage({
     }
     let data = await prisma.user.findMany({
         orderBy: {
-            id: "desc"
+            registered: "desc"
         },
         select: {
             id: true,            
@@ -70,7 +70,7 @@ export default async function UserControlPage({
         [next, prev] = await prisma.$transaction([
             prisma.user.findFirst({
                 orderBy: {
-                    id: "desc"
+                    registered: "desc"
                 },
                 select: {
                     id: true,
@@ -84,7 +84,7 @@ export default async function UserControlPage({
             }),
             prisma.user.findFirst({
                 orderBy: {
-                    id: "desc"
+                    registered: "desc"
                 },
                 select: {
                     id: true,

@@ -2,6 +2,9 @@ import { headers } from "next/headers"
 import prisma from "@/app/lib/prisma"
 import { Recents } from "./recents";
 
+export const metadata = {
+  title: '최근 수정된 문서 - SCI'
+}
 export default async function Page({
     params,
     searchParams,

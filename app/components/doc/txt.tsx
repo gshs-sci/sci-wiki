@@ -19,7 +19,8 @@ var checkDomain = function (url: string) {
     return url.toLowerCase().replace(/([a-z])?:\/\//, '$1').split('/')[0];
 };
 
-var isExternal = function (url: string) {
+var isExternal = function (url?: string) {
+    if(!url) return false
     return ((url.indexOf(':') > -1 || url.indexOf('//') > -1) && checkDomain(window.location.href) !== checkDomain(url));
 };
 

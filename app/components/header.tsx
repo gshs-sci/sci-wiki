@@ -104,6 +104,7 @@ z-index: 10;
         line-height: 18px;
         font-size: 14px;
         cursor: pointer;
+        font-family:inherit;
     }
     & p {
         margin: 0;
