@@ -121,7 +121,6 @@ export const SectionElem = (prop: any) => {
 }
 
 const ImgHolder = styled.span`
-    width: 100%;
     position: relative;
     display: block;
 
