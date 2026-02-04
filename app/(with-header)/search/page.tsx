@@ -2,7 +2,7 @@ import prisma from "@/app/lib/prisma";
 import { SearchResult } from "./search";
 import removeMd from "remove-markdown"
 import { redirect } from "next/navigation";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/prisma/generated/prisma/client";
 
 export default async function Page({
     params,

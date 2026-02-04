@@ -5,7 +5,7 @@ import { Verify } from "@/app/lib/turnstile";
 import { createHash } from "crypto";
 import { checkDelete, checkEdit,checkAdmin } from "@/app/lib/permission";
 import { disassembleHangul, getChosung } from "es-hangul"
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/prisma/generated/prisma/client";
 
 const DeleteEmptySubject = async (subjectId: any, tagsId: any) => {
     await prisma.$transaction([
