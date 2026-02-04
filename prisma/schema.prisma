@@ -1,13 +1,13 @@
 // schema.prisma
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated/prisma"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = "mysql://sci:mypassword@db:3306/main"
+  provider = "postgres"
 }
 
 model User {

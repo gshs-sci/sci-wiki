@@ -1,5 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@/prisma/generated/prisma/client'
+import { PrismaNeon } from '@prisma/adapter-neon'
 
+const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL })
 let globalWithPrisma = global as typeof globalThis & {
   prisma: PrismaClient;
 };
@@ -7,10 +9,10 @@ let globalWithPrisma = global as typeof globalThis & {
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === "production") {
-  prisma = new PrismaClient();
+  prisma = new PrismaClient({ adapter })
 } else {
   if (!globalWithPrisma.prisma) {
-    globalWithPrisma.prisma = new PrismaClient();
+    globalWithPrisma.prisma = new PrismaClient({ adapter })
   }
   prisma = globalWithPrisma.prisma;
 }

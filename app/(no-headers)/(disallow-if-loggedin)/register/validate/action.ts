@@ -3,6 +3,7 @@ import { createClient } from 'redis';
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import prisma from "@/app/lib/prisma";
+import { client } from "@/app/lib/redis";
 
 interface Reg {
     mail: string
@@ -10,10 +11,6 @@ interface Reg {
     pw: string
 }
 export async function Validate(prevState: any, formData: FormData) {
-    const client = await createClient({
-        url: 'redis://redis:6379'
-    }).on('error', err => console.log('Redis Client Error', err))
-        .connect();
     const key = cookies().get("reg-key")
     if (!key) {
         redirect("/register")

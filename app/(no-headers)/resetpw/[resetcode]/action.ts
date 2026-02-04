@@ -4,15 +4,11 @@ import prisma from "@/app/lib/prisma"
 import { createClient } from "redis"
 import { createHash } from "crypto";
 
+import { client } from "@/app/lib/redis";
 export async function ResetPW(prevState: any, formData: FormData) {
     const pw = formData.get("pw")?.toString()
     const code = formData.get("code")?.toString()
 
-    const client = await createClient({
-        url: 'redis://redis:6379'
-    })
-        .on('error', err => console.log('Redis Client Error', err))
-        .connect();
 
     const email = await client.get("resetcode:"+code)
     if(!email) {

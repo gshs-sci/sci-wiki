@@ -4,17 +4,14 @@ import { Resend } from 'resend';
 import { createClient } from 'redis';
 import { randomBytes } from "crypto";
 
+import { client } from "@/app/lib/redis";
+
 if (!process.env.RESEND_KEY) {
     throw new Error("No resend api key provided, terminating..")
 }
 const resend = new Resend(process.env.RESEND_KEY);
 
 export async function RequestPwReset(prevState: any, formData: FormData) {
-    const client = await createClient({
-        url: 'redis://redis:6379'
-    })
-        .on('error', err => console.log('Redis Client Error', err))
-        .connect();
 
     let email = formData.get("email")?.toString().trim()
     const storedcode = await client.get("resetemail:"+email)

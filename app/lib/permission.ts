@@ -1,7 +1,5 @@
 import prisma from "./prisma";
-import * as fs from 'node:fs/promises';
-import { createClient } from 'redis';
-
+import { client } from "@/app/lib/redis";
 const defaultConfig = {
     "allow_unauthorized_edit": true,
     "allow_unauthorized_delete": false,
@@ -37,11 +35,6 @@ export interface Config {
 
 
 const readConfig = async () => {
-    const client = await createClient({
-        url: 'redis://redis:6379'
-    })
-        .on('error', err => console.log('Redis Client Error', err))
-        .connect();
     let stored = await client.get("sci_configuration")
     let config
     if (!stored) {
@@ -220,11 +213,6 @@ export class ConfigClient {
 
     async writeToConfig(data: Config) {
         try {
-            const client = await createClient({
-                url: 'redis://redis:6379'
-            })
-                .on('error', err => console.log('Redis Client Error', err))
-                .connect();
             await client.set("sci_configuration", JSON.stringify(data))
             return true
         } catch (e) {

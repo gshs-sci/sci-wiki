@@ -3,21 +3,15 @@ import prisma from "@/app/lib/prisma";
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Resend } from 'resend';
-import { createClient } from 'redis';
 import { createHash } from "crypto";
 import { Verify } from "@/app/lib/turnstile";
-
+import { client } from "@/app/lib/redis";
 if (!process.env.RESEND_KEY) {
     throw new Error("No resend api key provided, terminating..")
 }
 const resend = new Resend(process.env.RESEND_KEY);
 
 export async function Register(prevState: any, formData: FormData) {
-    const client = await createClient({
-        url: 'redis://redis:6379'
-    })
-        .on('error', err => console.log('Redis Client Error', err))
-        .connect();
 
     let email = formData.get("email")?.toString().trim().replaceAll(/\s/g, '')
     let id = formData.get("id")?.toString().toLowerCase()

@@ -8,13 +8,13 @@ export async function POST(req: Request) {
         }
         const res = await prisma.$queryRaw`
         SELECT title, id 
-        FROM Doc 
+        FROM "Doc" 
         WHERE title_dis LIKE ${query + '%'} 
         ORDER BY title_dis ASC 
         LIMIT 10
         `;
         return Response.json(res)
-    }catch(e){return new Response("")}
+    }catch(e){return Response.json([])}
   }
 
 

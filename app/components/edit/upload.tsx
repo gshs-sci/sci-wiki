@@ -4,17 +4,12 @@ import prisma from "@/app/lib/prisma"
 import cryptoRandomString from 'crypto-random-string';
 import { headers } from "next/headers";
 import { checkEdit } from "@/app/lib/permission";
-import { createClient } from "redis";
 import sizeOf from "image-size";
 import sharp from "sharp"
 import bs58 from 'bs58'
+import { client } from "@/app/lib/redis";
 
 export const fileUpload = async (formData: FormData) => {
-    const client = await createClient({
-        url: 'redis://redis:6379'
-    })
-        .on('error', err => console.log('Redis Client Error', err))
-        .connect();
     let user = headers().get("x-user-id")
     const editPerm = await checkEdit(user)
     if (!editPerm || !user) {
