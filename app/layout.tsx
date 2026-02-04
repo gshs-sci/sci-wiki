@@ -6,6 +6,8 @@ import StyledComponentsRegistry from './lib/registry'
 import NextTopLoader from 'nextjs-toploader';
 import { useState,createContext, useEffect } from "react";
 import { ThemeContext } from "./themeContext";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 const notoSans = Noto_Sans_KR({
   subsets: ["latin"],
@@ -51,6 +53,8 @@ export default function RootLayout({
                 {children}
             </ThemeContext.Provider>
           </StyledComponentsRegistry>
+          <Analytics />
+          <SpeedInsights />
         </body>
       </html>
     </>

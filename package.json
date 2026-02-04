@@ -15,6 +15,8 @@
     "@aws-sdk/client-s3": "^3.621.0",
     "@prisma/adapter-neon": "^7.3.0",
     "@prisma/client": "^7.3.0",
+    "@vercel/analytics": "^1.6.1",
+    "@vercel/speed-insights": "^1.3.1",
     "bs58": "^6.0.0",
     "cloudflare-r2": "^1.0.0",
     "crypto-random-string": "^5.0.0",
@@ -27,6 +29,7 @@
     "katex": "^0.16.10",
     "next": "^14.2.27",
     "nextjs-toploader": "^1.6.12",
+    "prisma": "^7.3.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.0",
@@ -49,8 +52,7 @@
     "resend": "^3.2.0",
     "sharp": "^0.33.4",
     "styled-components": "^6.1.9",
-    "unified": "^11.0.4",
-    "prisma": "^7.3.0"
+    "unified": "^11.0.4"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",

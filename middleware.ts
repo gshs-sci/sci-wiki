@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    let ip = requestHeaders.get("CF-Connecting-IP")
+    let ip = requestHeaders.get("x-forwarded-for")//vercel specific real ip
     if (!ip) {
         ip = request.ip || "127.0.0.1";
     }
